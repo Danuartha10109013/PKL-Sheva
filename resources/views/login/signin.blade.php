@@ -49,7 +49,7 @@
                     </g>
                   </svg>
 
-                  <span class="brand-name">Sleek Dashboard</span>
+                  <span class="brand-name">Login nih</span>
                 </a>
               </div>
             </div>
