@@ -27,6 +27,9 @@
       <script src="{{asset('vendor/theme')}}/https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
     <script src="{{asset('vendor/theme')}}/assets/plugins/nprogress/nprogress.js"></script>
   </head>
 
@@ -54,14 +57,50 @@
             <div class="card-body p-5">
               <h4 class="text-dark mb-5">Sign In</h4>
               
-              <form action="/index.html">
+              @if (session('success'))
+                  <script>
+                      Swal.fire({
+                          icon: 'success',
+                          title: 'Success!',
+                          text: '{{ session('success') }}',
+                          showConfirmButton: false,
+                          timer: 3000
+                      });
+                  </script>
+              @endif
+
+              @if (session('error'))
+                  <script>
+                      Swal.fire({
+                          icon: 'error',
+                          title: 'Error!',
+                          text: '{{ session('error') }}',
+                          showConfirmButton: false,
+                          timer: 3000
+                      });
+                  </script>
+              @endif
+
+              @if ($errors->any())
+                  <script>
+                      Swal.fire({
+                          icon: 'error',
+                          title: 'Validation Error!',
+                          html: '<ul>@foreach ($errors->all() as $error) <li>{{ $error }}</li> @endforeach</ul>',
+                          showConfirmButton: true
+                      });
+                  </script>
+              @endif
+
+              <form action="{{route('input_login')}}" method="POST" >
+                @csrf 
                 <div class="row">
                   <div class="form-group col-md-12 mb-4">
-                    <input type="email" class="form-control input-lg" id="email" aria-describedby="emailHelp" placeholder="Username">
+                    <input type="text" name="username" class="form-control input-lg" id="email" aria-describedby="emailHelp" placeholder="Username">
                   </div>
 
                   <div class="form-group col-md-12 ">
-                    <input type="password" class="form-control input-lg" id="password" placeholder="Password">
+                    <input type="password" name="password" class="form-control input-lg" id="password" placeholder="Password">
                   </div>
 
                   <div class="col-md-12">

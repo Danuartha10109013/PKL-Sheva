@@ -7,16 +7,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class Team_leadMiddleware
 {
     public function handle($request, Closure $next)
     {
-        // Periksa apakah pengguna adalah admin (role = 0)
+        // Periksa apakah pengguna adalah pm (role = 0)
         if (Auth::check()) {
-            if (Auth::user()->role == 0){
+            if (Auth::user()->role == 1){
                 return $next($request);
             }
-            return response()->view('errors.custom', ['message' => 'Anda Bukan Admin'], 403);
+            return response()->view('errors.custom', ['message' => 'Anda Bukan Tim lead'], 403);
         }
         return redirect('/');
         
