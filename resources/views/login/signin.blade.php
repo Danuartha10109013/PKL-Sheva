@@ -16,7 +16,7 @@
     <link id="sleek-css" rel="stylesheet" href="{{asset('vendor/theme')}}/assets/css/sleek.css" />
 
     <!-- FAVICON -->
-    <link href="{{asset('vendor/theme')}}/assets/img/favicon.png" rel="shortcut icon" />
+    <link href="{{asset('vendor')}}/zen.png" rel="shortcut icon" />
 
     <!--
       HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries
@@ -41,22 +41,16 @@
             <div class="card-header bg-primary">
               <div class="app-brand">
                 <a href="/index.html">
-                  <svg class="brand-icon" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" width="30" height="33"
-                    viewBox="0 0 30 33">
-                    <g fill="none" fill-rule="evenodd">
-                      <path class="logo-fill-blue" fill="#7DBCFF" d="M0 4v25l8 4V0zM22 4v25l8 4V0z" />
-                      <path class="logo-fill-white" fill="#FFF" d="M11 4v25l8 4V0z" />
-                    </g>
-                  </svg>
+                  <img src="{{asset('vendor/zen.png')}}" alt="">
 
-                  <span class="brand-name">Sleek Dashboard</span>
+                  <span class="brand-name">PROJECT PLAN</span>
                 </a>
               </div>
             </div>
 
             <div class="card-body p-5">
               <h4 class="text-dark mb-5">Sign In</h4>
-              
+
               @if (session('success'))
                   <script>
                       Swal.fire({
@@ -93,7 +87,7 @@
               @endif
 
               <form action="{{route('input_login')}}" method="POST" >
-                @csrf 
+                @csrf
                 <div class="row">
                   <div class="form-group col-md-12 mb-4">
                     <input type="text" name="username" class="form-control input-lg" id="email" aria-describedby="emailHelp" placeholder="Username">
