@@ -49,7 +49,7 @@
                     </g>
                   </svg>
 
-                  <span class="brand-name">Login nih</span>
+                  <span class="brand-name">Login</span>
                 </a>
               </div>
             </div>
