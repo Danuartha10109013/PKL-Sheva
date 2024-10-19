@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('username')->unique();
             $table->string('name');
-<<<<<<< HEAD
+
             $table->string('no_pegawai');
             $table->string('jabatan');
             $table->string('alamat')->nullable();
@@ -23,9 +23,8 @@ return new class extends Migration
             $table->string('profile')->nullable();
             $table->string('role');
             $table->date('birthday')->nullable();
-=======
+
             $table->string('username')->unique();
->>>>>>> 33b8485b034889790445807936d4b017efe8c165
             $table->string('email')->unique();
             $table->string('active');
             $table->string('role');

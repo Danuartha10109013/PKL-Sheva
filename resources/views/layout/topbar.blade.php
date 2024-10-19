@@ -476,7 +476,7 @@
             </li>
 
             <li>
-              <a href="user-profile.html">
+              <a href="{{route('profile', Auth::user()->id)}}">
                 <i class="mdi mdi-account"></i> My Profile
               </a>
             </li>

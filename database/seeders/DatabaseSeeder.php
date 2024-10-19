@@ -15,34 +15,49 @@ class DatabaseSeeder extends Seeder
     {
         // Insert a pegawai user
         DB::table('users')->insert([
-            'username' => 'pegawai',
-            'name' => 'Pegawai User',
-            'no_pegawai' => '12345',
-            'jabatan' => 'Staff',
-            'alamat' => 'Some Address',
+            'username' => 'project manager',
+            'name' => 'PM',
+            'no_pegawai' => '1',
+            'jabatan' => 'project manager',
+            'alamat' => 'Tasikmalaya',
             'active' => '1',
             'profile' => null,
             'role' => '1',
             'birthday' => '1990-01-01',
-            'email' => 'pegawai@example.com',
-            'password' => Hash::make('pegawai_user'), // Password same as username
+            'email' => 'pm@example.com',
+            'password' => Hash::make('pm_user'), // Password same as username
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
         // Insert an admin user
         DB::table('users')->insert([
-            'username' => 'admin',
-            'name' => 'Admin User',
-            'no_pegawai' => '54321',
-            'jabatan' => 'Administrator',
-            'alamat' => 'Another Address',
+            'username' => 'Team lead',
+            'name' => 'team lead',
+            'no_pegawai' => '2',
+            'jabatan' => 'pemimpin team',
+            'alamat' => 'purwakarta',
             'active' => '1',
             'profile' => null,
-            'role' => '0',
+            'role' => '2',
             'birthday' => '1985-05-05',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('admin_user'), // Password same as username
+            'email' => 'teamlead@example.com',
+            'password' => Hash::make('team_lead'), // Password same as username
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        DB::table('users')->insert([
+            'username' => 'finance',
+            'name' => 'finance',
+            'no_pegawai' => '3',
+            'jabatan' => 'keuangan',
+            'alamat' => 'purwakarta',
+            'active' => '1',
+            'profile' => null,
+            'role' => '3',
+            'birthday' => '1985-05-05',
+            'email' => 'finance@example.com',
+            'password' => Hash::make('finance_user'), // Password same as username
             'created_at' => now(),
             'updated_at' => now(),
         ]);

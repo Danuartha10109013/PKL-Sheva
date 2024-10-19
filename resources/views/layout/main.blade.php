@@ -9,7 +9,7 @@
     <!-- theme meta -->
     <meta name="theme-name" content="sleek" />
     
-    <title>Ecommerce - Sleek Admin Dashboard Template</title>
+    <title>@yield('title')</title>
     
     <!-- GOOGLE FONTS -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500|Poppins:400,500,600,700|Roboto:400,500" rel="stylesheet" />
@@ -32,6 +32,7 @@
     
     
     
+
 
     <!-- SLEEK CSS -->
     <link id="sleek-css" rel="stylesheet" href="{{asset('vendor/theme')}}/assets/css/sleek.css" />
@@ -83,7 +84,16 @@
         <!-- ====================================
           ——— LEFT SIDEBAR WITH OUT FOOTER
         ===================================== -->
-        @include('layout.sidebar')
+        @if (Auth::user()->role==0)
+        @include('layout.pm.sidebar')
+        @elseif (Auth::user()->role==1)
+        @include('layout.team_lead.sidebar')
+        @elseif (Auth::user()->role==2)
+        @include('layout.finance.sidebar')
+        @elseif (Auth::user()->role==3)
+        @include('layout.klien.sidebar')
+          
+        @endif
 
 
           <!-- ====================================
