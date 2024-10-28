@@ -1,502 +1,120 @@
-<nav class="navbar navbar-static-top navbar-expand-lg">
-    <!-- Sidebar toggle button -->
-    <button id="sidebar-toggler" class="sidebar-toggle">
-      <span class="sr-only">Toggle navigation</span>
-    </button>
-    <!-- search form -->
-    <div class="search-form d-none d-lg-inline-block">
-      <div class="input-group">
-        <button type="button" name="search" id="search-btn" class="btn btn-flat">
-          <i class="mdi mdi-magnify"></i>
-        </button>
-        <input type="text" name="query" id="search-input" class="form-control" placeholder="'button', 'chart' etc."
-          autofocus autocomplete="off" />
+<nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl " id="navbarBlur" data-scroll="false">
+  <div class="container-fluid py-1 px-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="javascript:;">Pages</a></li>
+        <li class="breadcrumb-item text-sm text-white active" aria-current="page">@yield('pages')</li>
+      </ol>
+      <h6 class="font-weight-bolder text-white mb-0">@yield('pages')</h6>
+    </nav>
+    <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+      <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+        <div class="input-group">
+          <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+          <input type="text" class="form-control" placeholder="Type here...">
+        </div>
       </div>
-      <div id="search-results-container">
-        <ul id="search-results"></ul>
-      </div>
-    </div>
-
-    <div class="navbar-right ">
-      <ul class="nav navbar-nav">
-        <li class="dropdown notifications-menu custom-dropdown">
-          <button class="dropdown-toggle notify-toggler custom-dropdown-toggler">
-            <i class="mdi mdi-bell-outline"></i>
-          </button>
-
-          <div class="card card-default dropdown-notify dropdown-menu-right mb-0">
-            <div class="card-header card-header-border-bottom px-3">
-              <h2>Notifications</h2>
-            </div>
-
-            <div class="card-body px-0 py-3">
-              <ul class="nav nav-tabs nav-style-border p-0 justify-content-between" id="myTab" role="tablist">
-                <li class="nav-item mx-3 my-0 py-0">
-                  <a class="nav-link active pb-3" id="home2-tab" data-toggle="tab" href="#home2" role="tab" aria-controls="home2" aria-selected="true">All (11)</a>
-                </li>
-
-                <li class="nav-item mx-3 my-0 py-0">
-                  <a class="nav-link pb-3" id="profile2-tab" data-toggle="tab" href="#profile2" role="tab" aria-controls="profile2" aria-selected="false">Msgs (6)</a>
-                </li>
-
-                <li class="nav-item mx-3 my-0 py-0">
-                  <a class="nav-link pb-3" id="contact2-tab" data-toggle="tab" href="#contact2" role="tab" aria-controls="contact2" aria-selected="false">Others (5)</a>
-                </li>
-              </ul>
-
-              <div class="tab-content" id="myTabContent3">
-                <div class="tab-pane fade show active" id="home2" role="tabpanel" aria-labelledby="home2-tab">
-                  <ul class="list-unstyled" data-simplebar style="height: 360px">
-                    <li>
-                      <a href="javscript:void(0)" class="media media-message media-notification">
-                        <div class="position-relative mr-3">
-                          <img class="rounded-circle" src="assets/img/user/u2.jpg" alt="Image">
-                          <span class="status away"></span>
-                        </div>
-                        <div class="media-body d-flex justify-content-between">
-                          <div class="message-contents">
-                            <h4 class="title">Aaren</h4>
-                            <p class="last-msg">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam itaque doloremque odio, eligendi delectus vitae.</p>
-
-                            <span class="font-size-12 font-weight-medium text-secondary">
-                              <i class="mdi mdi-clock-outline"></i> 30 min ago...
-                            </span>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-
-                    <li>
-                      <a href="javscript:void(0)" class="media media-message media-notification media-active">
-                        <div class="position-relative mr-3">
-                          <img class="rounded-circle" src="assets/img/user/u1.jpg" alt="Image">
-                          <span class="status active"></span>
-                        </div>
-                        <div class="media-body d-flex justify-content-between">
-                          <div class="message-contents">
-                            <h4 class="title">Abril</h4>
-                            <p class="last-msg">Donec mattis augue a nisl consequat, nec imperdiet ex rutrum. Fusce et vehicula enim. Sed in enim eu odio vehic.</p>
-
-                            <span class="font-size-12 font-weight-medium text-white">
-                              <i class="mdi mdi-clock-outline"></i> Just now...
-                            </span>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-
-                    <li>
-                      <a href="javscript:void(0)" class="media media-message media-notification">
-                        <div class="position-relative mr-3">
-                          <img class="rounded-circle" src="assets/img/user/u5.jpg" alt="Image">
-                          <span class="status away"></span>
-                        </div>
-                        <div class="media-body d-flex justify-content-between">
-                          <div class="message-contents">
-                            <h4 class="title">Emma</h4>
-                            <p class="last-msg">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam itaque doloremque odio, eligendi delectus vitae.</p>
-
-                            <span class="font-size-12 font-weight-medium text-secondary">
-                              <i class="mdi mdi-clock-outline"></i> 1 hrs ago...
-                            </span>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-
-                    <li>
-                      <a href="javscript:void(0)" class="media media-message media-notification event-active">
-
-                        <div class="d-flex rounded-circle align-items-center justify-content-center mr-3 media-icon iconbox-45 bg-info text-white">
-                          <i class="mdi mdi-calendar-check font-size-20"></i>
-                        </div>
-
-                        <div class="media-body d-flex justify-content-between">
-                          <div class="message-contents">
-                            <h4 class="title">New event added</h4>
-                            <p class="last-msg font-size-14">03/Jan/2020 (1pm - 2pm)</p>
-
-                            <span class="font-size-12 font-weight-medium text-secondary">
-                              <i class="mdi mdi-clock-outline"></i> 10 min ago...
-                            </span>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-
-                    <li>
-                      <a href="javscript:void(0)" class="media media-message media-notification">
-
-                        <div class="d-flex rounded-circle align-items-center justify-content-center mr-3 media-icon iconbox-45 bg-warning text-white">
-                          <i class="mdi mdi-chart-areaspline font-size-20"></i>
-                        </div>
-
-                        <div class="media-body d-flex justify-content-between">
-                          <div class="message-contents">
-                            <h4 class="title">Sales report</h4>
-                            <p class="last-msg font-size-14">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam itaque doloremque odio, eligendi delectus vitae.</p>
-
-                            <span class="font-size-12 font-weight-medium text-secondary">
-                              <i class="mdi mdi-clock-outline"></i> 1 hrs ago...
-                            </span>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-
-                    <li>
-                      <a href="javscript:void(0)" class="media media-message media-notification">
-
-                        <div class="d-flex rounded-circle align-items-center justify-content-center mr-3 media-icon iconbox-45 bg-primary text-white">
-                          <i class="mdi mdi-account-multiple-check font-size-20"></i>
-                        </div>
-
-                        <div class="media-body d-flex justify-content-between">
-                          <div class="message-contents">
-                            <h4 class="title">Add request</h4>
-                            <p class="last-msg font-size-14">Add Dany Jones as your contact consequat nec imperdiet ex rutrum. Fusce et vehicula enim. Sed in enim.</p>
-
-                            <button type="button" class="my-1 btn btn-sm btn-success">Accept</button>
-                            <button type="button" class="my-1 btn btn-sm btn-secondary">Delete</button>
-
-                            <span class="font-size-12 font-weight-medium text-secondary d-block">
-                              <i class="mdi mdi-clock-outline"></i> 5 min ago...
-                            </span>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-
-                    <li>
-                      <a href="javscript:void(0)" class="media media-message media-notification">
-
-                        <div class="d-flex rounded-circle align-items-center justify-content-center mr-3 media-icon iconbox-45 bg-danger text-white">
-                          <i class="mdi mdi-server-network-off font-size-20"></i>
-                        </div>
-
-                        <div class="media-body d-flex justify-content-between">
-                          <div class="message-contents">
-                            <h4 class="title">Server overloaded</h4>
-                            <p class="last-msg font-size-14">Donec mattis augue a nisl consequat, nec imperdiet ex rutrum. Fusce et vehicula enim. Sed in enim eu odio vehic.</p>
-
-                            <span class="font-size-12 font-weight-medium text-secondary">
-                              <i class="mdi mdi-clock-outline"></i> 30 min ago...
-                            </span>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-
-                    <li>
-                      <a href="javscript:void(0)" class="media media-message media-notification">
-
-                        <div class="d-flex rounded-circle align-items-center justify-content-center mr-3 media-icon iconbox-45 bg-purple text-white">
-                          <i class="mdi mdi-playlist-check font-size-20"></i>
-                        </div>
-
-                        <div class="media-body d-flex justify-content-between">
-                          <div class="message-contents">
-                            <h4 class="title">Task complete</h4>
-                            <p class="last-msg font-size-14">Nam ut nisi erat. Ut quis tortor varius, hendrerit arcu quis, congue nisl. In scelerisque, sem ut ve.</p>
-
-                            <span class="font-size-12 font-weight-medium text-secondary">
-                              <i class="mdi mdi-clock-outline"></i> 2 hrs ago...
-                            </span>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-
-                  </ul>
-                </div>
-
-                <div class="tab-pane fade" id="profile2" role="tabpanel" aria-labelledby="profile2-tab">
-                  <ul class="list-unstyled" data-simplebar style="height: 360px">
-                    <li>
-                      <a href="javscript:void(0)" class="media media-message media-notification">
-                        <div class="position-relative mr-3">
-                          <img class="rounded-circle" src="assets/img/user/u6.jpg" alt="Image">
-                          <span class="status away"></span>
-                        </div>
-                        <div class="media-body d-flex justify-content-between">
-                          <div class="message-contents">
-                            <h4 class="title">William</h4>
-                            <p class="last-msg">Donec mattis augue a nisl consequat, nec imperdiet ex rutrum. Fusce et vehicula enim. Sed in enim eu odio vehic.</p>
-
-                            <span class="font-size-12 font-weight-medium text-secondary">
-                              <i class="mdi mdi-clock-outline"></i> 1 hrs ago...
-                            </span>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-
-                    <li>
-                      <a href="javscript:void(0)" class="media media-message media-notification">
-                        <div class="position-relative mr-3">
-                          <img class="rounded-circle" src="assets/img/user/u7.jpg" alt="Image">
-                          <span class="status away"></span>
-                        </div>
-                        <div class="media-body d-flex justify-content-between">
-                          <div class="message-contents">
-                            <h4 class="title">Camble</h4>
-                            <p class="last-msg">Nam ut nisi erat. Ut quis tortor varius, hendrerit arcu quis, congue nisl. In scelerisque, sem ut ve.</p>
-
-                            <span class="font-size-12 font-weight-medium text-secondary">
-                              <i class="mdi mdi-clock-outline"></i> 1 hrs ago...
-                            </span>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-
-                    <li>
-                      <a href="javscript:void(0)" class="media media-message media-notification media-active">
-                        <div class="position-relative mr-3">
-                          <img class="rounded-circle" src="assets/img/user/u1.jpg" alt="Image">
-                          <span class="status active"></span>
-                        </div>
-                        <div class="media-body d-flex justify-content-between">
-                          <div class="message-contents">
-                            <h4 class="title">Abril</h4>
-                            <p class="last-msg">Donec mattis augue a nisl consequat, nec imperdiet ex rutrum. Fusce et vehicula enim. Sed in enim eu odio vehic.</p>
-
-                            <span class="font-size-12 font-weight-medium text-white">
-                              <i class="mdi mdi-clock-outline"></i> Just now...
-                            </span>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-
-                    <li>
-                      <a href="javscript:void(0)" class="media media-message media-notification">
-                        <div class="position-relative mr-3">
-                          <img class="rounded-circle" src="assets/img/user/u2.jpg" alt="Image">
-                          <span class="status away"></span>
-                        </div>
-                        <div class="media-body d-flex justify-content-between">
-                          <div class="message-contents">
-                            <h4 class="title">Aaren</h4>
-                            <p class="last-msg">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam itaque doloremque odio, eligendi delectus vitae.</p>
-
-                            <span class="font-size-12 font-weight-medium text-secondary">
-                              <i class="mdi mdi-clock-outline"></i> 1 hrs ago...
-                            </span>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-
-                    <li>
-                      <a href="javscript:void(0)" class="media media-message media-notification">
-                        <div class="position-relative mr-3">
-                          <img class="rounded-circle" src="assets/img/user/u5.jpg" alt="Image">
-                          <span class="status away"></span>
-                        </div>
-                        <div class="media-body d-flex justify-content-between">
-                          <div class="message-contents">
-                            <h4 class="title">Emma</h4>
-                            <p class="last-msg">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam itaque doloremque odio, eligendi delectus vitae.</p>
-
-                            <span class="font-size-12 font-weight-medium text-secondary">
-                              <i class="mdi mdi-clock-outline"></i> 1 hrs ago...
-                            </span>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-
-                  </ul>
-                </div>
-
-                <div class="tab-pane fade" id="contact2" role="tabpanel" aria-labelledby="contact2-tab">
-                  <ul class="list-unstyled" data-simplebar style="height: 360px">
-                    <li>
-                      <a href="javscript:void(0)" class="media media-message media-notification event-active">
-
-                        <div class="d-flex rounded-circle align-items-center justify-content-center mr-3 media-icon iconbox-45 bg-info text-white">
-                          <i class="mdi mdi-calendar-check font-size-20"></i>
-                        </div>
-
-                        <div class="media-body d-flex justify-content-between">
-                          <div class="message-contents">
-                            <h4 class="title">New event added</h4>
-                            <p class="last-msg font-size-14">03/Jan/2020 (1pm - 2pm)</p>
-
-                            <span class="font-size-12 font-weight-medium text-secondary">
-                              <i class="mdi mdi-clock-outline"></i> 10 min ago...
-                            </span>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-
-                    <li>
-                      <a href="javscript:void(0)" class="media media-message media-notification">
-
-                        <div class="d-flex rounded-circle align-items-center justify-content-center mr-3 media-icon iconbox-45 bg-warning text-white">
-                          <i class="mdi mdi-chart-areaspline font-size-20"></i>
-                        </div>
-
-                        <div class="media-body d-flex justify-content-between">
-                          <div class="message-contents">
-                            <h4 class="title">Sales report</h4>
-                            <p class="last-msg font-size-14">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam itaque doloremque odio, eligendi delectus vitae.</p>
-
-                            <span class="font-size-12 font-weight-medium text-secondary">
-                              <i class="mdi mdi-clock-outline"></i> 1 hrs ago...
-                            </span>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-
-                    <li>
-                      <a href="javscript:void(0)" class="media media-message media-notification">
-
-                        <div class="d-flex rounded-circle align-items-center justify-content-center mr-3 media-icon iconbox-45 bg-primary text-white">
-                          <i class="mdi mdi-account-multiple-check font-size-20"></i>
-                        </div>
-
-                        <div class="media-body d-flex justify-content-between">
-                          <div class="message-contents">
-                            <h4 class="title">Add request</h4>
-                            <p class="last-msg font-size-14">Add Dany Jones as your contact consequat nec imperdiet ex rutrum. Fusce et vehicula enim. Sed in enim.</p>
-
-                            <button type="button" class="my-1 btn btn-sm btn-success">Accept</button>
-                            <button type="button" class="my-1 btn btn-sm btn-secondary">Delete</button>
-
-                            <span class="font-size-12 font-weight-medium text-secondary d-block">
-                              <i class="mdi mdi-clock-outline"></i> 5 min ago...
-                            </span>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-
-                    <li>
-                      <a href="javscript:void(0)" class="media media-message media-notification">
-
-                        <div class="d-flex rounded-circle align-items-center justify-content-center mr-3 media-icon iconbox-45 bg-danger text-white">
-                          <i class="mdi mdi-server-network-off font-size-20"></i>
-                        </div>
-
-                        <div class="media-body d-flex justify-content-between">
-                          <div class="message-contents">
-                            <h4 class="title">Server overloaded</h4>
-                            <p class="last-msg font-size-14">Donec mattis augue a nisl consequat, nec imperdiet ex rutrum. Fusce et vehicula enim. Sed in enim eu odio vehic.</p>
-
-                            <span class="font-size-12 font-weight-medium text-secondary">
-                              <i class="mdi mdi-clock-outline"></i> 30 min ago...
-                            </span>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-
-                    <li>
-                      <a href="javscript:void(0)" class="media media-message media-notification">
-
-                        <div class="d-flex rounded-circle align-items-center justify-content-center mr-3 media-icon iconbox-45 bg-purple text-white">
-                          <i class="mdi mdi-playlist-check font-size-20"></i>
-                        </div>
-
-                        <div class="media-body d-flex justify-content-between">
-                          <div class="message-contents">
-                            <h4 class="title">Task complete</h4>
-                            <p class="last-msg font-size-14">Nam ut nisi erat. Ut quis tortor varius, hendrerit arcu quis, congue nisl. In scelerisque, sem ut ve.</p>
-
-                            <span class="font-size-12 font-weight-medium text-secondary">
-                              <i class="mdi mdi-clock-outline"></i> 2 hrs ago...
-                            </span>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <ul class="dropdown-menu dropdown-menu-right d-none">
-            <li class="dropdown-header">You have 5 notifications</li>
-            <li>
-              <a href="#">
-                <i class="mdi mdi-account-plus"></i> New user registered
-                <span class=" font-size-12 d-inline-block float-right"><i class="mdi mdi-clock-outline"></i> 10 AM</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <i class="mdi mdi-account-remove"></i> User deleted
-                <span class=" font-size-12 d-inline-block float-right"><i class="mdi mdi-clock-outline"></i> 07 AM</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <i class="mdi mdi-chart-areaspline"></i> Sales report is ready
-                <span class=" font-size-12 d-inline-block float-right"><i class="mdi mdi-clock-outline"></i> 12 PM</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <i class="mdi mdi-account-supervisor"></i> New client
-                <span class=" font-size-12 d-inline-block float-right"><i class="mdi mdi-clock-outline"></i> 10 AM</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <i class="mdi mdi-server-network-off"></i> Server overloaded
-                <span class=" font-size-12 d-inline-block float-right"><i class="mdi mdi-clock-outline"></i> 05 AM</span>
-              </a>
-            </li>
-            <li class="dropdown-footer">
-              <a class="text-center" href="#"> View All </a>
-            </li>
+      <ul class="navbar-nav  justify-content-end">
+        <li class="nav-item dropdown d-flex align-items-center">
+          <a href="#" class="nav-link text-white font-weight-bold px-0 dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="{{ asset('zen-white-logo.png') }}" alt="Profile" style="border-radius: 9px; border: 2px solid white;" class="avatar avatar-sm rounded-circle me-2">
+            <span class="d-sm-inline d-none">{{Auth::user()->username}}</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li><a class="dropdown-item" href="{{ route('profile',Auth::user()->id) }}">Edit Profile</a></li>
+            <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
           </ul>
         </li>
-        <li class="right-sidebar-in right-sidebar-2-menu">
-          <i class="mdi mdi-settings mdi-spin"></i>
+        
+        
+        <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+          <a href="javascript:;" class="nav-link text-white p-0" id="iconNavbarSidenav">
+            <div class="sidenav-toggler-inner">
+              <i class="sidenav-toggler-line bg-white"></i>
+              <i class="sidenav-toggler-line bg-white"></i>
+              <i class="sidenav-toggler-line bg-white"></i>
+            </div>
+          </a>
         </li>
-        <!-- User Account -->
-        <li class="dropdown user-menu">
-          <button href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-            <img src="{{asset('vendor/theme')}}/assets/img/user/user.png" class="user-image" alt="User Image" />
-            <span class="d-none d-lg-inline-block">Abdus Salam</span>
-          </button>
-          <ul class="dropdown-menu dropdown-menu-right">
-            <!-- User image -->
-            <li class="dropdown-header">
-              <img src="{{asset('vendor/theme')}}/assets/img/user/user.png" class="img-circle" alt="User Image" />
-              <div class="d-inline-block">
-                Abdus Salam <small class="pt-1">iamabdus@gmail.com</small>
-              </div>
+        <li class="nav-item px-3 d-flex align-items-center">
+          <a href="javascript:;" class="nav-link text-white p-0">
+            <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
+          </a>
+        </li>
+        <li class="nav-item dropdown pe-2 d-flex align-items-center">
+          <a href="javascript:;" class="nav-link text-white p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-bell cursor-pointer"></i>
+          </a>
+          <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
+            <li class="mb-2">
+              <a class="dropdown-item border-radius-md" href="javascript:;">
+                <div class="d-flex py-1">
+                  <div class="my-auto">
+                    <img src="{{asset('vendorin')}}/assets/img/team-2.jpg" class="avatar avatar-sm  me-3 ">
+                  </div>
+                  <div class="d-flex flex-column justify-content-center">
+                    <h6 class="text-sm font-weight-normal mb-1">
+                      <span class="font-weight-bold">New message</span> from Laur
+                    </h6>
+                    <p class="text-xs text-secondary mb-0">
+                      <i class="fa fa-clock me-1"></i>
+                      13 minutes ago
+                    </p>
+                  </div>
+                </div>
+              </a>
             </li>
-
-            <li>
-              <a href="{{route('profile', Auth::user()->id)}}">
-                <i class="mdi mdi-account"></i> My Profile
+            <li class="mb-2">
+              <a class="dropdown-item border-radius-md" href="javascript:;">
+                <div class="d-flex py-1">
+                  <div class="my-auto">
+                    <img src="{{asset('vendorin')}}/assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm bg-gradient-dark  me-3 ">
+                  </div>
+                  <div class="d-flex flex-column justify-content-center">
+                    <h6 class="text-sm font-weight-normal mb-1">
+                      <span class="font-weight-bold">New album</span> by Travis Scott
+                    </h6>
+                    <p class="text-xs text-secondary mb-0">
+                      <i class="fa fa-clock me-1"></i>
+                      1 day
+                    </p>
+                  </div>
+                </div>
               </a>
             </li>
             <li>
-              <a href="#">
-                <i class="mdi mdi-email"></i> Message
+              <a class="dropdown-item border-radius-md" href="javascript:;">
+                <div class="d-flex py-1">
+                  <div class="avatar avatar-sm bg-gradient-secondary  me-3  my-auto">
+                    <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                      <title>credit-card</title>
+                      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g transform="translate(-2169.000000, -745.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                          <g transform="translate(1716.000000, 291.000000)">
+                            <g transform="translate(453.000000, 454.000000)">
+                              <path class="color-background" d="M43,10.7482083 L43,3.58333333 C43,1.60354167 41.3964583,0 39.4166667,0 L3.58333333,0 C1.60354167,0 0,1.60354167 0,3.58333333 L0,10.7482083 L43,10.7482083 Z" opacity="0.593633743"></path>
+                              <path class="color-background" d="M0,16.125 L0,32.25 C0,34.2297917 1.60354167,35.8333333 3.58333333,35.8333333 L39.4166667,35.8333333 C41.3964583,35.8333333 43,34.2297917 43,32.25 L43,16.125 L0,16.125 Z M19.7083333,26.875 L7.16666667,26.875 L7.16666667,23.2916667 L19.7083333,23.2916667 L19.7083333,26.875 Z M35.8333333,26.875 L28.6666667,26.875 L28.6666667,23.2916667 L35.8333333,23.2916667 L35.8333333,26.875 Z"></path>
+                            </g>
+                          </g>
+                        </g>
+                      </g>
+                    </svg>
+                  </div>
+                  <div class="d-flex flex-column justify-content-center">
+                    <h6 class="text-sm font-weight-normal mb-1">
+                      Payment successfully completed
+                    </h6>
+                    <p class="text-xs text-secondary mb-0">
+                      <i class="fa fa-clock me-1"></i>
+                      2 days
+                    </p>
+                  </div>
+                </div>
               </a>
-            </li>
-            <li>
-              <a href="#"> <i class="mdi mdi-diamond-stone"></i> Projects </a>
-            </li>
-            <li class="right-sidebar-in">
-              <a href="javascript:0"> <i class="mdi mdi-settings"></i> Setting </a>
-            </li>
-
-            <li class="dropdown-footer">
-              <a href="index.html"> <i class="mdi mdi-logout"></i> Log Out </a>
             </li>
           </ul>
         </li>
       </ul>
     </div>
-  </nav>
+  </div>
+</nav>

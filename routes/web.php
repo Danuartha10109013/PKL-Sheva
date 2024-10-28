@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [Clogin::class, 'login'])->name('login');
 Route::post('/loginz', [Clogin::class, 'input_login'])->name('input_login');
+Route::get('/logout', [Clogin::class, 'logout'])->name('logout');
 
 
 //auto Logout
@@ -15,7 +16,7 @@ Route::middleware([AutoLogout::class])->group(function () {
     //Profile
     Route::prefix('profile')->group(function () {
         Route::get('{id}',[ProfileController::class,'index'])->name('profile');
-        Route::put('/update',[ProfileController::class,'update'])->name('profile.update');
+        Route::post('/update',[ProfileController::class,'update'])->name('profile.update');
     });
     
     Route::group(['prefix' => 'pm', 'middleware' => ['pm'], 'as' => 'pm.'], function () {

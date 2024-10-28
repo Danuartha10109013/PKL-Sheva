@@ -44,5 +44,11 @@ class Clogin
             return redirect()->route('login')->with('error', 'Username atau Password anda salah!');
         }
     }
+
+    public function logout(Request $request) {
+        Auth::logout();
+        // Mengarahkan kembali ke halaman login dengan pesan sukses
+        return redirect()->route('login')->with('success', 'Kamu berhasil Logout');
+    }
 }
 
