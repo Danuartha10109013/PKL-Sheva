@@ -75,7 +75,7 @@
                     <label for="profile_image">Profile Image (optional)</label>
                     <input type="file" name="profile_image" class="form-control-file">
                     @if($data->profile)
-                        <img src="{{ Storage::url($data->profile) }}" alt="Profile Image" class="img-thumbnail mt-2" width="150">
+                        <img src="{{asset('storage/user_profile/'.$data->id.'/'.$data->profile)}}" alt="Profile Image" class="img-thumbnail mt-2" width="150">
                     @endif
                 </div>
             </div>

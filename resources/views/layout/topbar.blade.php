@@ -17,7 +17,7 @@
       <ul class="navbar-nav  justify-content-end">
         <li class="nav-item dropdown d-flex align-items-center">
           <a href="#" class="nav-link text-white font-weight-bold px-0 dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="{{ asset('zen-white-logo.png') }}" alt="Profile" style="border-radius: 9px; border: 2px solid white;" class="avatar avatar-sm rounded-circle me-2">
+            <img src="{{ asset('storage/user_profile/'.Auth::user()->id.'/'.Auth::user()->profile) }}" alt="Profile" style="border-radius: 9px; border: 2px solid white;" class="avatar avatar-sm rounded-circle me-2">
             <span class="d-sm-inline d-none">{{Auth::user()->username}}</span>
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">

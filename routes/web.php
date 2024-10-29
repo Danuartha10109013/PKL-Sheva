@@ -22,7 +22,12 @@ Route::middleware([AutoLogout::class])->group(function () {
     Route::group(['prefix' => 'pm', 'middleware' => ['pm'], 'as' => 'pm.'], function () {
         //Dashboard
         Route::get('/', [DashboardController::class, 'projectManager'])->name('PM');
-
+        Route::prefix('k-user')->group(function () {
+            Route::get('/', [KelolaUser::class, 'index'])->name('k-user');
+            Route::post('/store', [KelolaUser::class, 'store'])->name('k-user.store');
+            Route::put('/update/{id}', [KelolaUser::class, 'update'])->name('k-user.update');
+            Route::delete('/destroy/{id}', [KelolaUser::class, 'destroy'])->name('k-user.destroy');
+        });
     });
     Route::group(['prefix' => 'team_lead', 'middleware' => ['team_lead'], 'as' => 'team_lead.'], function () {
         //Dashboard

@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DashboardController
 {
     public function projectManager ()
     {
-        return view('page.pm.index');
+        $client = User::where('role', 3)->count(); 
+        return view('page.pm.index',compact('client'));
     }
     public function team_lead ()
     {
