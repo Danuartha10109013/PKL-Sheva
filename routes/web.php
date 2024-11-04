@@ -28,6 +28,11 @@ Route::middleware([AutoLogout::class])->group(function () {
             Route::put('/update/{id}', [KelolaUser::class, 'update'])->name('k-user.update');
             Route::delete('/destroy/{id}', [KelolaUser::class, 'destroy'])->name('k-user.destroy');
         });
+        Route::prefix('k-project')->group(function () {
+            Route::get('/', [KProjectController::class, 'index'])->name('k-project');
+            Route::post('/store', [KProjectController::class, 'store'])->name('k-project.store');
+        });
+
     });
     Route::group(['prefix' => 'team_lead', 'middleware' => ['team_lead'], 'as' => 'team_lead.'], function () {
         //Dashboard
