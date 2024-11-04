@@ -147,6 +147,7 @@
         </div>
       </div>
     </div>
+    <script src="{{asset('ckeditor/ckeditor.js')}}"></script>
   <!--   Core JS Files   -->
   <script src="{{asset('vendorin')}}/assets/js/core/popper.min.js"></script>
   <script src="{{asset('vendorin')}}/assets/js/core/bootstrap.min.js"></script>

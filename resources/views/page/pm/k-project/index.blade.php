@@ -17,41 +17,114 @@ Kelola Poject Plan
     </div>
     <div class="table-responsive">
         <table class="table align-items-center">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Judul</th>
-                    <th>Customer</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Action</th>
-                    <th>Total Biaya</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($data as $d)
-                <tr>
-                    <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$loop->iteration}}</td>
-                    <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->judul}}</td>
-                    <td> &nbsp;&nbsp;&nbsp;&nbsp;
-                        @php
-                            $name = \App\Models\User::where('id',$d->customer_id)->value('name');
-                        @endphp
-                        {{$name}}</td>
-                    <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->start}}</td>
-                    <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->end}}</td>
-                    <td> &nbsp;&nbsp;&nbsp;&nbsp;
-                        <a href="" class="btn btn-primary"><i class="fas fa-keyboard"></i></a>
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Judul</th>
+            <th>Customer</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Action</th>
+            <th>Total Biaya</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($data as $d)
+        <tr>
+            <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$loop->iteration}}</td>
+            <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->judul}}</td>
+            <td> &nbsp;&nbsp;&nbsp;&nbsp;
+                @php
+                    $name = \App\Models\User::where('id', $d->customer_id)->value('name');
+                @endphp
+                {{$name}}
+            </td>
+            <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->start}}</td>
+            <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->end}}</td>
+            <td> &nbsp;&nbsp;&nbsp;&nbsp;
+                @php
+                    $ids = \App\Models\ProjectPlanM::where('project_id',$d->id)->value('id');
+                @endphp
+                <a href="{{route('pm.k-project.plan',$ids)}}" class="btn btn-primary"><i class="fas fa-keyboard"></i></a>
                         <a href="" class="btn btn-success"><i class="fa fa-eye"></i></a>
-                        <a href="" class="btn btn-warning"><i class="fa fa-pencil-square"></i></a>
-                        <a href="" class="btn btn-danger"><i class="fa fa-trash"></i></a>
-                    </td>
-                    <td> &nbsp;&nbsp;&nbsp;&nbsp;Rp. {{$d->biaya}},00</td>
-                </tr>
-                @endforeach
+                <!-- Edit Button -->
+                <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal{{$d->id}}">
+                    <i class="fa fa-pencil-square"></i>
+                </a>
 
-            </tbody>
-        </table>
+                <!-- Delete Button -->
+                <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{$d->id}}">
+                    <i class="fa fa-trash"></i>
+                </a>
+            </td>
+            <td> &nbsp;&nbsp;&nbsp;&nbsp;Rp. {{$d->biaya}}</td>
+        </tr>
+
+        <!-- Edit Modal for Each Row -->
+        <div class="modal fade" id="editModal{{$d->id}}" tabindex="-1" aria-labelledby="editModalLabel{{$d->id}}" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form action="{{ route('pm.k-project.update', $d->id) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-header">
+                  <h5 class="modal-title" id="editModalLabel{{$d->id}}">Edit Data</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="mb-3">
+                    <label for="judul{{$d->id}}" class="form-label">Judul</label>
+                    <input type="text" class="form-control" id="judul{{$d->id}}" name="judul" value="{{ $d->judul }}">
+                  </div>
+                  <div class="mb-3">
+                    <label for="start{{$d->id}}" class="form-label">Start Date</label>
+                    <input type="date" class="form-control" id="start{{$d->id}}" name="start" value="{{ $d->start }}">
+                  </div>
+                  <div class="mb-3">
+                    <label for="end{{$d->id}}" class="form-label">End Date</label>
+                    <input type="date" class="form-control" id="end{{$d->id}}" name="end" value="{{ $d->end }}">
+                  </div>
+                  <div class="mb-3">
+                    <label for="biaya{{$d->id}}" class="form-label">Total Biaya</label>
+                    <input type="text" class="form-control" id="biaya{{$d->id}}" name="biaya" value="{{ $d->biaya }}">
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delete Modal for Each Row -->
+        <div class="modal fade" id="deleteModal{{$d->id}}" tabindex="-1" aria-labelledby="deleteModalLabel{{$d->id}}" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form action="{{ route('pm.k-project.delete', $d->id) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <div class="modal-header">
+                  <h5 class="modal-title" id="deleteModalLabel{{$d->id}}">Confirm Delete</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  Are you sure you want to delete this record?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        @endforeach
+    </tbody>
+</table>
+
     </div>
 </div>
 
