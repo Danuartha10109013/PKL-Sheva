@@ -46,7 +46,7 @@ Kelola Poject Plan
                     $ids = \App\Models\ProjectPlanM::where('project_id',$d->id)->value('id');
                 @endphp
                 <a href="{{route('pm.k-project.plan',$ids)}}" class="btn btn-primary"><i class="fas fa-keyboard"></i></a>
-                        <a href="" class="btn btn-success"><i class="fa fa-eye"></i></a>
+                <a href="{{route('pm.k-project.show',$d->id)}}" class="btn btn-success"><i class="fa fa-eye"></i></a>
                 <!-- Edit Button -->
                 <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal{{$d->id}}">
                     <i class="fa fa-pencil-square"></i>
@@ -56,7 +56,35 @@ Kelola Poject Plan
                 <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{$d->id}}">
                     <i class="fa fa-trash"></i>
                 </a>
-            </td>
+                <!-- Launch Button to Trigger Modal -->
+                @if ($d->launch == 0)
+                <a class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#launchConfirmModal">
+                  <i class="fa fa-rocket"></i>
+                </a>
+                @else
+                <a href="{{route('pm.k-project.communication',$d->id)}}" class="btn btn-light"><i class="fa-solid fa-people-arrows"></i></a>
+                @endif
+
+                <!-- Launch Confirmation Modal -->
+                <div class="modal fade" id="launchConfirmModal" tabindex="-1" aria-labelledby="launchConfirmModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                              <h5 class="modal-title" id="launchConfirmModalLabel">Confirm Launch</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                              Are you sure you want to launch this project to the customer?
+                          </div>
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                              <a href="{{ route('pm.k-project.launch', $d->id) }}" class="btn btn-dark">Yes, Launch</a>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+
+              </td>
             <td> &nbsp;&nbsp;&nbsp;&nbsp;Rp. {{$d->biaya}}</td>
         </tr>
 
@@ -153,11 +181,11 @@ Kelola Poject Plan
                     </div>
                     <div class="mb-3">
                         <label for="start" class="form-label">Start Date</label>
-                        <input type="date" class="form-control" id="start" name="start" required>
+                        <input type="date" class="form-control" id="start" name="start" >
                     </div>
                     <div class="mb-3">
                         <label for="end" class="form-label">End Date</label>
-                        <input type="date" class="form-control" id="end" name="end" required>
+                        <input type="date" class="form-control" id="end" name="end" >
                     </div>
                     <div class="mb-3">
                         <label for="biaya" class="form-label">Total Cost</label>

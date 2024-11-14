@@ -18,5 +18,6 @@ class ProjectM extends Model
         'start',
         'end',
         'biaya',
+        'launch',
     ];
 }

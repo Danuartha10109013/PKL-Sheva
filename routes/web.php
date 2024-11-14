@@ -47,10 +47,13 @@ Route::middleware([AutoLogout::class])->group(function () {
         Route::prefix('k-project')->group(function () {
             Route::get('/', [KProjectController::class, 'index'])->name('k-project');
             Route::get('/plan/{id}', [KProjectController::class, 'plan'])->name('k-project.plan');
+            Route::get('/show/{id}', [KProjectController::class, 'show'])->name('k-project.show');
             Route::put('/plan/update/{id}', [KProjectController::class, 'update_plan'])->name('k-project.plan.update');
             Route::post('/store', [KProjectController::class, 'store'])->name('k-project.store');
             Route::put('/update/{id}', [KProjectController::class, 'update'])->name('k-project.update');
             Route::delete('/delete/{id}', [KProjectController::class, 'delete'])->name('k-project.delete');
+            Route::get('/launch/{id}', [KProjectController::class, 'launch'])->name('k-project.launch');
+            Route::get('/communication/{id}', [KProjectController::class, 'communication'])->name('k-project.communication');
         });
 
     });
@@ -67,6 +70,11 @@ Route::middleware([AutoLogout::class])->group(function () {
     Route::group(['prefix' => 'klien', 'middleware' => ['klien'], 'as' => 'klien.'], function () {
         //Dashboard
         Route::get('/', [DashboardController::class, 'klien'])->name('klien');
+        Route::prefix('project')->group(function () {
+            Route::get('/{id}', [ClientController::class, 'plan'])->name('project');
+            Route::post('update/{id}', [ClientController::class, 'update'])->name('project.update');
+            Route::get('setuju/{id}', [ClientController::class, 'setuju'])->name('project.setuju');
+        });
 
     });
 });

@@ -23,8 +23,8 @@ class KProjectController
         $request->validate([
             'judul' => 'required|string|max:255',
             'customer' => 'required|string|max:255',
-            'start' => 'required|date',
-            'end' => 'required|date|after_or_equal:start',
+            'start' => 'nullable|date',
+            'end' => 'nullable|date|after_or_equal:start',
             'biaya' => 'nullable|numeric|min:0',
         ]);
 
@@ -95,6 +95,14 @@ class KProjectController
         return view('page.pm.k-project.plan',compact('data','id'));
     }
 
+    public function show($id){
+        $ids = ProjectPlanM::where('project_id',$id)->value('id');
+        $data = ProjectPlanM::find($ids);
+        $project = ProjectM::find($id);
+        // dd($ids);
+        return view('page.pm.k-project.show',compact('data','project'));
+    }
+
     public function update_plan(Request $request,$id){
         // Validate incoming request data
         $request->validate([
@@ -110,6 +118,7 @@ class KProjectController
             'topologi' => 'string|nullable',
             'diagram' => 'string|nullable',
             'anggaran' => 'string|nullable',
+            'nilai' => 'string|nullable',
             'pernyataan' => 'string|nullable',
             'catatan' => 'string|nullable',
         ]);
@@ -130,6 +139,7 @@ class KProjectController
         $projectPlan->topologi = $request->topologi;
         $projectPlan->diagram = $request->diagram;
         $projectPlan->anggaran = $request->anggaran;
+        $projectPlan->nilai = $request->nilai;
         $projectPlan->pernyataan = $request->pernyataan;
         $projectPlan->catatan = $request->catatan;
 
@@ -139,4 +149,41 @@ class KProjectController
         // Redirect with a success message
         return redirect()->back()->with('success', 'Project plan updated successfully');
     }
+
+    public function launch($id) {
+        $projectPlans = ProjectPlanM::where('project_id', $id)->get();
+        
+        $allFilled = $projectPlans->every(function ($plan) {
+            foreach ($plan->getAttributes() as $key => $value) {
+                if (empty($value) && $key !== 'id' && $key !== 'project_id') { // Exclude non-essential fields
+                    return false;
+                }
+            }
+            return true;
+        });
+        // dd($allFilled);
+    
+        if ($allFilled) {
+            $data = ProjectM::find($id);
+            if ($data) {
+                $data->launch = 1;
+                $data->save();
+    
+                return redirect()->back()->with('success', 'Your project has been launched.');
+            } else {
+                return redirect()->back()->with('error', 'Project not found.');
+            }
+        } else {
+            return redirect()->back()->with('error', 'Data for the project is incomplete. Please complete all fields.');
+        }
+    }
+
+    public function communication($id){
+        $ids = ProjectPlanM::where('project_id',$id)->value('id');
+        $data = ProjectPlanM::find($ids);
+        $project = ProjectM::find($id);
+        // dd($ids);
+        return view('page.pm.k-project.communication',compact('data','project'));
+    }
+    
 }

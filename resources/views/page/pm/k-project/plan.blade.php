@@ -71,6 +71,10 @@ Detail Project Plan
                 <textarea name="anggaran" id="anggaran" class="form-control" cols="30" rows="10">{{ old('anggaran', $data->anggaran) }}</textarea>
             </div>
             <div class="mb-3">
+                <label for="nilai">Nilai Proyek</label>
+                <textarea name="nilai" id="nilai" class="form-control" cols="30" rows="10">{{ old('nilai', $data->nilai) }}</textarea>
+            </div>
+            <div class="mb-3">
                 <label for="pernyataan">Pernyataan Kesepakatan Dokumen Perencanaan Proyek</label>
                 <textarea name="pernyataan" id="pernyataan" class="form-control" cols="30" rows="10">{{ old('pernyataan', $data->pernyataan) }}</textarea>
             </div>
@@ -101,6 +105,7 @@ Detail Project Plan
     CKEDITOR.replace('topologi');
     CKEDITOR.replace('diagram');
     CKEDITOR.replace('anggaran');
+    CKEDITOR.replace('nilai');
     CKEDITOR.replace('pernyataan');
     CKEDITOR.replace('catatan');
 </script>

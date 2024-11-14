@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProjectM;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController
 {
@@ -22,6 +24,9 @@ class DashboardController
     }
     public function klien ()
     {
-        return view('page.Klien.index');
+        $project = ProjectM::where('customer_id',Auth::user()->id)->value('judul');
+        $ids = ProjectM::where('customer_id',Auth::user()->id)->value('id');
+        $data= ProjectM::find($ids);
+        return view('page.Klien.index',compact('project','data'));
     }
 }

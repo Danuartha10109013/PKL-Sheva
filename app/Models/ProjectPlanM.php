@@ -25,7 +25,26 @@ class ProjectPlanM extends Model
         'topologi',
         'diagram',
         'anggaran',
+        'nilai',
         'pernyataan',
         'catatan',
+
+        'pengantar_catatan',
+        'ringkasan_catatan',
+        'ruang_lingkup_catatan',
+        'jadwal_proyek_catatan',
+        'fase_1_catatan',
+        'team_proyek_catatan',
+        'manajemen_proyek_catatan',
+        'fitur_utama_catatan',
+        'rincian_teknis_catatan',
+        'topologi_catatan',
+        'diagram_catatan',
+        'anggaran_catatan',
+        'nilai_catatan',
+        'pernyataan_catatan',
+        'catatan_catatan',
+
+        'status',
     ];
 }
