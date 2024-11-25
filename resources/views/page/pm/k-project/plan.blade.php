@@ -18,7 +18,11 @@ Detail Project Plan
         </p>
         
         <!-- Form for editing project plan -->
+        @if ($data->status == 2)
+        <form action="{{ route('pm.k-project.plan.update.revision', $id) }}" method="POST">
+        @else
         <form action="{{ route('pm.k-project.plan.update', $id) }}" method="POST">
+        @endif
             @csrf
             @method('PUT')
 
@@ -84,7 +88,11 @@ Detail Project Plan
             </div>
 
             <!-- Submit button -->
+            @if ($data->status == 2)
+            <button type="submit" class="btn btn-primary">Save Revision</button>
+            @else
             <button type="submit" class="btn btn-primary">Save</button>
+            @endif
         </form>
     </div>
 </div>

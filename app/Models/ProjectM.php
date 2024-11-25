@@ -19,5 +19,6 @@ class ProjectM extends Model
         'end',
         'biaya',
         'launch',
+        'team_leader_id',
     ];
 }

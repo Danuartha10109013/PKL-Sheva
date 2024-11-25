@@ -75,6 +75,7 @@ class ClientController
             'nilai_catatan' => $validatedData['nilai_catatan'] ?? $projectPlan->nilai_catatan,
             'pernyataan_catatan' => $validatedData['pernyataan_catatan'] ?? $projectPlan->pernyataan_catatan,
             'catatan_catatan' => $validatedData['catatan_catatan'] ?? $projectPlan->catatan_catatan,
+            'status' => 2,
         ]);
 
         // Redirect back to the project details page with a success message

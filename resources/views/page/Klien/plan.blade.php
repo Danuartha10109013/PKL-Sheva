@@ -16,7 +16,11 @@
             <a href="" class="btn btn-primary"><i class="fa fa-download"></i> Download</a>
         </div>
     </div>
+    @if (Auth::user()->role == 3)
     <form action="{{ route('klien.project.update', $data->id) }}" method="POST">
+    @else
+    <form action="{{ route('team_lead.project.update', $data->id) }}" method="POST">
+    @endif
         @csrf
         <div class="card-body">
             <h3 class="mb-4">{{ $project->judul }}</h3>
@@ -48,10 +52,13 @@
             </div>
         </div>
     </form>
-    @if ($data->status == 1)
-    @else
-    <a href="#" data-id="{{ $data->id }}" class="btn btn-primary" id="approveBtn"><i class="fa fa-check"></i> Approve Project Plan</a>
+    @if (Auth::user()->role == 3)
+      @if ($data->status == 1)
+      @else
+      <a href="#" data-id="{{ $data->id }}" class="btn btn-primary" id="approveBtn"><i class="fa fa-check"></i> Approve Project Plan</a>
+      @endif
     @endif
+
     <!-- Approve Project Plan Button -->
 
     <!-- Confirmation Modal -->

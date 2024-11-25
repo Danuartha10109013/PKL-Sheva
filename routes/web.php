@@ -14,6 +14,12 @@ Route::get('/logout', [Clogin::class, 'logout'])->name('logout');
 
 //auto Logout
 Route::middleware([AutoLogout::class])->group(function () {
+
+    //Fotum
+    Route::prefix('forum')->group(function () {
+        Route::get('/{id}',[ForumDiskusiController::class,'index'])->name('forum');
+        Route::post('/message/{id}',[ForumDiskusiController::class,'message'])->name('forum.message');
+    });
     
     //Profile
     Route::prefix('profile')->group(function () {
@@ -49,18 +55,31 @@ Route::middleware([AutoLogout::class])->group(function () {
             Route::get('/plan/{id}', [KProjectController::class, 'plan'])->name('k-project.plan');
             Route::get('/show/{id}', [KProjectController::class, 'show'])->name('k-project.show');
             Route::put('/plan/update/{id}', [KProjectController::class, 'update_plan'])->name('k-project.plan.update');
+            Route::put('/plan/update/revision/{id}', [KProjectController::class, 'update_plan_revision'])->name('k-project.plan.update.revision');
             Route::post('/store', [KProjectController::class, 'store'])->name('k-project.store');
             Route::put('/update/{id}', [KProjectController::class, 'update'])->name('k-project.update');
             Route::delete('/delete/{id}', [KProjectController::class, 'delete'])->name('k-project.delete');
             Route::get('/launch/{id}', [KProjectController::class, 'launch'])->name('k-project.launch');
             Route::get('/communication/{id}', [KProjectController::class, 'communication'])->name('k-project.communication');
         });
+        Route::prefix('k-forum')->group(function () {
+            Route::get('/', [ForumDiskusiController::class, 'pm'])->name('k-forum');
+
+        });
 
     });
     Route::group(['prefix' => 'team_lead', 'middleware' => ['team_lead'], 'as' => 'team_lead.'], function () {
         //Dashboard
         Route::get('/', [DashboardController::class, 'team_lead'])->name('team_lead');
+        Route::prefix('project')->group(function () {
+            Route::get('/', [TeamLeadController::class, 'project'])->name('project');
+            Route::get('/plan/{id}', [TeamLeadController::class, 'plan'])->name('project.plan');
+            Route::get('/show/{id}', [KProjectController::class, 'show'])->name('project.show');
+            Route::post('update/{id}', [TeamLeadController::class, 'update'])->name('project.update');
+            Route::get('setuju/{id}', [TeamLeadController::class, 'setuju'])->name('project.setuju');
+            Route::get('forum/', [ForumDiskusiController::class, 'pm'])->name('project.forum');
 
+        });
     });
     Route::group(['prefix' => 'finance', 'middleware' => ['finance'], 'as' => 'finance.'], function () {
         //Dashboard

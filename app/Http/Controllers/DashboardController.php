@@ -16,7 +16,10 @@ class DashboardController
     }
     public function team_lead ()
     {
-        return view('page.team_lead.index');
+        $project = ProjectM::where('customer_id',Auth::user()->id)->value('judul');
+        $ids = ProjectM::where('customer_id',Auth::user()->id)->value('id');
+        $data= ProjectM::find($ids);
+        return view('page.team_lead.index',compact('project','data'));
     }
     public function finance ()
     {

@@ -45,6 +45,22 @@ class ProjectPlanM extends Model
         'pernyataan_catatan',
         'catatan_catatan',
 
+        'pengantar_catatantl',
+        'ringkasan_catatantl',
+        'ruang_lingkup_catatantl',
+        'jadwal_proyek_catatantl',
+        'fase_1_catatantl',
+        'team_proyek_catatantl',
+        'manajemen_proyek_catatantl',
+        'fitur_utama_catatantl',
+        'rincian_teknis_catatantl',
+        'topologi_catatantl',
+        'diagram_catatantl',
+        'anggaran_catatantl',
+        'nilai_catatantl',
+        'pernyataan_catatantl',
+        'catatan_catatantl',
+
         'status',
     ];
 }

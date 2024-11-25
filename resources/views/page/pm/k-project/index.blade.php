@@ -22,6 +22,7 @@ Kelola Poject Plan
             <th>No</th>
             <th>Judul</th>
             <th>Customer</th>
+            <th>Team Leader</th>
             <th>Start Date</th>
             <th>End Date</th>
             <th>Action</th>
@@ -36,18 +37,23 @@ Kelola Poject Plan
             <td> &nbsp;&nbsp;&nbsp;&nbsp;
                 @php
                     $name = \App\Models\User::where('id', $d->customer_id)->value('name');
+                    $name_tl = \App\Models\User::where('id', $d->team_leader_id)->value('name');
                 @endphp
                 {{$name}}
             </td>
+            <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$name_tl}}</td>
             <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->start}}</td>
             <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->end}}</td>
             <td> &nbsp;&nbsp;&nbsp;&nbsp;
                 @php
                     $ids = \App\Models\ProjectPlanM::where('project_id',$d->id)->value('id');
+                    $plans = \App\Models\ProjectPlanM::find($ids);
                 @endphp
-                <a href="{{route('pm.k-project.plan',$ids)}}" class="btn btn-primary"><i class="fas fa-keyboard"></i></a>
                 <a href="{{route('pm.k-project.show',$d->id)}}" class="btn btn-success"><i class="fa fa-eye"></i></a>
                 <!-- Edit Button -->
+                @if ($plans->status == 1)
+                @else
+                <a href="{{route('pm.k-project.plan',$ids)}}" class="btn btn-primary"><i class="fas fa-keyboard"></i></a>
                 <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal{{$d->id}}">
                     <i class="fa fa-pencil-square"></i>
                 </a>
@@ -56,14 +62,15 @@ Kelola Poject Plan
                 <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{$d->id}}">
                     <i class="fa fa-trash"></i>
                 </a>
-                <!-- Launch Button to Trigger Modal -->
-                @if ($d->launch == 0)
-                <a class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#launchConfirmModal">
-                  <i class="fa fa-rocket"></i>
-                </a>
-                @else
-                <a href="{{route('pm.k-project.communication',$d->id)}}" class="btn btn-light"><i class="fa-solid fa-people-arrows"></i></a>
+                  @if ($d->launch == 0)
+                  <a class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#launchConfirmModal">
+                    <i class="fa fa-rocket"></i>
+                  </a>
+                  @else
+                  <a href="{{route('pm.k-project.communication',$d->id)}}" class="btn btn-light"><i class="fa-solid fa-people-arrows"></i></a>
+                  @endif
                 @endif
+                <!-- Launch Button to Trigger Modal -->
 
                 <!-- Launch Confirmation Modal -->
                 <div class="modal fade" id="launchConfirmModal" tabindex="-1" aria-labelledby="launchConfirmModalLabel" aria-hidden="true">
@@ -176,6 +183,15 @@ Kelola Poject Plan
                             <option value="" selected disabled>--Pilih Customer Or Add New</option>
                             @foreach ($customer as $c)
                             <option value="{{$c->id}}" >{{$c->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="customer" class="form-label">Team Lead</label>
+                        <select type="text" class="form-control" id="customer" name="team_leader" required>
+                            <option value="" selected disabled>--Pilih Team Lead Or Add New</option>
+                            @foreach ($team_leader as $tl)
+                            <option value="{{$tl->id}}" >{{$tl->name}}</option>
                             @endforeach
                         </select>
                     </div>
