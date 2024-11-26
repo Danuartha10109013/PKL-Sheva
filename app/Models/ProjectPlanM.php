@@ -17,7 +17,7 @@ class ProjectPlanM extends Model
         'ringkasan',
         'ruang_lingkup',
         'jadwal_proyek',
-        'fase_1',
+        'fase',
         'team_proyek',
         'manajemen_proyek',
         'fitur_utama',

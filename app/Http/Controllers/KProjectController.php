@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PhpParser\Node\Expr\New_;
+use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 
 class KProjectController
 {
@@ -94,10 +95,9 @@ class KProjectController
 
     public function plan($id){
         $data = ProjectPlanM::findOrFail($id);
-        // dd($data);
-        // $data = [];
+        $fase = json_decode($data->fase, true); // Decode JSON to array
 
-        return view('page.pm.k-project.plan',compact('data','id'));
+        return view('page.pm.k-project.plan',compact('data','id','fase'));
     }
 
     public function show($id){
@@ -110,12 +110,12 @@ class KProjectController
 
     public function update_plan(Request $request,$id){
         // Validate incoming request data
+       
         $request->validate([
             'pengantar' => 'string|nullable',
             'ringkasan' => 'string|nullable',
             'ruang_lingkup' => 'string|nullable',
             'jadwal_proyek' => 'string|nullable',
-            'fase_1' => 'string|nullable',
             'team_proyek' => 'string|nullable',
             'manajemen_proyek' => 'string|nullable',
             'fitur_utama' => 'string|nullable',
@@ -136,7 +136,6 @@ class KProjectController
         $projectPlan->ringkasan = $request->ringkasan;
         $projectPlan->ruang_lingkup = $request->ruang_lingkup;
         $projectPlan->jadwal_proyek = $request->jadwal_proyek;
-        $projectPlan->fase_1 = $request->fase_1;
         $projectPlan->team_proyek = $request->team_proyek;
         $projectPlan->manajemen_proyek = $request->manajemen_proyek;
         $projectPlan->fitur_utama = $request->fitur_utama;
@@ -147,8 +146,17 @@ class KProjectController
         $projectPlan->nilai = $request->nilai;
         $projectPlan->pernyataan = $request->pernyataan;
         $projectPlan->catatan = $request->catatan;
+        $faseData = [];
 
-        // Save the changes to the database
+        foreach ($request->scrum_name as $index => $scrumName) {
+        $faseData[] = [
+            'scrum_name' => $scrumName,
+            'start' => $request->start[$index] ?? null,
+            'end' => $request->end[$index] ?? null,
+            'description' => $request->fase_1[$index] ?? null,
+            ];
+        }
+        $projectPlan->fase = json_encode($faseData); // Simpan dalam kolom JSON
         $projectPlan->save();
 
         // Redirect with a success message
@@ -161,7 +169,6 @@ class KProjectController
             'ringkasan' => 'string|nullable',
             'ruang_lingkup' => 'string|nullable',
             'jadwal_proyek' => 'string|nullable',
-            'fase_1' => 'string|nullable',
             'team_proyek' => 'string|nullable',
             'manajemen_proyek' => 'string|nullable',
             'fitur_utama' => 'string|nullable',
@@ -182,7 +189,6 @@ class KProjectController
         $projectPlan->ringkasan = $request->ringkasan;
         $projectPlan->ruang_lingkup = $request->ruang_lingkup;
         $projectPlan->jadwal_proyek = $request->jadwal_proyek;
-        $projectPlan->fase_1 = $request->fase_1;
         $projectPlan->team_proyek = $request->team_proyek;
         $projectPlan->manajemen_proyek = $request->manajemen_proyek;
         $projectPlan->fitur_utama = $request->fitur_utama;
@@ -193,6 +199,18 @@ class KProjectController
         $projectPlan->nilai = $request->nilai;
         $projectPlan->pernyataan = $request->pernyataan;
         $projectPlan->catatan = $request->catatan;
+
+        $faseData = [];
+
+        foreach ($request->scrum_name as $index => $scrumName) {
+        $faseData[] = [
+            'scrum_name' => $scrumName,
+            'start' => $request->start[$index] ?? null,
+            'end' => $request->end[$index] ?? null,
+            'description' => $request->fase_1[$index] ?? null,
+            ];
+        }
+        $projectPlan->fase = json_encode($faseData); 
 
         // $projectPlan->pengantar_catatan = null;
         // $projectPlan->ringkasan_catatan = null;
@@ -306,6 +324,14 @@ class KProjectController
         $project = ProjectM::find($id);
         // dd($ids);
         return view('page.pm.k-project.communication',compact('data','project'));
+    }
+
+    public function print($id){
+        $project = ProjectM::find($id);
+        $ids = ProjectPlanM::where('project_id',$project->id)->value('id');
+        $data = ProjectPlanM::find($ids);
+        $fase = json_decode($data->fase, true); 
+        return view('page.pm.k-project.print',compact('data','fase'));
     }
     
 }

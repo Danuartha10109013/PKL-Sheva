@@ -61,6 +61,7 @@ Route::middleware([AutoLogout::class])->group(function () {
             Route::delete('/delete/{id}', [KProjectController::class, 'delete'])->name('k-project.delete');
             Route::get('/launch/{id}', [KProjectController::class, 'launch'])->name('k-project.launch');
             Route::get('/communication/{id}', [KProjectController::class, 'communication'])->name('k-project.communication');
+            Route::get('/print/{id}', [KProjectController::class, 'print'])->name('k-project.print');
         });
         Route::prefix('k-forum')->group(function () {
             Route::get('/', [ForumDiskusiController::class, 'pm'])->name('k-forum');

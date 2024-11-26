@@ -10,7 +10,7 @@ Detail Project Plan
     <div class="card-header pb-0">
         <div class="d-flex justify-content-between">
             <h6 class="">Detail Of Project Plan</h6>
-            <a href="" class="btn btn-primary"><i class="fa fa-download"></i></a>
+            <a href="{{route('pm.k-project.print',$project->id)}}" class="btn btn-primary"><i class="fa fa-download"></i></a>
         </div>
     </div>
     <div class="card-body">

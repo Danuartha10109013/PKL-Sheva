@@ -42,10 +42,83 @@ Detail Project Plan
                 <label for="jadwal_proyek">Jadwal Proyek</label>
                 <textarea name="jadwal_proyek" id="jadwal_proyek" class="form-control" cols="30" rows="10">{{ old('jadwal_proyek', $data->jadwal_proyek) }}</textarea>
             </div>
-            <div class="mb-3">
-                <label for="fase_1">Fase 1</label>
-                <textarea name="fase_1" id="fase_1" class="form-control" cols="30" rows="10">{{ old('fase_1', $data->fase_1) }}</textarea>
+            <div id="dynamic-form-container">
+                @if(!empty($fase))
+                    @foreach($fase as $index => $item)
+                        <div class="mb-3 dynamic-input">
+                            <label for="fase_{{ $index + 1 }}">Fase {{ $index + 1 }}</label>
+                            <input type="text" name="scrum_name[]" value="{{ $item['scrum_name'] }}" placeholder="Fase {{ $index + 1 }}">
+                            <input type="date" name="start[]" value="{{ $item['start'] }}">
+                            <input type="date" name="end[]" value="{{ $item['end'] }}">
+                            <textarea name="fase_1[]" id="fase_{{ $index + 1 }}" class="form-control ck-editor" cols="30" rows="3" placeholder="Fase {{ $index + 1 }}">{{ $item['description'] }}</textarea>
+                            <button type="button" class="btn btn-danger btn-sm remove-input" onclick="removeInput(this)">Hapus</button>
+                        </div>
+                    @endforeach
+                @else
+                    <div class="mb-3 dynamic-input">
+                        <label for="fase_1">Fase 1</label>
+                        <input type="text" name="scrum_name[]" placeholder="Fase 1">
+                        <input type="date" name="start[]">
+                        <input type="date" name="end[]">
+                        <textarea name="fase_1[]" id="fase_1" class="form-control ck-editor" cols="30" rows="3" placeholder="Fase 1"></textarea>
+                        <button type="button" class="btn btn-danger btn-sm remove-input" onclick="removeInput(this)">Hapus</button>
+                    </div>
+                @endif
             </div>
+            <button type="button" class="btn btn-primary btn-sm" onclick="addInput()">Tambah Fase</button>
+            
+            <script>
+                let phaseCounter = {{ !empty($fase) ? count($fase) + 1 : 2 }}; // Mulai dari fase berikutnya
+            
+                // Inisialisasi CKEditor untuk semua textarea yang ada saat halaman dimuat
+                document.addEventListener('DOMContentLoaded', () => {
+                    const textareas = document.querySelectorAll('.ck-editor');
+                    textareas.forEach(textarea => {
+                        if (!CKEDITOR.instances[textarea.id]) {
+                            CKEDITOR.replace(textarea.id);
+                        }
+                    });
+                });
+            
+                // Fungsi untuk menambah input baru
+                function addInput() {
+                    const container = document.getElementById('dynamic-form-container');
+                    const newInput = document.createElement('div');
+                    newInput.classList.add('mb-3', 'dynamic-input');
+            
+                    const uniqueId = `fase_${phaseCounter}`;
+            
+                    newInput.innerHTML = `
+                        <label for="${uniqueId}">Fase ${phaseCounter}</label>
+                        <input type="text" name="scrum_name[]" placeholder="Fase ${phaseCounter}">
+                        <input type="date" name="start[]">
+                        <input type="date" name="end[]">
+                        <textarea name="fase_1[]" id="${uniqueId}" class="form-control ck-editor" cols="30" rows="3" placeholder="Fase ${phaseCounter}"></textarea>
+                        <button type="button" class="btn btn-danger btn-sm remove-input" onclick="removeInput(this)">Hapus</button>
+                    `;
+                    container.appendChild(newInput);
+            
+                    // Inisialisasi CKEditor untuk textarea baru
+                    CKEDITOR.replace(uniqueId);
+            
+                    phaseCounter++;
+                }
+            
+                // Fungsi untuk menghapus input
+                function removeInput(button) {
+                    const parent = button.parentElement;
+            
+                    // Hapus instance CKEditor sebelum menghapus elemen
+                    const textarea = parent.querySelector('textarea');
+                    if (textarea && CKEDITOR.instances[textarea.id]) {
+                        CKEDITOR.instances[textarea.id].destroy();
+                    }
+            
+                    parent.remove();
+                }
+            </script>
+            
+            
             <div class="mb-3">
                 <label for="team_proyek">Tim Proyek</label>
                 <textarea name="team_proyek" id="team_proyek" class="form-control" cols="30" rows="10">{{ old('team_proyek', $data->team_proyek) }}</textarea>
