@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\forumM;
+use App\Models\invoiceM;
 use App\Models\ProjectM;
 use App\Models\ProjectPlanM;
 use App\Models\User;
@@ -45,6 +46,14 @@ class KProjectController
         $plan = New ProjectPlanM();
         $plan->project_id = $project->id;
         $plan->save();
+
+        $forum = New forumM();
+        $forum->project_id = $project->id;
+        $forum->save();
+
+        $bill = new invoiceM ;
+        $bill->project_id = $project->id;
+        $bill->save();
 
         // Redirect back with a success message
         return redirect()->back()->with('success', 'Project created successfully!');
@@ -154,6 +163,7 @@ class KProjectController
             'start' => $request->start[$index] ?? null,
             'end' => $request->end[$index] ?? null,
             'description' => $request->fase_1[$index] ?? null,
+            'status' =>  null,
             ];
         }
         $projectPlan->fase = json_encode($faseData); // Simpan dalam kolom JSON
@@ -208,6 +218,7 @@ class KProjectController
             'start' => $request->start[$index] ?? null,
             'end' => $request->end[$index] ?? null,
             'description' => $request->fase_1[$index] ?? null,
+            'status' =>  null,
             ];
         }
         $projectPlan->fase = json_encode($faseData); 

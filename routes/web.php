@@ -19,6 +19,7 @@ Route::middleware([AutoLogout::class])->group(function () {
     Route::prefix('forum')->group(function () {
         Route::get('/{id}',[ForumDiskusiController::class,'index'])->name('forum');
         Route::post('/message/{id}',[ForumDiskusiController::class,'message'])->name('forum.message');
+        Route::post('/post',[ForumDiskusiController::class,'foumstore'])->name('forum.post');
     });
     
     //Profile
@@ -63,6 +64,12 @@ Route::middleware([AutoLogout::class])->group(function () {
             Route::get('/communication/{id}', [KProjectController::class, 'communication'])->name('k-project.communication');
             Route::get('/print/{id}', [KProjectController::class, 'print'])->name('k-project.print');
         });
+        Route::prefix('k-progres')->group(function () {
+            Route::get('/', [KProgresController::class, 'index'])->name('k-progres');
+            Route::get('/progres/{id}', [KProgresController::class, 'progres'])->name('k-progres.progres');
+            Route::post('/update/{id}', [KProgresController::class, 'update'])->name('k-progres.update');
+        });
+
         Route::prefix('k-forum')->group(function () {
             Route::get('/', [ForumDiskusiController::class, 'pm'])->name('k-forum');
 
@@ -85,6 +92,11 @@ Route::middleware([AutoLogout::class])->group(function () {
     Route::group(['prefix' => 'finance', 'middleware' => ['finance'], 'as' => 'finance.'], function () {
         //Dashboard
         Route::get('/', [DashboardController::class, 'finance'])->name('finance');
+        Route::prefix('invoice')->group(function () {
+            Route::get('/', [FinanceController::class, 'index'])->name('invoice');
+            Route::get('/print/{id}', [FinanceController::class, 'print'])->name('invoice.print');
+            Route::put('/update/{id}', [FinanceController::class, 'update'])->name('invoice.update');
+        });
 
     });
     Route::group(['prefix' => 'klien', 'middleware' => ['klien'], 'as' => 'klien.'], function () {

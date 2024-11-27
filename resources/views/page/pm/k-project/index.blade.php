@@ -30,70 +30,72 @@ Kelola Poject Plan
         </tr>
     </thead>
     <tbody>
-        @foreach ($data as $d)
-        <tr>
-            <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$loop->iteration}}</td>
-            <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->judul}}</td>
-            <td> &nbsp;&nbsp;&nbsp;&nbsp;
-                @php
-                    $name = \App\Models\User::where('id', $d->customer_id)->value('name');
-                    $name_tl = \App\Models\User::where('id', $d->team_leader_id)->value('name');
-                @endphp
-                {{$name}}
-            </td>
-            <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$name_tl}}</td>
-            <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->start}}</td>
-            <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->end}}</td>
-            <td> &nbsp;&nbsp;&nbsp;&nbsp;
-                @php
-                    $ids = \App\Models\ProjectPlanM::where('project_id',$d->id)->value('id');
-                    $plans = \App\Models\ProjectPlanM::find($ids);
-                @endphp
-                <a href="{{route('pm.k-project.show',$d->id)}}" class="btn btn-success"><i class="fa fa-eye"></i></a>
-                <!-- Edit Button -->
-                @if ($plans->status == 1)
-                @else
-                <a href="{{route('pm.k-project.plan',$ids)}}" class="btn btn-primary"><i class="fas fa-keyboard"></i></a>
-                <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal{{$d->id}}">
-                    <i class="fa fa-pencil-square"></i>
-                </a>
-
-                <!-- Delete Button -->
-                <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{$d->id}}">
-                    <i class="fa fa-trash"></i>
-                </a>
-                  @if ($d->launch == 0)
-                  <a class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#launchConfirmModal">
-                    <i class="fa fa-rocket"></i>
+      @foreach ($data as $d)
+      <tr>
+          <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$loop->iteration}}</td>
+          <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->judul}}</td>
+          <td> &nbsp;&nbsp;&nbsp;&nbsp;
+              {{-- Cari nama customer berdasarkan ID --}}
+              {{ $customer->where('id', $d->customer_id)->pluck('name')->first() ?? 'N/A' }}
+          </td>
+          <td> &nbsp;&nbsp;&nbsp;&nbsp;
+              {{-- Cari nama team leader berdasarkan ID --}}
+              {{ $team_leader->where('id', $d->team_leader_id)->pluck('name')->first() ?? 'N/A' }}
+          </td>
+          <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->start}}</td>
+          <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->end}}</td>
+          <td> &nbsp;&nbsp;&nbsp;&nbsp;
+              {{-- Mengambil project plan ID --}}
+              @php
+                  $plans = \App\Models\ProjectPlanM::where('project_id', $d->id)->first();
+              @endphp
+              <a href="{{ route('pm.k-project.show', $d->id) }}" class="btn btn-success">
+                  <i class="fa fa-eye"></i>
+              </a>
+  
+              @if ($plans && $plans->status != 1)
+                  <a href="{{ route('pm.k-project.plan', $plans->id) }}" class="btn btn-primary">
+                      <i class="fas fa-keyboard"></i>
                   </a>
-                  @else
-                  <a href="{{route('pm.k-project.communication',$d->id)}}" class="btn btn-light"><i class="fa-solid fa-people-arrows"></i></a>
-                  @endif
-                @endif
-                <!-- Launch Button to Trigger Modal -->
-
-                <!-- Launch Confirmation Modal -->
-                <div class="modal fade" id="launchConfirmModal" tabindex="-1" aria-labelledby="launchConfirmModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                      <div class="modal-content">
-                          <div class="modal-header">
-                              <h5 class="modal-title" id="launchConfirmModalLabel">Confirm Launch</h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>
-                          <div class="modal-body">
-                              Are you sure you want to launch this project to the customer?
-                          </div>
-                          <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                              <a href="{{ route('pm.k-project.launch', $d->id) }}" class="btn btn-dark">Yes, Launch</a>
-                          </div>
-                      </div>
+                  <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal{{$d->id}}">
+                      <i class="fa fa-pencil-square"></i>
+                  </a>
+                  <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{$d->id}}">
+                      <i class="fa fa-trash"></i>
+                  </a>
+              @endif
+  
+              @if ($d->launch == 0)
+                  <a class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#launchConfirmModal{{$d->id}}">
+                      <i class="fa fa-rocket"></i>
+                  </a>
+              @else
+                  <a href="{{ route('pm.k-project.communication', $d->id) }}" class="btn btn-light">
+                      <i class="fa-solid fa-people-arrows"></i>
+                  </a>
+              @endif
+          </td>
+          <td> &nbsp;&nbsp;&nbsp;&nbsp;Rp. {{$d->biaya}}</td>
+      </tr>
+  
+      <!-- Launch Confirmation Modal -->
+      <div class="modal fade" id="launchConfirmModal{{$d->id}}" tabindex="-1" aria-labelledby="launchConfirmModalLabel{{$d->id}}" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="launchConfirmModalLabel{{$d->id}}">Confirm Launch</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
-                </div>
-
-              </td>
-            <td> &nbsp;&nbsp;&nbsp;&nbsp;Rp. {{$d->biaya}}</td>
-        </tr>
+                  <div class="modal-body">
+                      Are you sure you want to launch this project to the customer?
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                      <a href="{{ route('pm.k-project.launch', $d->id) }}" class="btn btn-dark">Yes, Launch</a>
+                  </div>
+              </div>
+          </div>
+      </div>
 
         <!-- Edit Modal for Each Row -->
         <div class="modal fade" id="editModal{{$d->id}}" tabindex="-1" aria-labelledby="editModalLabel{{$d->id}}" aria-hidden="true">

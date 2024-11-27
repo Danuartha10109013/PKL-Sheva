@@ -23,8 +23,15 @@ Detail Project Plan
         {!! $data->ruang_lingkup !!}
         <p class="mt-3"><strong>Jadwal Proyek</strong></p>
         {!! $data->jadwal_proyek !!}
-        <p class="mt-3"><strong>Fase 1</strong></p>
-        {!! $data->fase_1 !!}
+        @php
+            $fase = json_decode($data->fase, true); 
+        @endphp
+        @if (!empty($fase))
+            @foreach ($fase as $index => $item)
+                <p><strong>Fase {{ $index + 1 }}:</strong> {{ $item['scrum_name'] }} <strong>Start:</strong> {{ $item['start'] }} <strong>End:</strong> {{ $item['end'] }}</p>
+                {!! $item['description'] !!}
+            @endforeach
+        @endif
         <p class="mt-3"><strong>Tim Proyek</strong></p>
         {!! $data->team_proyek !!}
         <p class="mt-3"><strong>Manajemen Risiko</strong></p>

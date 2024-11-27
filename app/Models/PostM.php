@@ -5,17 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ChatM extends Model
+class PostM extends Model
 {
     use HasFactory;
 
-    protected $table = 'chat';
+    protected $table = 'post';
 
     protected $fillable = [
-        'post_id',
-        'project_id',
         'user_id',
-        'chat',
+        'forum_id',
         'file',
-    ];
+        'judul',
+        'desc',
+];
 }
