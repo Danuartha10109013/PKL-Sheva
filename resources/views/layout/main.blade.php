@@ -20,6 +20,7 @@
     <!-- CSS Files -->
     <link id="pagestyle" href="{{asset('vendorin')}}/assets/css/argon-dashboard.css?v=2.1.0" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
   </head>
 
@@ -51,7 +52,7 @@
             title: 'Success!',
             text: '{{ session('success') }}',
             showConfirmButton: false,
-            timer: 3000
+            timer: 10000
           });
         </script>
       @endif
@@ -63,7 +64,7 @@
             title: 'Error!',
             text: '{{ session('error') }}',
             showConfirmButton: false,
-            timer: 3000
+            timer: 5000
           });
         </script>
       @endif

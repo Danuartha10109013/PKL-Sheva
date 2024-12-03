@@ -28,6 +28,8 @@ class ProjectPlanM extends Model
         'nilai',
         'pernyataan',
         'catatan',
+        'no_rev',
+        'no_projec_plan',
 
         'pengantar_catatan',
         'ringkasan_catatan',

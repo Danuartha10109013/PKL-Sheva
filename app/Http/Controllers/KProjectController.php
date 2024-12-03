@@ -9,6 +9,7 @@ use App\Models\ProjectPlanM;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use PhpParser\Node\Expr\New_;
 use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 
@@ -45,6 +46,37 @@ class KProjectController
 
         $plan = New ProjectPlanM();
         $plan->project_id = $project->id;
+        function getRomanMonth($month) {
+            $romans = [
+                1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV', 5 => 'V', 
+                6 => 'VI', 7 => 'VII', 8 => 'VIII', 9 => 'IX', 10 => 'X', 
+                11 => 'XI', 12 => 'XII'
+            ];
+            return $romans[$month] ?? '';
+        }
+        
+        // Ambil data terakhir dari database
+        $lastPlan = ProjectPlanM::orderBy('id', 'desc')->first();
+        $lastNoProjectPlan = $lastPlan ? $lastPlan->no_project_plan : null;
+        
+        if ($lastNoProjectPlan) {
+            // Ekstrak nomor urut dari format "001/DOK-PRP/ZMI/VII/2024"
+            preg_match('/^(\d+)\//', $lastNoProjectPlan, $matches);
+            $lastNoUrut = isset($matches[1]) ? (int)$matches[1] : 0;
+        } else {
+            $lastNoUrut = 0; // Jika belum ada data, mulai dari 0
+        }
+        
+        // Nomor urut baru
+        $newNoUrut = str_pad($lastNoUrut + 1, 3, '0', STR_PAD_LEFT);
+        
+        $dokumen = "DOK-PRP";
+        $companyCode = "ZMI";
+        $tahun = date('Y');
+        $bulanRomawi = getRomanMonth(date('n'));
+        $noProjectPlan = "{$newNoUrut}/{$dokumen}/{$companyCode}/{$bulanRomawi}/{$tahun}";
+        $plan->no_project_plan = $noProjectPlan;
+        $plan->no_rev = 0;
         $plan->save();
 
         $forum = New forumM();
@@ -209,6 +241,7 @@ class KProjectController
         $projectPlan->nilai = $request->nilai;
         $projectPlan->pernyataan = $request->pernyataan;
         $projectPlan->catatan = $request->catatan;
+        $projectPlan->no_rev = $projectPlan->no_rev + 1;
 
         $faseData = [];
 
@@ -223,39 +256,6 @@ class KProjectController
         }
         $projectPlan->fase = json_encode($faseData); 
 
-        // $projectPlan->pengantar_catatan = null;
-        // $projectPlan->ringkasan_catatan = null;
-        // $projectPlan->ruang_lingkup_catatan = null;
-        // $projectPlan->jadwal_proyek_catatan = null;
-        // $projectPlan->fase_1_catatan = null;
-        // $projectPlan->team_proyek_catatan = null;
-        // $projectPlan->manajemen_proyek_catatan = null;
-        // $projectPlan->fitur_utama_catatan = null;
-        // $projectPlan->rincian_teknis_catatan = null;
-        // $projectPlan->topologi_catatan = null;
-        // $projectPlan->diagram_catatan = null;
-        // $projectPlan->anggaran_catatan = null;
-        // $projectPlan->nilai_catatan = null;
-        // $projectPlan->pernyataan_catatan = null;
-        // $projectPlan->catatan_catatan = null;
-
-        // $projectPlan->pengantar_catatantl = null;
-        // $projectPlan->ringkasan_catatantl = null;
-        // $projectPlan->ruang_lingkup_catatantl = null;
-        // $projectPlan->jadwal_proyek_catatantl = null;
-        // $projectPlan->fase_1_catatantl = null;
-        // $projectPlan->team_proyek_catatantl = null;
-        // $projectPlan->manajemen_proyek_catatantl = null;
-        // $projectPlan->fitur_utama_catatantl = null;
-        // $projectPlan->rincian_teknis_catatantl = null;
-        // $projectPlan->topologi_catatantl = null;
-        // $projectPlan->diagram_catatantl = null;
-        // $projectPlan->anggaran_catatantl = null;
-        // $projectPlan->nilai_catatantl = null;
-        // $projectPlan->pernyataan_catatantl = null;
-        // $projectPlan->catatan_catatantl = null;
-
-        // Save the changes to the database
         $projectPlan->save();
 
         // Redirect with a success message
@@ -344,5 +344,24 @@ class KProjectController
         $fase = json_decode($data->fase, true); 
         return view('page.pm.k-project.print',compact('data','fase'));
     }
+
+    public function upload(Request $request)
+    {
+        // Memastikan file diupload
+        if ($request->hasFile('upload')) {
+            $file = $request->file('upload');
+            
+            // Simpan file ke storage
+            $path = $file->store('uploads', 'public');
+            
+            // Membuat URL untuk file yang baru diupload
+            
+            // Mengembalikan response yang diharapkan CKEditor
+            return redirect()->back()->with('success','http://127.0.0.1:8000/storage/'.$path);
+        }
+    }
+    
+    
+    
     
 }

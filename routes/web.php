@@ -14,6 +14,10 @@ Route::get('/logout', [Clogin::class, 'logout'])->name('logout');
 
 //auto Logout
 Route::middleware([AutoLogout::class])->group(function () {
+    //ckeditor
+    Route::get('/ckfinder/upload', [KProjectController::class, 'upload'])->name('ckfinder.browser');
+    Route::post('/ckeditor/upload', [KProjectController::class, 'upload'])->name('ckeditor.upload');
+
 
     //Fotum
     Route::prefix('forum')->group(function () {
