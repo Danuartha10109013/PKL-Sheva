@@ -88,6 +88,10 @@ Route::middleware([AutoLogout::class])->group(function () {
             Route::get('forum/', [ForumDiskusiController::class, 'pm'])->name('project.forum');
 
         });
+        Route::prefix('progres')->group(function () {
+            Route::get('/', [KProgresController::class, 'index'])->name('progres');
+        });
+
     });
     Route::group(['prefix' => 'finance', 'middleware' => ['finance'], 'as' => 'finance.'], function () {
         //Dashboard

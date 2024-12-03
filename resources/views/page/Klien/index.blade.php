@@ -34,22 +34,68 @@ Dashboard
         <div class="row">
           <div class="col-8">
             <div class="numbers">
-              <p class="text-sm mb-0 text-uppercase font-weight-bold">Progres</p>
-              <h5 class="font-weight-bolder">
-                50%
-              </h5>
+                <a href="#"  data-bs-toggle="modal" data-bs-target="#progressModal-{{ $data->id }}">
+                <p class="text-sm mb-0 text-uppercase font-weight-bold">Progres</p>
+                <h5 class="font-weight-bolder">
+                  {{ number_format($data->progres, 2) }}%
+                </h5>
+              </a>
+              <div class="modal fade" id="progressModal-{{ $data->id }}" tabindex="-1" aria-labelledby="progressModalLabel-{{ $data->id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="progressModalLabel-{{ $data->id }}">Progres Project: {{ $data->judul }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <canvas id="progressChart-{{ $data->id }}"></canvas>
+                    </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="col-4 text-end">
-            <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
-              <i class="fa-solid fa-spinner text-lg opacity-10" aria-hidden="true"></i>
+                  
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+              <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                // Event listener untuk setiap modal
+                const modalId = document.getElementById('progressModal-{{ $data->id }}');
+                modalId.addEventListener('shown.bs.modal', function () {
+                    const ctx = document.getElementById('progressChart-{{ $data->id }}').getContext('2d');
+                    new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Progres', 'Sisa'],
+                        datasets: [{
+                        data: [{{ $data->progres }}, {{ 100 - $data->progres }}],
+                        backgroundColor: ['#4caf50', '#f44336'],
+                        borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: false,
+                        plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                        }
+                    }
+                    });
+                });
+                });
+              </script>
+              </div>
+            </div>
+            <div class="col-4 text-end">
+              <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
+                <i class="fa-solid fa-spinner text-lg opacity-10" aria-hidden="true"></i>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+
+  <div class="col-xl-3 col-sm-6 mb-xl-0">
     <div class="card">
       <div class="card-body p-3">
         <div class="row">
@@ -57,9 +103,17 @@ Dashboard
             <div class="numbers">
               <p class="text-sm mb-0 text-uppercase font-weight-bold">Status</p>
               <h5 class="font-weight-bolder">
-                <p class="text-success">Complete</p>
-              </h5>
+                <p class="text-{{ 
+                  $data->progres == 0 ? 'danger' : 
+                  ($data->progres > 0 && $data->progres < 100 ? 'warning' : 'success') 
+              }}">
+                  {{ 
+                      $data->progres == 0 ? 'Belum Mulai' : 
+                      ($data->progres > 0 && $data->progres < 100 ? 'Sedang Berjalan' : 'Selesai') 
+                  }}
+              </p>
               
+              </h5>
             </div>
           </div>
           <div class="col-4 text-end">

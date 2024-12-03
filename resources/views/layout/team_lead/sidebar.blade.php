@@ -31,8 +31,15 @@
               <i class="ni ni-app text-dark text-sm opacity-10"></i>
           </div>
           <span class="nav-link-text ms-1">Forum Diskusi</span>
-      </a>
-  </li>
+        </a>
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('team_lead.progres') ? 'active' : '' }}" href="{{route('team_lead.progres')}}">
+          <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="fa-solid fa-bars-progress text-dark text-sm opacity-10"></i>
+          </div>
+          <span class="nav-link-text ms-1">Meninjau Progres</span>
+        </a>
+      </li>
   </ul>
 </div>
 <div class="sidenav-footer mt-5 ">
