@@ -75,7 +75,7 @@ class KProjectController
         $tahun = date('Y');
         $bulanRomawi = getRomanMonth(date('n'));
         $noProjectPlan = "{$newNoUrut}/{$dokumen}/{$companyCode}/{$bulanRomawi}/{$tahun}";
-        $plan->no_project_plan = $noProjectPlan;
+        $plan->no_projec_plan = $noProjectPlan;
         $plan->no_rev = 0;
         $plan->save();
 
