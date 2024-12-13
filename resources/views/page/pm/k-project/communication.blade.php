@@ -106,7 +106,7 @@ Detail Project Plan
                 <div class="col-md-2">
                     <p class="mt-3"><strong>Catatan</strong></p>
                     <div class="btn btn-light">
-                        {{ $data->fase_1_catatantl }}
+                        {{ $f->notes }}
                     </div>
                 </div>
             @endforeach

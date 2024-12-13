@@ -197,6 +197,7 @@ class KProjectController
             'description' => $request->fase_1[$index] ?? null,
             'status' =>  null,
             'note' =>  null,
+            'notes' =>  null,
             ];
         }
         $projectPlan->fase = json_encode($faseData); // Simpan dalam kolom JSON
@@ -258,6 +259,7 @@ class KProjectController
             'description' => $request->fase_1[$index] ?? null,
             'status' =>  $fase[$index]->status,
             'note' =>  $fase[$index]->note ?? null,
+            'notes' =>  $fase[$index]->notes ?? null,
             ];
         }
         // dd($faseData);
@@ -349,7 +351,7 @@ class KProjectController
         $ids = ProjectPlanM::where('project_id',$project->id)->value('id');
         $data = ProjectPlanM::find($ids);
         $fase = json_decode($data->fase, true); 
-        return view('page.pm.k-project.print',compact('data','fase'));
+        return view('page.pm.k-project.print',compact('data','fase','project'));
     }
 
     public function upload(Request $request)

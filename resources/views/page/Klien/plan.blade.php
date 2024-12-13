@@ -13,7 +13,9 @@
     <div class="card-header pb-0">
         <div class="d-flex justify-content-between align-items-center">
             <h6>Detail of Project Plan</h6>
-            <a href="" class="btn btn-primary"><i class="fa fa-download"></i> Download</a>
+          @if ($project->launch == 1)
+          <a href="" class="btn btn-primary"><i class="fa fa-download"></i> Download</a>
+          @endif
         </div>
     </div>
     @if (Auth::user()->role == 3)
@@ -23,8 +25,9 @@
     @endif
         @csrf
         <div class="card-body">
+          @if ($project->launch == 1)
             <h3 class="mb-4">{{ $project->judul }}</h3>
-            
+              
             @foreach ($sections as $section)
                 <div class="row mb-4">
                     <div class="col-md-9">
@@ -43,21 +46,27 @@
                     </div>
                 </div>
             @endforeach
-
             <div class="text-end">
-                @if ($data->status == 1)
-                @else
-                <button type="submit" class="btn btn-success">Save Changes</button>
-                @endif
+              @if ($data->status == 1)
+              @else
+              <button type="submit" class="btn btn-success">Save Changes</button>
+              @endif
             </div>
-        </div>
-    </form>
-    @if (Auth::user()->role == 3)
-      @if ($data->status == 1)
-      @else
-      <a href="#" data-id="{{ $data->id }}" class="btn btn-primary" id="approveBtn"><i class="fa fa-check"></i> Approve Project Plan</a>
-      @endif
-    @endif
+          </div>
+        </form>
+            @if (Auth::user()->role == 3)
+              @if ($data->status == 1)
+              @else
+                <a href="#" data-id="{{ $data->id }}" class="btn btn-primary" id="approveBtn"><i class="fa fa-check"></i> Approve Project Plan</a>
+              @endif
+            @endif
+        @else
+        <p class="text-center text-warning">The Document is in Progres</p>
+        @endif
+            
+
+            
+
 
     <!-- Approve Project Plan Button -->
 

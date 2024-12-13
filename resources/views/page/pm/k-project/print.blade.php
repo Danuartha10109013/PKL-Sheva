@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/png" href="{{asset('zen-blue-logo.png')}}">
+
     <title>Print Project Plan</title>
     <style>
         /* Print settings for A4 size */
@@ -24,21 +26,24 @@
             position: relative;
             width: 210mm;
             height: 297mm;
-            background: url('{{ asset("bcg.png") }}') no-repeat center center;
+            background: url('{{ asset("cover.jpg") }}') no-repeat center center;
             background-size: cover;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            color: white;
+            color: rgb(18, 24, 111);
             page-break-after: always;
         }
 
         .cover-page h1 {
             font-size: 36px;
-            font-weight: bold;
-            margin-bottom: 10px;
+            font-weight: bolder;
+            margin-bottom: 50px;
+            text-transform: uppercase; /* Makes text uppercase */
+            font-family: Arial, sans-serif;
+            margin-top: -70px
         }
 
         .cover-page p {
@@ -101,15 +106,25 @@
             .btn-print {
                 display: none;
             }
-        }
+            @page:first {
+                margin: 0; /* No margin for the first page */
+            }
+
+            @page {
+                margin-top: 50px;
+                margin-bottom: 50px
+                /* margin: 5mm; Apply margin to all subsequent pages */
+            }
     </style>
 </head>
 <body>
     <!-- Cover Page -->
     <div class="cover-page">
-        <h1>PROJECT PLANNING</h1>
-        <p>Created by PT. ZEN INDONESIA</p>
-        <p>Alamat: Jalan Taman Pahlawan, Purwakarta</p>
+        <h1>{{$project->judul}}</h1>
+        <p style="margin-top: -12px;margin-left: 50px">{{$data->no_projec_plan}} <br> 
+            <div style="margin-left: -220px;margin-top: -4px">
+                {{$data->no_rev}}
+            </div>  </p>
     </div>
 
     <!-- Watermark -->

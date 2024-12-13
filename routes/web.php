@@ -115,6 +115,11 @@ Route::middleware([AutoLogout::class])->group(function () {
             Route::post('update/{id}', [ClientController::class, 'update'])->name('project.update');
             Route::get('setuju/{id}', [ClientController::class, 'setuju'])->name('project.setuju');
         });
+        Route::prefix('invoice')->group(function () {
+            Route::get('/{id}', [ClientController::class, 'invoice'])->name('invoice');
+            Route::get('/print/{id}', [ClientController::class, 'p_invoice'])->name('p.invoice');
+
+        });
 
     });
 });

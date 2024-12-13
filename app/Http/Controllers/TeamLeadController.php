@@ -16,16 +16,32 @@ class TeamLeadController
     }
 
     public function plan($id){
-        $ids = ProjectM::where('customer_id',$id)->value('id');
-        $project = ProjectM::find($ids);
-        $plan = ProjectPlanM::where('project_id',$ids)->value('id');
+        // $ids = ProjectM::where('customer_id',$id)->value('id');
+        $project = ProjectM::find($id);
+        $plan = ProjectPlanM::where('project_id',$project->id)->value('id');
+        // dd($id);
         $data = ProjectPlanM::find($plan);
+        $fase = json_decode($data->fase);
+
         $sections = [
             ['title' => 'Pengantar', 'content' => $data->pengantar, 'note' => $data->pengantar_catatantl, 'name' => 'pengantar_catatan'],
             ['title' => 'Ringkasan Eksekutif', 'content' => $data->ringkasan, 'note' => $data->ringkasan_catatantl, 'name' => 'ringkasan_catatan'],
             ['title' => 'Ruang Lingkup Proyek', 'content' => $data->ruang_lingkup, 'note' => $data->ruang_lingkup_catatantl, 'name' => 'ruang_lingkup_catatan'],
             ['title' => 'Jadwal Proyek', 'content' => $data->jadwal_proyek, 'note' => $data->jadwal_proyek_catatantl, 'name' => 'jadwal_proyek_catatan'],
-            ['title' => 'Fase 1', 'content' => $data->fase_1, 'note' => $data->fase_1_catatantl, 'name' => 'fase_1_catatan'],
+        ];
+        // Process dynamic sections from $fase
+        if (!empty($fase)) {
+            foreach ($fase as $d) {
+                $sections[] = [
+                    'title' => "{$d->scrum_name}, {$d->start} - {$d->end}",
+                    'content' => $d->description,
+                    'note' => $d->notes,
+                    'name' => 'scrum_names[]',
+                ];
+            }
+        }
+        $sections = array_merge($sections, [
+
             ['title' => 'Tim Proyek', 'content' => $data->team_proyek, 'note' => $data->team_proyek_catatantl, 'name' => 'team_proyek_catatan'],
             ['title' => 'Manajemen Risiko', 'content' => $data->manajemen_proyek, 'note' => $data->manajemen_proyek_catatantl, 'name' => 'manajemen_proyek_catatan'],
             ['title' => 'Fitur Utama Aplikasi', 'content' => $data->fitur_utama, 'note' => $data->fitur_utama_catatantl, 'name' => 'fitur_utama_catatan'],
@@ -36,7 +52,7 @@ class TeamLeadController
             ['title' => 'Nilai Proyek', 'content' => $data->nilai, 'note' => $data->nilai_catatantl, 'name' => 'nilai_catatan'],
             ['title' => 'Pernyataan Kesepakatan Dokumen Perencanaan Proyek', 'content' => $data->pernyataan, 'note' => $data->pernyataan_catatantl, 'name' => 'pernyataan_catatan'],
             ['title' => 'Catatan Tambahan', 'content' => $data->catatan, 'note' => $data->catatan_catatantl, 'name' => 'catatan_catatan'],
-        ];
+        ]);
 
         return view('page.Klien.plan',compact('data','project','sections'));
     }
@@ -49,7 +65,6 @@ class TeamLeadController
             'ringkasan_catatan' => 'nullable|string',
             'ruang_lingkup_catatan' => 'nullable|string',
             'jadwal_proyek_catatan' => 'nullable|string',
-            'fase_1_catatan' => 'nullable|string',
             'team_proyek_catatan' => 'nullable|string',
             'manajemen_proyek_catatan' => 'nullable|string',
             'fitur_utama_catatan' => 'nullable|string',
@@ -64,14 +79,26 @@ class TeamLeadController
 
         // Find the project plan by ID
         $projectPlan = ProjectPlanM::findOrFail($id);
+        $fase = json_decode($projectPlan->fase);
 
+        foreach ($fase as $index => $f) {
+            $faseData[] = [
+                'scrum_name' => $f->scrum_name,
+                'start' => $f->start,
+                'end' => $f->end,
+                'description' => $f->description,
+                'status' =>  $f->status,
+                'note' =>  $f->note,
+                'notes' =>  $request->scrum_names[$index] ?? null, 
+                ];
+            }
         // Update the fields with the validated data
         $projectPlan->update([
+            'fase' => json_encode($faseData),
             'pengantar_catatantl' => $validatedData['pengantar_catatan'] ?? $projectPlan->pengantar_catatantl,
             'ringkasan_catatantl' => $validatedData['ringkasan_catatan'] ?? $projectPlan->ringkasan_catatantl,
             'ruang_lingkup_catatantl' => $validatedData['ruang_lingkup_catatan'] ?? $projectPlan->ruang_lingkup_catatantl,
             'jadwal_proyek_catatantl' => $validatedData['jadwal_proyek_catatan'] ?? $projectPlan->jadwal_proyek_catatantl,
-            'fase_1_catatantl' => $validatedData['fase_1_catatan'] ?? $projectPlan->fase_1_catatantl,
             'team_proyek_catatantl' => $validatedData['team_proyek_catatan'] ?? $projectPlan->team_proyek_catatantl,
             'manajemen_proyek_catatantl' => $validatedData['manajemen_proyek_catatan'] ?? $projectPlan->manajemen_proyek_catatantl,
             'fitur_utama_catatantl' => $validatedData['fitur_utama_catatan'] ?? $projectPlan->fitur_utama_catatantl,

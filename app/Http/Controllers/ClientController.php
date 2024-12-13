@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\invoiceM;
 use App\Models\ProjectM;
 use App\Models\ProjectPlanM;
 use Illuminate\Http\Request;
@@ -13,6 +14,7 @@ class ClientController
         $project = ProjectM::find($ids);
         $plan = ProjectPlanM::where('project_id',$ids)->value('id');
         $data = ProjectPlanM::find($plan);
+        // dd($data);
         
         $fase = json_decode(ProjectPlanM::where('project_id', $ids)->value('fase'));
         $sections = [
@@ -84,6 +86,7 @@ class ClientController
                 'end' => $f->end,
                 'description' => $f->description,
                 'status' =>  $f->status,
+                'notes' =>  $f->notes,
                 'note' =>  $request->scrum_name[$index] ?? null, 
                 ];
             }
@@ -119,5 +122,32 @@ class ClientController
         $data->status = 1 ;
         $data->save();
         return redirect()->back()->with('success','Project Plan has Approved');
+    }
+
+    public function invoice($id){
+        $ids = ProjectM::where('customer_id',$id)->value('id');
+        $data = ProjectM::where('customer_id',$id)->get();
+        $project = ProjectM::find($ids);
+        $invoice = invoiceM::where('project_id',$project->id)->get();
+
+        return view('page.Klien.invoice',compact('data'));
+    }
+
+    public function p_invoice($id){
+        $ids = invoiceM::where('project_id',$id)->value('id');
+        $data = invoiceM::find($ids);
+        $project = ProjectM::find($id);
+        $datain = ProjectM::where('id',$id)->get();
+        foreach ($datain as $project) {
+            $invoice = InvoiceM::where('project_id', $project->id)->first();
+            if ($invoice) {
+                if (empty($invoice->no_invoice) || empty($invoice->kepada) || empty($invoice->npwp) || empty($invoice->alamat) || empty($invoice->harga) || empty($invoice->terbilang) || empty($invoice->pembuat) || empty($invoice->date)) {
+                    return redirect()->back()->with('error' , 'Lengkapi data invoice terlebih dahulu untuk project: ' . $project->judul);
+                }
+            }
+        }
+        $data->date= now();
+        $data->save();
+        return view('page.finance.k-invoice.print',compact('data','project'));
     }
 }

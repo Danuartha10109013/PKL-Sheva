@@ -45,9 +45,9 @@ public function index($id)
     public function foumstore(Request $request)
 {
     $request->validate([
-        'judul' => 'required|string|max:255',
-        'desc' => 'required|string',
-        'file' => 'nullable|file|mimes:jpg,jpeg,png,gif,pdf,doc,docx,xlsx,csv,txt|max:5120', // 5MB max size
+        'judul' => 'nullable|string|max:255',
+        'desc' => 'nullable|string',
+        'file' => 'nullable|file|mimes:jpg,jpeg,png,gif,pdf,doc,docx,xlsx,csv,txt', // 5MB max size
     ]);
 
     $filePath = null;

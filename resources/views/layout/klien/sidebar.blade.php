@@ -36,7 +36,7 @@
       </a>
   </li>
     <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('klien.project',Auth::user()->id) ? 'active' : '' }}" href="{{ route('klien.project',Auth::user()->id) }}">
+        <a class="nav-link {{ request()->routeIs('klien.invoice',Auth::user()->id) ? 'active' : '' }}" href="{{ route('klien.invoice',Auth::user()->id) }}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                 <i class="fa-solid fa-coins text-dark text-sm opacity-10"></i>
             </div>
