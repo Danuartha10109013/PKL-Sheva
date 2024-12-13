@@ -51,6 +51,7 @@ public function index($id)
     ]);
 
     $filePath = null;
+    $originalName = null;
     if ($request->hasFile('file')) {
         $originalName = $request->file('file')->getClientOriginalName();
         $filePath = $request->file('file')->storeAs('chat', $originalName, 'public');

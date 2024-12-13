@@ -55,7 +55,7 @@ class KProgresController
     $pjct->progres = $completion_percentage;
     $pjct->save();
 
-    return redirect()->back()->with('success', 'Data telah diperbarui');
+    return redirect()->route('pm.k-progres')->with('success', 'Data telah diperbarui');
 }
 
 }

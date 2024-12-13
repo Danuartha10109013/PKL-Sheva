@@ -88,22 +88,29 @@ Detail Project Plan
             </div>
         </div>
         <div class="row">
-            <div class="col-md-8">
-                <p class="mt-3"><strong>Fase 1</strong></p>
-                {!! $data->fase_1 !!}
-            </div>
-            <div class="col-md-2">
-                <p class="mt-3"><strong>Catatan</strong></p>
-                <div class="btn btn-light">
-                    {{ $data->fase_1_catatan }}
+            @php
+                $fase = json_decode($data->fase);
+            @endphp
+            @foreach ($fase as $f)
+                
+                <div class="col-md-8">
+                    <p class="mt-3"><strong>{{$f->scrum_name}} , {{$f->start}} sampai {{$f->end}}</strong></p>
+                    {!! $f->description !!}
                 </div>
-            </div>
-            <div class="col-md-2">
-                <p class="mt-3"><strong>Catatan</strong></p>
-                <div class="btn btn-light">
-                    {{ $data->fase_1_catatantl }}
+                <div class="col-md-2">
+                    <p class="mt-3"><strong>Catatan</strong></p>
+                    <div class="btn btn-light">
+                        {{ $f->note }}
+                    </div>
                 </div>
-            </div>
+                <div class="col-md-2">
+                    <p class="mt-3"><strong>Catatan</strong></p>
+                    <div class="btn btn-light">
+                        {{ $data->fase_1_catatantl }}
+                    </div>
+                </div>
+            @endforeach
+
         </div>
         <div class="row">
             <div class="col-md-8">

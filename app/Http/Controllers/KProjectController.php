@@ -196,6 +196,7 @@ class KProjectController
             'end' => $request->end[$index] ?? null,
             'description' => $request->fase_1[$index] ?? null,
             'status' =>  null,
+            'note' =>  null,
             ];
         }
         $projectPlan->fase = json_encode($faseData); // Simpan dalam kolom JSON
@@ -225,6 +226,7 @@ class KProjectController
 
         // Find the project plan by ID
         $projectPlan = ProjectPlanM::findOrFail($id);
+        // dd($projectPlan);
 
         // Update fields with input data
         $projectPlan->pengantar = $request->pengantar;
@@ -245,15 +247,20 @@ class KProjectController
 
         $faseData = [];
 
+        $fase= json_decode($projectPlan->fase);
+        // dd($fase);
+
         foreach ($request->scrum_name as $index => $scrumName) {
         $faseData[] = [
             'scrum_name' => $scrumName,
             'start' => $request->start[$index] ?? null,
             'end' => $request->end[$index] ?? null,
             'description' => $request->fase_1[$index] ?? null,
-            'status' =>  null,
+            'status' =>  $fase[$index]->status,
+            'note' =>  $fase[$index]->note ?? null,
             ];
         }
+        // dd($faseData);
         $projectPlan->fase = json_encode($faseData); 
 
         $projectPlan->save();

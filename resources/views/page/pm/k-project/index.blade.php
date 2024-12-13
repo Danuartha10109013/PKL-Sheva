@@ -54,9 +54,11 @@ Kelola Poject Plan
               </a>
   
               @if ($plans && $plans->status != 1)
-                  <a href="{{ route('pm.k-project.plan', $plans->id) }}" class="btn btn-primary">
-                      <i class="fas fa-keyboard"></i>
-                  </a>
+                {{-- @if ($d->launch != 1) --}}
+                    <a href="{{ route('pm.k-project.plan', $plans->id) }}" class="btn btn-primary">
+                        <i class="fas fa-keyboard"></i>
+                    </a>
+                {{-- @endif --}}
                   <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal{{$d->id}}">
                       <i class="fa fa-pencil-square"></i>
                   </a>
