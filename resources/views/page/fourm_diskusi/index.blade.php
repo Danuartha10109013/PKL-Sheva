@@ -10,19 +10,20 @@ Forum Diskusi
     <div class="card-header pb-0">
         <div class="d-flex justify-content-between align-items-center">
             <h6>Forum Diskusi || {{ $project->judul }}</h6>
+            @if (Auth::user()->role == 3 || Auth::user()->role == 1)
+            @else 
             <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createPostModal">
                 <i class="fa fa-plus"></i> Create New Post
             </a>
+            @endif
             <!-- Create Post Modal -->
             <div class="modal fade" id="createPostModal" tabindex="-1" aria-labelledby="createPostModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                    @if (Auth::user()->role == 3)
-                    @else    
+                      
                         <h5 class="modal-title" id="createPostModalLabel">Create New Post</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    @endif
                     </div>
                     <form action="{{route('forum.post')}}" method="POST" enctype="multipart/form-data">
                     @csrf

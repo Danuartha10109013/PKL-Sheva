@@ -30,7 +30,7 @@ Client's Invoice
                 </tr>
             </thead>
             <tbody>
-                @if ($data)
+                @if ($data->progres > 30)
                     @foreach ($data as $d)
                     <tr>
                         <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$loop->iteration}}</td>

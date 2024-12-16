@@ -46,7 +46,7 @@ Kelola Poject
                 @php
                     $ids = \App\Models\ProjectPlanM::where('project_id',$d->id)->value('id');
                 @endphp
-                <a href="{{route('team_lead.project.show',$d->id)}}" class="btn btn-success"><i class="fa fa-eye"></i></a>
+                <a href="{{route('finance.project.plan',$d->id)}}" class="btn btn-success"><i class="fa fa-eye"></i></a>
                 
                 
                 @if ($d->launch == 1)

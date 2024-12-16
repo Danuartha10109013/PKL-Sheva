@@ -19,7 +19,7 @@ Route::middleware([AutoLogout::class])->group(function () {
     Route::post('/ckeditor/upload', [KProjectController::class, 'upload'])->name('ckeditor.upload');
 
 
-    //Fotum
+    //Forum
     Route::prefix('forum')->group(function () {
         Route::get('/{id}',[ForumDiskusiController::class,'index'])->name('forum');
         Route::post('/message/{id}',[ForumDiskusiController::class,'message'])->name('forum.message');
@@ -87,6 +87,7 @@ Route::middleware([AutoLogout::class])->group(function () {
             Route::get('/', [TeamLeadController::class, 'project'])->name('project');
             Route::get('/plan/{id}', [TeamLeadController::class, 'plan'])->name('project.plan');
             Route::get('/show/{id}', [KProjectController::class, 'show'])->name('project.show');
+            Route::get('/print/{id}', [KProjectController::class, 'print'])->name('project.print');
             Route::post('update/{id}', [TeamLeadController::class, 'update'])->name('project.update');
             Route::get('setuju/{id}', [TeamLeadController::class, 'setuju'])->name('project.setuju');
             Route::get('forum/', [ForumDiskusiController::class, 'pm'])->name('project.forum');
@@ -105,6 +106,12 @@ Route::middleware([AutoLogout::class])->group(function () {
             Route::get('/print/{id}', [FinanceController::class, 'print'])->name('invoice.print');
             Route::put('/update/{id}', [FinanceController::class, 'update'])->name('invoice.update');
         });
+        Route::prefix('project')->group(function () {
+            Route::get('/', [FinanceController::class, 'project'])->name('project');
+            Route::get('/plan/{id}', [KProjectController::class, 'show'])->name('project.plan');
+            Route::get('/print/{id}', [KProjectController::class, 'print'])->name('project.print');
+
+        });
 
     });
     Route::group(['prefix' => 'klien', 'middleware' => ['klien'], 'as' => 'klien.'], function () {
@@ -112,8 +119,9 @@ Route::middleware([AutoLogout::class])->group(function () {
         Route::get('/', [DashboardController::class, 'klien'])->name('klien');
         Route::prefix('project')->group(function () {
             Route::get('/{id}', [ClientController::class, 'plan'])->name('project');
-            Route::post('update/{id}', [ClientController::class, 'update'])->name('project.update');
-            Route::get('setuju/{id}', [ClientController::class, 'setuju'])->name('project.setuju');
+            Route::post('/update/{id}', [ClientController::class, 'update'])->name('project.update');
+            Route::get('/setuju/{id}', [ClientController::class, 'setuju'])->name('project.setuju');
+            Route::get('/print/{id}', [KProjectController::class, 'print'])->name('project.print');
         });
         Route::prefix('invoice')->group(function () {
             Route::get('/{id}', [ClientController::class, 'invoice'])->name('invoice');

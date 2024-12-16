@@ -69,47 +69,55 @@ class KelolaUser
     }
 
     public function store(Request $request)
-    {
-        // dd($request->all());
-        // Validate the incoming request data
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users',
-            'no_pegawai' => 'required|string|max:255',
-            'jabatan' => 'required|string|max:255',
-            'alamat' => 'nullable|string|max:255',
-            'active' => 'required|boolean',
-            'role' => 'required|in:0,1,2,3',
-            'birthday' => 'nullable|date',
-            'email' => 'required|string|email|max:255|unique:users',
-            'profile' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+{
+    // Validate the incoming request data
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'username' => 'required|string|max:255|unique:users',
+        'no_pegawai' => 'required|string|max:255',
+        'jabatan' => 'required|string|max:255',
+        'alamat' => 'nullable|string|max:255',
+        'active' => 'required|boolean',
+        'role' => 'required|in:0,1,2,3',
+        'birthday' => 'nullable|date',
+        'email' => 'required|string|email|max:255|unique:users',
+        'profile' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'password' => ['required', 'confirmed', Rules\Password::defaults()],
+    ]);
 
-        // Store the profile image if it exists
-        $profilePath = null;
-        if ($request->hasFile('profile')) {
-            $profilePath = $request->file('profile')->store('user_profiles', 'public');
-        }
+    // Create a new user
+    $user = User::create([
+        'name' => $request->name,
+        'username' => $request->username,
+        'no_pegawai' => $request->no_pegawai,
+        'jabatan' => $request->jabatan,
+        'alamat' => $request->alamat,
+        'active' => $request->active,
+        'role' => $request->role,
+        'birthday' => $request->birthday,
+        'email' => $request->email,
+        'profile' => null, // Temporary null, will be updated if profile image exists
+        'password' => Hash::make($request->password),
+    ]);
 
-        // Create a new user
-        $user = User::create([
-            'name' => $request->name,
-            'username' => $request->username,
-            'no_pegawai' => $request->no_pegawai,
-            'jabatan' => $request->jabatan,
-            'alamat' => $request->alamat,
-            'active' => $request->active,
-            'role' => $request->role,
-            'birthday' => $request->birthday,
-            'email' => $request->email,
-            'profile' => $profilePath,
-            'password' => Hash::make($request->password),
-        ]);
+    // Store the profile image if it exists
+    if ($request->hasFile('profile')) {
+        $image = $request->file('profile');
+        $folderPath = 'user_profile/' . $user->id; // Use the new user's ID for folder structure
+        $extension = $image->getClientOriginalExtension();
+        $fileName = uniqid() . '.' . $extension;
 
-        // Redirect back with a success message
-        return redirect()->back()->with('success', 'User added successfully.');
+        // Save the image in the specified folder
+        $profilePath = $image->storeAs($folderPath, $fileName, 'public');
+
+        // Update the user with the profile path
+        $user->update(['profile' => $fileName]);
     }
+
+    // Redirect back with a success message
+    return redirect()->back()->with('success', 'User added successfully.');
+}
+
 
     public function destroy($id)
     {

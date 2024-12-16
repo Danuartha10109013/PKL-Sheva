@@ -33,15 +33,21 @@ class KProjectController
             'biaya' => 'nullable|numeric|min:0',
         ]);
 
+        // Check if the customer already has a project
+        $customerExists = ProjectM::where('customer_id', $request->customer)->exists();
+        if ($customerExists) {
+            return redirect()->back()->with('error', 'User Telah memiliki Project');
+        }
+
         // Create a new project with the provided data
-        $project = New ProjectM();
+        $project = new ProjectM();
         $project->judul = $request->judul;
         $project->customer_id = $request->customer;
         $project->start = $request->start;
         $project->team_leader_id = $request->team_leader;
         $project->end = $request->end;
         $project->biaya = $request->biaya;
-        $project->pm_id =  Auth::user()->id;
+        $project->pm_id = Auth::user()->id;
         $project->save();
 
         $plan = New ProjectPlanM();

@@ -31,7 +31,7 @@ Detail Project Plan
             @method('PUT')
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#uploadModal">
                 Generate Image Link
-            </button>
+            </button><small class="text-danger">*</small> save first before generating
 
             
             <div class="mb-3">
@@ -40,7 +40,7 @@ Detail Project Plan
             </div>
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#uploadModal">
                 Generate Image Link
-            </button>
+            </button><small class="text-danger">*</small> save first before generating
 
             
             <div class="mb-3">
@@ -49,7 +49,7 @@ Detail Project Plan
             </div>
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#uploadModal">
                 Generate Image Link
-            </button>
+            </button><small class="text-danger">*</small> save first before generating
 
             
             <div class="mb-3">
@@ -58,7 +58,7 @@ Detail Project Plan
             </div>
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#uploadModal">
                 Generate Image Link
-            </button>
+            </button><small class="text-danger">*</small> save first before generating
 
             
             <div class="mb-3">
@@ -67,7 +67,7 @@ Detail Project Plan
             </div>
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#uploadModal">
                 Generate Image Link
-            </button>
+            </button><small class="text-danger">*</small> save first before generating
 
             
             <div id="dynamic-form-container">
@@ -148,7 +148,7 @@ Detail Project Plan
             
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#uploadModal">
                 Generate Image Link
-            </button>
+            </button><small class="text-danger">*</small> save first before generating
 
             
             <div class="mb-3">
@@ -157,7 +157,7 @@ Detail Project Plan
             </div>
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#uploadModal">
                 Generate Image Link
-            </button>
+            </button><small class="text-danger">*</small> save first before generating
 
             
             <div class="mb-3">
@@ -166,7 +166,7 @@ Detail Project Plan
             </div>
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#uploadModal">
                 Generate Image Link
-            </button>
+            </button><small class="text-danger">*</small> save first before generating
 
             
             <div class="mb-3">
@@ -175,7 +175,7 @@ Detail Project Plan
             </div>
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#uploadModal">
                 Generate Image Link
-            </button>
+            </button><small class="text-danger">*</small> save first before generating
 
             
             <div class="mb-3">
@@ -184,7 +184,7 @@ Detail Project Plan
             </div>
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#uploadModal">
                 Generate Image Link
-            </button>
+            </button><small class="text-danger">*</small> save first before generating
 
             
             <div class="mb-3">
@@ -193,7 +193,7 @@ Detail Project Plan
             </div>
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#uploadModal">
                 Generate Image Link
-            </button>
+            </button><small class="text-danger">*</small> save first before generating
 
             
             <div class="mb-3">
@@ -202,7 +202,7 @@ Detail Project Plan
             </div>
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#uploadModal">
                 Generate Image Link
-            </button>
+            </button><small class="text-danger">*</small> save first before generating
 
             
             <div class="mb-3">
@@ -211,7 +211,7 @@ Detail Project Plan
             </div>
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#uploadModal">
                 Generate Image Link
-            </button>
+            </button><small class="text-danger">*</small> save first before generating
 
             
             <div class="mb-3">
@@ -220,7 +220,7 @@ Detail Project Plan
             </div>
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#uploadModal">
                 Generate Image Link
-            </button>
+            </button><small class="text-danger">*</small> save first before generating
 
             
             <div class="mb-3">
@@ -229,7 +229,7 @@ Detail Project Plan
             </div>
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#uploadModal">
                 Generate Image Link
-            </button>
+            </button> <small class="text-danger">*</small> save first before generating
 
             
             <div class="mb-3">

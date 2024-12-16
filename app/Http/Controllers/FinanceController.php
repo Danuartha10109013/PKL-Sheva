@@ -70,4 +70,9 @@ class FinanceController
         // Redirect atau kembali dengan pesan sukses
         return redirect()->back()->with('success', 'Invoice berhasil diperbarui.');
     }
+
+    public function project(){
+        $data = ProjectM::all();
+        return view('page.finance.k-project.index',compact('data'));
+    }
 }

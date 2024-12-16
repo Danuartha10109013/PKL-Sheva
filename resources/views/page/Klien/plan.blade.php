@@ -14,7 +14,7 @@
         <div class="d-flex justify-content-between align-items-center">
             <h6>Detail of Project Plan</h6>
           @if ($project->launch == 1)
-          <a href="" class="btn btn-primary"><i class="fa fa-download"></i> Download</a>
+          <a href="{{route('klien.project.print',$project->id)}}" class="btn btn-primary"><i class="fa fa-download"></i> Download</a>
           @endif
         </div>
     </div>
