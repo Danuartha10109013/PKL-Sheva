@@ -12,7 +12,7 @@ Detail Project Plan
             <h6 class="">Detail Of Project Plan No Dokumen : {{$data->no_projec_plan}}</h6>
             @if (Auth::user()->role == 1)
             <a href="{{route('team_lead.project.print',$project->id)}}" class="btn btn-primary"><i class="fa fa-download"></i> Download</a>
-            @elseif (Auth::user()->role == 1)
+            @elseif (Auth::user()->role == 0)
             <a href="{{route('pm.k-project.print',$project->id)}}" class="btn btn-primary"><i class="fa fa-download"></i> Download</a>
             @elseif (Auth::user()->role == 2)
             <a href="{{route('finance.project.print',$project->id)}}" class="btn btn-primary"><i class="fa fa-download"></i> Download</a>
