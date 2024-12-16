@@ -86,7 +86,7 @@ class ClientController
                 'end' => $f->end,
                 'description' => $f->description,
                 'status' =>  $f->status,
-                'notes' =>  $f->notes,
+                'notes' =>  $f->notes ?? null,
                 'note' =>  $request->scrum_name[$index] ?? null, 
                 ];
             }

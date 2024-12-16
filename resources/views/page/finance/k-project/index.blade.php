@@ -50,7 +50,7 @@ Kelola Poject
                 
                 
                 @if ($d->launch == 1)
-                <a href="{{route('team_lead.project.plan',$d->id)}}" class="btn btn-light"><i class="fa-solid fa-people-arrows"></i></a>
+                <a href="{{route('forum',$d->id)}}" class="btn btn-light"><i class="fab fa-rocketchat"></i></a>
                 @endif
 
                 
