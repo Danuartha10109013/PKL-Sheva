@@ -77,19 +77,19 @@ Kelola User
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
+                        <label for="name" class="form-label">Name <small class="text-danger">*</small></label>
                         <input type="text" class="form-control" name="name" id="name" required>
                     </div>
                     <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
+                        <label for="username" class="form-label">Username <small class="text-danger">*</small></label>
                         <input type="text" class="form-control" name="username" id="username" required>
                     </div>
                     <div class="mb-3">
-                        <label for="no_pegawai" class="form-label">Employee Number</label>
+                        <label for="no_pegawai" class="form-label">Employee Number <small class="text-danger">*</small></label>
                         <input type="text" class="form-control" name="no_pegawai" id="no_pegawai" required>
                     </div>
                     <div class="mb-3">
-                        <label for="jabatan" class="form-label">Position</label>
+                        <label for="jabatan" class="form-label">Position <small class="text-danger">*</small></label>
                         <input type="text" class="form-control" name="jabatan" id="jabatan" required>
                     </div>
                     <div class="mb-3">
@@ -97,7 +97,7 @@ Kelola User
                         <input type="text" class="form-control" name="alamat" id="alamat">
                     </div>
                     <div class="mb-3">
-                        <label for="active" class="form-label">Active Status</label>
+                        <label for="active" class="form-label">Active Status <small class="text-danger">*</small></label>
                         <select class="form-select" name="active" id="active" required>
                             <option value="" selected disabled>--Select Status--</option>
                             <option value="1">Active</option>
@@ -105,7 +105,7 @@ Kelola User
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="role" class="form-label">Role</label>
+                        <label for="role" class="form-label">Role <small class="text-danger">*</small></label>
                         <select class="form-select" name="role" id="role" required>
                             <option value="" selected disabled>--Select Role--</option>
                             <option value="0">Project Manager</option>
@@ -119,7 +119,7 @@ Kelola User
                         <input type="date" class="form-control" name="birthday" id="birthday">
                     </div>
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
+                        <label for="email" class="form-label">Email <small class="text-danger">*</small></label>
                         <input type="email" class="form-control" name="email" id="email" required>
                     </div>
                     <div class="mb-3">
@@ -127,12 +127,12 @@ Kelola User
                         <input type="file" class="form-control" name="profile" id="profile">
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
+                        <label for="password" class="form-label">Password <small class="text-danger">*</small></label>
                         <input type="password" class="form-control" name="password" id="password" required minlength="8">
                         <small class="form-text text-muted">Minimum 8 characters</small>
                     </div>
                     <div class="mb-3">
-                        <label for="password_confirmation" class="form-label">Confirm Password</label>
+                        <label for="password_confirmation" class="form-label">Confirm Password <small class="text-danger">*</small></label>
                         <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" required minlength="8">
                     </div>
                 </div>
