@@ -13,9 +13,12 @@ Dashboard
         <div class="row">
           <div class="col-8">
             <div class="numbers">
-              <p class="text-sm mb-0 text-uppercase font-weight-bold">Today's Money</p>
+              <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Project</p>
               <h5 class="font-weight-bolder">
-                $53,000
+                @php
+                  $project = \App\Models\ProjectM::all()->count()
+                @endphp
+                {{$project}}
               </h5>
             </div>
           </div>
@@ -34,9 +37,12 @@ Dashboard
         <div class="row">
           <div class="col-8">
             <div class="numbers">
-              <p class="text-sm mb-0 text-uppercase font-weight-bold">Today's Users</p>
+              <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Team Leader</p>
               <h5 class="font-weight-bolder">
-                2,300
+                @php
+                  $tl = \App\Models\User::where('role',1)->count();
+                @endphp
+                {{$tl}}
               </h5>
             </div>
           </div>
@@ -58,6 +64,10 @@ Dashboard
               <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Clients</p>
               <h5 class="font-weight-bolder">
                 {{-- {{$client}} --}}
+                @php
+                  $client = \App\Models\User::where('role',3)->count();
+                @endphp
+                {{$client}}
               </h5>
               
             </div>
@@ -77,9 +87,13 @@ Dashboard
         <div class="row">
           <div class="col-8">
             <div class="numbers">
-              <p class="text-sm mb-0 text-uppercase font-weight-bold">Sales</p>
+              <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Finance</p>
               <h5 class="font-weight-bolder">
-                $103,430
+                {{-- {{$client}} --}}
+                @php
+                  $fn = \App\Models\User::where('role',2)->count();
+                @endphp
+                {{$fn}}
               </h5>
             </div>
           </div>
@@ -93,7 +107,7 @@ Dashboard
     </div>
   </div>
 </div>
-<div class="row mt-4">
+{{-- <div class="row mt-4">
   <div class="col-lg-7 mb-lg-0 mb-4">
     <div class="card z-index-2 h-100">
       <div class="card-header pb-0 pt-3 bg-transparent">
@@ -152,8 +166,8 @@ background-size: cover;">
       </div>
     </div>
   </div>
-</div>
-<div class="row mt-4">
+</div> --}}
+{{-- <div class="row mt-4">
   <div class="col-lg-7 mb-lg-0 mb-4">
     <div class="card ">
       <div class="card-header pb-0 p-3">
@@ -360,5 +374,5 @@ background-size: cover;">
       </div>
     </div>
   </div>
-</div>
+</div> --}}
 @endsection
