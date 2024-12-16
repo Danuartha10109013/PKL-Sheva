@@ -125,12 +125,22 @@ class ClientController
     }
 
     public function invoice($id){
-        $ids = ProjectM::where('customer_id',$id)->value('id');
-        $data = ProjectM::where('customer_id',$id)->get();
-        $project = ProjectM::find($ids);
-        $invoice = invoiceM::where('project_id',$project->id)->get();
-
-        return view('page.Klien.invoice',compact('data'));
+        $cc = ProjectM::where('customer_id',$id)->value('id');
+        $ids = invoiceM::where('project_id',$cc)->value('id');
+        $data = invoiceM::find($ids);
+        $project = ProjectM::find($id);
+        $datain = ProjectM::where('id',$id)->get();
+        foreach ($datain as $project) {
+            $invoice = InvoiceM::where('project_id', $project->id)->first();
+            if ($invoice) {
+                if (empty($invoice->no_invoice) || empty($invoice->kepada) || empty($invoice->npwp) || empty($invoice->alamat) || empty($invoice->harga) || empty($invoice->terbilang) || empty($invoice->pembuat) || empty($invoice->date)) {
+                    return redirect()->back()->with('error' , 'Lengkapi data invoice terlebih dahulu untuk project: ' . $project->judul);
+                }
+            }
+        }
+        $data->date= now();
+        $data->save();
+        return view('page.Klien.invoice',compact('data','project'));
     }
 
     public function p_invoice($id){

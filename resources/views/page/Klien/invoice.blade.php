@@ -1,132 +1,242 @@
-@extends('layout.main')
-@section('title')
-Client's Invoice || {{Auth::user()->name}}
-@endsection
-@section('pages')
-Client's Invoice
-@endsection
-@section('content')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{asset('zen-blue-logo.png')}}">
+    <title>Invoice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #000;
+            background: #fff;
+        }
 
-<div class="card">
-    <div class="card-header pb-0 p-3">
-        <div class="d-flex justify-content-between">
-            <h6 class="mb-2">The Project</h6>
-        </div>
-    </div>
-    <div class="table-responsive">
-        <table class="table align-items-center">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Judul</th>
-                    <th>Progres</th>
-                    <th>Customer</th>
-                    <th>Team Leader</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Action</th>
-                    <th>Pembayaran </th>
-                    <th>Total Biaya</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if ($data->progres > 30)
-                    @foreach ($data as $d)
-                    <tr>
-                        <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$loop->iteration}}</td>
-                        <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->judul}}</td>
-                    
-                        <td> &nbsp;&nbsp;&nbsp;&nbsp; {{ number_format($d->progres, 2) }}%</td>
-                        <td> &nbsp;&nbsp;&nbsp;&nbsp;
-                            @php
-                                $name = \App\Models\User::where('id', $d->customer_id)->value('name');
-                                $name_tl = \App\Models\User::where('id', $d->team_leader_id)->value('name');
-                            @endphp
-                            {{$name}}
-                        </td>
-                        <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$name_tl}}</td>
-                        <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->start}}</td>
-                        <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->end}}</td>
-                        <td> &nbsp;&nbsp;&nbsp;&nbsp;
-                            @php
-                                $ids = \App\Models\InvoiceM::where('project_id',$d->id)->value('id');
-                                // dd($ids);
-                                $invoice = \App\Models\InvoiceM::find($ids);
-                            @endphp
-                            
-                            
-                            
-                            
-                            <a href="{{route('klien.p.invoice',$d->id)}}" class="btn btn-warning"><i class="fa-solid fa-print"></i></a>
-                            <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#progressModal-{{ $d->id }}">
-                                <i class="fa-solid fa-spinner"></i>
-                            </a>
-                              
-                            <div class="modal fade" id="progressModal-{{ $d->id }}" tabindex="-1" aria-labelledby="progressModalLabel-{{ $d->id }}" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="progressModalLabel-{{ $d->id }}">Progres Project: {{ $d->judul }}</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body text-center">
-                                    <canvas id="progressChart-{{ $d->id }}"></canvas>
-                                </div>
-                                </div>
-                            </div>
-                            </div>
-                              
-                            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                            <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                            // Event listener untuk setiap modal
-                            const modalId = document.getElementById('progressModal-{{ $d->id }}');
-                            modalId.addEventListener('shown.bs.modal', function () {
-                                const ctx = document.getElementById('progressChart-{{ $d->id }}').getContext('2d');
-                                new Chart(ctx, {
-                                type: 'pie',
-                                data: {
-                                    labels: ['Progres', 'Sisa'],
-                                    datasets: [{
-                                    data: [{{ $d->progres }}, {{ 100 - $d->progres }}],
-                                    backgroundColor: ['#4caf50', '#f44336'],
-                                    borderWidth: 1
-                                    }]
-                                },
-                                options: {
-                                    responsive: false,
-                                    plugins: {
-                                    legend: {
-                                        position: 'top',
-                                    }
-                                    }
-                                }
-                                });
-                            });
-                            });
-                            </script>
-                            
+        .invoice {
+            width: 210mm;
+            margin: auto;
+            padding: 20mm;
+            border: 1px solid #ccc;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Spasi antara logo dan teks */
+        }
+
+        .header-left .logo {
+            width: 100px; /* Sesuaikan ukuran logo */
+            height: auto;
+        }
+
+        .header-right {
+            text-align: right;
+        }
+
+        .header-right h1 {
+            margin: 0;
+            font-size: 24px; /* Sesuaikan ukuran */
+        }
+
+        .header-right p {
+            margin: 0;
+            font-size: 12px; /* Sesuaikan ukuran */
+        }
+        .header-left p strong {
+            font-size: 12px; /* Perbesar ukuran font */
+            font-weight: bold; /* Gunakan font-weight bold */
+        }
+
+        .logo {
+            max-width: 150px;
+            margin-bottom: 10px;
+        }
+
+        .header-right {
+            text-align: right;
+        }
+
+        main {
+            margin-top: 20px;
+        }
+
+        .to-section {
+            margin-bottom: 20px;
+        }
+
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .invoice-table th, .invoice-table td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .invoice-table th {
+            background: #f0f0f0;
+        }
+
+        .invoice-table .right-align {
+            text-align: right;
+        }
+
+        .terbilang {
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        .notes {
+            margin-top: 20px;
+        }
+
+        footer {
+            margin-top: 30px;
+            text-align: right;
+        }
             
-                        </td>
-                        @if ($d->progres >= 30 && $d->progres <60)
-                        <td> &nbsp;&nbsp;&nbsp;&nbsp;Rp. {{$d->biaya * 0.3}}</td>
-                        @elseif ($d->progres >= 60 && $d->progres <100)
-                        <td> &nbsp;&nbsp;&nbsp;&nbsp;Rp. {{($d->biaya * 0.6)-($d->biaya * 0.3)}}</td>
-                        @elseif ($d->progres == 100)
-                        <td> &nbsp;&nbsp;&nbsp;&nbsp;Rp. {{($d->biaya * 1)-($d->biaya * 0.6)-($d->biaya * 0.3)}}</td>
-                        @endif
-                        <td> &nbsp;&nbsp;&nbsp;&nbsp;Rp. {{$d->biaya}}</td>
-                        
-
-
+    </style>    
+</head>
+<body>
+    <div class="invoice">
+        <header>
+            <div class="header-left">
+                <img src="{{ asset('zen-black.png') }}" alt="Logo" class="logo">
+                <p style="font-size: 12px">
+                    <strong style="font-size: 16px; font-weight: bold;">PT. ZEN MULTIMEDIA INDONESIA</strong><br>
+                    Jl. Tarumanegara Raya Blk EE-1/199 RT.09 RW.005, Purwamekar, Purwakarta<br>
+                    Email: info@zenmultimedia.com | Website: www.zenmultimediaexp.com
+                </p>
+            </div>
+            <div class="header-right">
+                <h1>&nbsp; &nbsp; I&nbsp;&nbsp;N&nbsp;&nbsp;V&nbsp;&nbsp;O&nbsp;&nbsp;I&nbsp;&nbsp;C&nbsp;&nbsp;E&nbsp; &nbsp;  &nbsp; </h1>
+                <hr style="margin-top: -5px">
+                <p>No: {{$data->no_invoice}}<br>Tgl: {{$data->date}}</p>
+            </div>
+        </header>
+        
+        <main>
+            <section class="to-section">
+                <p><strong>Kepada:</strong> {{$data->kepada}}</p>
+                <p>NPWP: {{$data->npwp}}</p>
+                <p>Alamat: {{$data->alamat}}</p>
+            </section>
+            <table class="invoice-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Deskripsi</th>
+                        <th>Unit</th>
+                        <th>Harga (Rp)</th>
+                        <th>Jumlah (Rp)</th>
                     </tr>
-                    @endforeach
-                @else
-                <p>Data Tidak Ada</p>
-                @endif
-            </tbody>
-        </table>
-    </div>
-</div>
+                </thead>
+                <tbody>
+                    @if ($project->progres >= 30 && $project->progres < 60)
+                        
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Termin I 30%, {{$project->judul}}</td>
+                            <td>1 Pckg</td>
+                            <td>Rp. {{ number_format($project->biaya * 0.3, 0, ',', '.') }}</td>
+                            <td>Rp. {{ number_format($project->biaya * 0.3, 0, ',', '.') }}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" class="right-align">Sub Total</td>
+                            <td>Rp. {{ number_format($project->biaya * 0.3, 0, ',', '.') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="right-align">PPN 11%</td>
+                            <td>Rp. {{ number_format(($project->biaya * 0.3) * 0.11, 0, ',', '.') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="right-align"><strong>Total</strong></td>
+                            <td><strong>Rp. {{ number_format(($project->biaya * 0.3) + (($project->biaya * 0.3) * 0.11), 0, ',', '.') }}</strong></td>
+                        </tr>
+                    </tfoot>
+                    @elseif ($project->progres >= 60 && $project->progres < 100)
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Termin 2 60%, {{$project->judul}}</td>
+                            <td>1 Pckg</td>
+                            <td>Rp. {{ number_format(($project->biaya * 0.6) - ($project->biaya * 0.3), 0, ',', '.') }}</td>
+                            <td>Rp. {{ number_format(($project->biaya * 0.6) - ($project->biaya * 0.3), 0, ',', '.') }}</td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4" class="right-align">Sub Total</td>
+                                <td>Rp. {{ number_format(($project->biaya * 0.6) - ($project->biaya * 0.3), 0, ',', '.') }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="right-align">PPN 11%</td>
+                                <td>Rp. {{ number_format((($project->biaya * 0.6) * 0.11) - (($project->biaya * 0.3) * 0.11), 0, ',', '.') }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="right-align"><strong>Total</strong></td>
+                                <td><strong>Rp. {{ number_format((($project->biaya * 0.6) + (($project->biaya * 0.6) * 0.11)) - (($project->biaya * 0.3) + (($project->biaya * 0.3) * 0.11)), 0, ',', '.') }}</strong></td>
+                            </tr>
+                        </tfoot>
+                    @elseif ($project->progres >= 100)
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Termin 3 100%, {{$project->judul}}</td>
+                            <td>1 Pckg</td>
+                            <td>Rp. {{ number_format(($project->biaya * 1) - ($project->biaya * 0.6), 0, ',', '.') }}</td>
+                            <td>Rp. {{ number_format(($project->biaya * 1) - ($project->biaya * 0.6), 0, ',', '.') }}</td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4" class="right-align">Sub Total</td>
+                                <td>Rp. {{ number_format(($project->biaya * 1) - ($project->biaya * 0.6), 0, ',', '.') }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="right-align">PPN 11%</td>
+                                <td>Rp. {{ number_format((($project->biaya * 1) * 0.11) - (($project->biaya * 0.6) * 0.11), 0, ',', '.') }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="right-align"><strong>Total</strong></td>
+                                <td><strong>Rp. {{ number_format((($project->biaya * 1) + (($project->biaya * 1) * 0.11)) - (($project->biaya * 0.6) + (($project->biaya * 0.6) * 0.11)), 0, ',', '.') }}</strong></td>
+                            </tr>
+                        </tfoot>
+                    @endif
 
-@endsection
+            </table>
+            <p class="terbilang">Terbilang:{{$data->terbilang}}</p>
+            <section class="notes">
+                <p><strong>Note:</strong></p>
+                <p>Pembayaran invoice ini mohon ditransfer ke:</p>
+                <p>
+                    Bank BCA - Rek. 231-266-5213<br>
+                    Bank BRI - Rek. 005.002.202.100.1<br>
+                    Atas Nama: PT. ZEN MULTIMEDIA INDONESIA
+                </p>
+            </section>
+        </main>
+        <footer>
+            <p>Purwakarta, {{$data->date}}</p>
+            <p><strong>Hormat Kami,</strong></p>
+            <p><strong>{{$data->pembuat}}</strong></p>
+        </footer>
+    </div>
+</body>
+</html>

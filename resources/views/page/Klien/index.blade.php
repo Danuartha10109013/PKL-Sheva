@@ -173,7 +173,7 @@ Dashboard
         <h6 class="text-capitalize">Invoice</h6>
       </div>
       <div class="card-body p-3">
-        <a href="" class="text-decoration-none text-dark">
+        <a href="{{route('klien.invoice',Auth::user()->id)}}" class="text-decoration-none text-dark">
             <div class="row align-items-center">
                 <div class="col-md-4 d-flex align-items-center">
                     <i class="fa-solid fa-right-from-bracket me-2"></i> Go To Invoice
