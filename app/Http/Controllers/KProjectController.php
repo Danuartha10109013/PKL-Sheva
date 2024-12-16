@@ -54,17 +54,17 @@ class KProjectController
         $plan->project_id = $project->id;
         function getRomanMonth($month) {
             $romans = [
-                1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV', 5 => 'V', 
-                6 => 'VI', 7 => 'VII', 8 => 'VIII', 9 => 'IX', 10 => 'X', 
+                1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV', 5 => 'V',
+                6 => 'VI', 7 => 'VII', 8 => 'VIII', 9 => 'IX', 10 => 'X',
                 11 => 'XI', 12 => 'XII'
             ];
             return $romans[$month] ?? '';
         }
-        
+
         // Ambil data terakhir dari database
         $lastPlan = ProjectPlanM::orderBy('id', 'desc')->first();
         $lastNoProjectPlan = $lastPlan ? $lastPlan->no_project_plan : null;
-        
+
         if ($lastNoProjectPlan) {
             // Ekstrak nomor urut dari format "001/DOK-PRP/ZMI/VII/2024"
             preg_match('/^(\d+)\//', $lastNoProjectPlan, $matches);
@@ -72,10 +72,10 @@ class KProjectController
         } else {
             $lastNoUrut = 0; // Jika belum ada data, mulai dari 0
         }
-        
+
         // Nomor urut baru
         $newNoUrut = str_pad($lastNoUrut + 1, 3, '0', STR_PAD_LEFT);
-        
+
         $dokumen = "DOK-PRP";
         $companyCode = "ZMI";
         $tahun = date('Y');
@@ -142,9 +142,10 @@ class KProjectController
 
     public function plan($id){
         $data = ProjectPlanM::findOrFail($id);
+        $project = ProjectM::find($data->project_id);
         $fase = json_decode($data->fase, true); // Decode JSON to array
 
-        return view('page.pm.k-project.plan',compact('data','id','fase'));
+        return view('page.pm.k-project.plan',compact('data','id','fase','project'));
     }
 
     public function show($id){
@@ -157,7 +158,7 @@ class KProjectController
 
     public function update_plan(Request $request,$id){
         // Validate incoming request data
-       
+
         $request->validate([
             'pengantar' => 'string|nullable',
             'ringkasan' => 'string|nullable',
@@ -269,7 +270,7 @@ class KProjectController
             ];
         }
         // dd($faseData);
-        $projectPlan->fase = json_encode($faseData); 
+        $projectPlan->fase = json_encode($faseData);
 
         $projectPlan->save();
 
@@ -279,7 +280,7 @@ class KProjectController
 
     public function launch($id) {
         $projectPlans = ProjectPlanM::where('project_id', $id)->get();
-        
+
         $excludedKeys = [
             'pengantar_catatan',
             'ringkasan_catatan',
@@ -312,7 +313,7 @@ class KProjectController
             'pernyataan_catatantl',
             'catatan_catatantl',
         ];
-        
+
         $allFilled = $projectPlans->every(function ($plan) use ($excludedKeys) {
             foreach ($plan->getAttributes() as $key => $value) {
                 if (!in_array($key, $excludedKeys) && ($value === null || $value === '')) {
@@ -321,10 +322,10 @@ class KProjectController
             }
             return true;
         });
-        
-        
+
+
         // dd($allFilled);
-    
+
         if ($allFilled) {
             $data = ProjectM::find($id);
             if ($data) {
@@ -334,7 +335,7 @@ class KProjectController
                 $forum->project_id = $data->id;
                 // $forum->project_id = $data->id;
                 $forum->save();
-    
+
                 return redirect()->back()->with('success', 'Your project has been launched.');
             } else {
                 return redirect()->back()->with('error', 'Project not found.');
@@ -356,7 +357,7 @@ class KProjectController
         $project = ProjectM::find($id);
         $ids = ProjectPlanM::where('project_id',$project->id)->value('id');
         $data = ProjectPlanM::find($ids);
-        $fase = json_decode($data->fase, true); 
+        $fase = json_decode($data->fase, true);
         return view('page.pm.k-project.print',compact('data','fase','project'));
     }
 
@@ -365,18 +366,18 @@ class KProjectController
         // Memastikan file diupload
         if ($request->hasFile('upload')) {
             $file = $request->file('upload');
-            
+
             // Simpan file ke storage
             $path = $file->store('uploads', 'public');
-            
+
             // Membuat URL untuk file yang baru diupload
-            
+
             // Mengembalikan response yang diharapkan CKEditor
             return redirect()->back()->with('success','http://127.0.0.1:8000/storage/'.$path);
         }
     }
-    
-    
-    
-    
+
+
+
+
 }
