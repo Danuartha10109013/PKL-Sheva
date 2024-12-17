@@ -10,7 +10,7 @@ Forum Diskusi
     <div class="card-header pb-0">
         <div class="d-flex justify-content-between align-items-center">
             <h6>Forum Diskusi || {{ $project->judul }}</h6>
-            @if (Auth::user()->role == 3 || Auth::user()->role == 1)
+            @if (Auth::user()->role == 2)
             @else 
             <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createPostModal">
                 <i class="fa fa-plus"></i> Create New Post

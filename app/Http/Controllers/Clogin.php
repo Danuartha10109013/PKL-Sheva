@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class Clogin
 {
@@ -11,6 +12,8 @@ class Clogin
     {
         return view('login.signin');
     }
+    
+    
     public function input_login(Request $request)
     {
         // dd($request->all());
@@ -21,12 +24,14 @@ class Clogin
             'password' => $request->password,
         ];
 
+        $cc=$request->username;
+
         if (Auth::attempt($data)) {
             $user = Auth::user();
             
             // Cek peran pengguna setelah login berhasil
             if ($user->active == 0) {
-                return redirect()->route('login')->with('error', 'Your Account was inactive, contact your admin');
+                return redirect()->route('login',compact('cc'))->with('error', 'Your Account was inactive, contact your admin');
             }
         
             // Redirect sesuai peran pengguna jika status aktif
@@ -41,9 +46,13 @@ class Clogin
             }
         } else {
             // Redirect kembali ke halaman login jika gagal
-            return redirect()->route('login')->with('error', 'Username atau Password anda salah!');
+            return redirect()->route('login',compact('cc'))->with('error', 'Username atau Password anda salah!');
         }
     }
+    
+
+
+
 
     public function logout(Request $request) {
         Auth::logout();

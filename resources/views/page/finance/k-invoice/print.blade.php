@@ -145,82 +145,32 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if ($project->progres >= 30 && $project->progres < 60)
-                        
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Termin I 30%, {{$project->judul}}</td>
-                            <td>1 Pckg</td>
-                            <td>Rp. {{ number_format($project->biaya * 0.3, 0, ',', '.') }}</td>
-                            <td>Rp. {{ number_format($project->biaya * 0.3, 0, ',', '.') }}</td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="4" class="right-align">Sub Total</td>
-                            <td>Rp. {{ number_format($project->biaya * 0.3, 0, ',', '.') }}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="4" class="right-align">PPN 11%</td>
-                            <td>Rp. {{ number_format(($project->biaya * 0.3) * 0.11, 0, ',', '.') }}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="4" class="right-align"><strong>Total</strong></td>
-                            <td><strong>Rp. {{ number_format(($project->biaya * 0.3) + (($project->biaya * 0.3) * 0.11), 0, ',', '.') }}</strong></td>
-                        </tr>
-                    </tfoot>
-                    @elseif ($project->progres >= 60 && $project->progres < 100)
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Termin 2 60%, {{$project->judul}}</td>
-                            <td>1 Pckg</td>
-                            <td>Rp. {{ number_format(($project->biaya * 0.6) - ($project->biaya * 0.3), 0, ',', '.') }}</td>
-                            <td>Rp. {{ number_format(($project->biaya * 0.6) - ($project->biaya * 0.3), 0, ',', '.') }}</td>
-                        </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="4" class="right-align">Sub Total</td>
-                                <td>Rp. {{ number_format(($project->biaya * 0.6) - ($project->biaya * 0.3), 0, ',', '.') }}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" class="right-align">PPN 11%</td>
-                                <td>Rp. {{ number_format((($project->biaya * 0.6) * 0.11) - (($project->biaya * 0.3) * 0.11), 0, ',', '.') }}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" class="right-align"><strong>Total</strong></td>
-                                <td><strong>Rp. {{ number_format((($project->biaya * 0.6) + (($project->biaya * 0.6) * 0.11)) - (($project->biaya * 0.3) + (($project->biaya * 0.3) * 0.11)), 0, ',', '.') }}</strong></td>
-                            </tr>
-                        </tfoot>
-                    @elseif ($project->progres >= 100)
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Termin 3 100%, {{$project->judul}}</td>
-                            <td>1 Pckg</td>
-                            <td>Rp. {{ number_format(($project->biaya * 1) - ($project->biaya * 0.6), 0, ',', '.') }}</td>
-                            <td>Rp. {{ number_format(($project->biaya * 1) - ($project->biaya * 0.6), 0, ',', '.') }}</td>
-                        </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="4" class="right-align">Sub Total</td>
-                                <td>Rp. {{ number_format(($project->biaya * 1) - ($project->biaya * 0.6), 0, ',', '.') }}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" class="right-align">PPN 11%</td>
-                                <td>Rp. {{ number_format((($project->biaya * 1) * 0.11) - (($project->biaya * 0.6) * 0.11), 0, ',', '.') }}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" class="right-align"><strong>Total</strong></td>
-                                <td><strong>Rp. {{ number_format((($project->biaya * 1) + (($project->biaya * 1) * 0.11)) - (($project->biaya * 0.6) + (($project->biaya * 0.6) * 0.11)), 0, ',', '.') }}</strong></td>
-                            </tr>
-                        </tfoot>
-                    @endif
-
+                    @foreach ($invoiceDetails as $detail)
+                    <tr>
+                        <td>{{ $detail['no'] }}</td>
+                        <td>{{ $detail['deskripsi'] }}</td>
+                        <td>{{ $detail['unit'] }}</td>
+                        <td>Rp. {{ number_format($detail['harga'], 0, ',', '.') }}</td>
+                        <td>Rp. {{ number_format($detail['jumlah'], 0, ',', '.') }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" class="right-align">Sub Total</td>
+                        <td>Rp. {{ number_format($subTotal, 0, ',', '.') }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="right-align">PPN 11%</td>
+                        <td>Rp. {{ number_format($ppn, 0, ',', '.') }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="right-align"><strong>Total</strong></td>
+                        <td><strong>Rp. {{ number_format($total, 0, ',', '.') }}</strong></td>
+                    </tr>
+                </tfoot>
             </table>
+            
             <p class="terbilang">Terbilang:{{$data->terbilang}}</p>
             <section class="notes">
                 <p><strong>Note:</strong></p>
