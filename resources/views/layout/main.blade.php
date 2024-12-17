@@ -38,7 +38,7 @@
       @else
       User Not Found
       @endif
-      
+
     </aside>
     <main class="main-content position-relative border-radius-lg ">
       <!-- Navbar -->
@@ -143,7 +143,7 @@
               <input class="form-check-input mt-1 ms-auto" type="checkbox" id="dark-version" onclick="darkMode(this)">
             </div>
           </div>
-          
+
           </div>
         </div>
       </div>
