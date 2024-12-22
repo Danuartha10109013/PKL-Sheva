@@ -41,6 +41,7 @@ class FinanceController
                 empty($invoice->harga) || 
                 empty($invoice->terbilang) || 
                 empty($invoice->pembuat) || 
+                empty($invoice->ppn) || 
                 empty($invoice->date)
             ) {
                 return redirect()->back()->with('error', 'Lengkapi data invoice terlebih dahulu untuk project: ' . $project->judul);
@@ -62,6 +63,7 @@ class FinanceController
             'unit' => '1 Pckg',
             'harga' => $subTotal,
             'jumlah' => $subTotal,
+            'ppn' => $data->ppn,
         ];
     } elseif ($project->progres >= 60 && $project->progres < 100) {
         $subTotal = ($project->biaya * 0.6) - ($project->biaya * 0.3);
@@ -71,6 +73,7 @@ class FinanceController
             'unit' => '1 Pckg',
             'harga' => $subTotal,
             'jumlah' => $subTotal,
+            'ppn' => $data->ppn,
         ];
     } elseif ($project->progres >= 100) {
         $subTotal = ($project->biaya * 1) - ($project->biaya * 0.6);
@@ -80,10 +83,11 @@ class FinanceController
             'unit' => '1 Pckg',
             'harga' => $subTotal,
             'jumlah' => $subTotal,
+            'ppn' => $data->ppn,
         ];
     }
 
-    $ppn = $subTotal * 0.11;
+    $ppn = $subTotal * $data->ppn;
     $total = $subTotal + $ppn;
 
     return view('page.finance.k-invoice.print', compact('data', 'project', 'invoiceDetails', 'subTotal', 'ppn', 'total'));
@@ -93,6 +97,7 @@ class FinanceController
 
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         // Validasi input
         $request->validate([
             'no_invoice' => 'nullable|string|max:255',
@@ -100,6 +105,7 @@ class FinanceController
             'npwp' => 'nullable|string|max:255',
             'alamat' => 'nullable|string',
             'harga' => 'nullable|numeric',
+            'ppn' => 'nullable',
             'terbilang' => 'nullable|string|max:255',
             'pembuat' => 'nullable|string|max:255',
             'date' => 'nullable|date',
@@ -109,17 +115,21 @@ class FinanceController
         $ids = invoiceM::where('project_id',$id)->value('id');
         $invoice = invoiceM::findOrFail($ids);
 
+        // dd($invoice);
+
         // Update data
-        $invoice->update([
-            'no_invoice' => $request->no_invoice,
-            'kepada' => $request->kepada,
-            'npwp' => $request->npwp,
-            'alamat' => $request->alamat,
-            'harga' => $request->harga,
-            'terbilang' => $request->terbilang,
-            'pembuat' => $request->pembuat,
-            'date' => $request->date,
-        ]);
+            $invoice->no_invoice = $request->no_invoice;
+            $invoice->kepada = $request->kepada;
+            $invoice->npwp = $request->npwp;
+            $invoice->alamat = $request->alamat;
+            $invoice->harga = $request->harga;
+            $invoice->terbilang = $request->terbilang;
+            $invoice->pembuat = $request->pembuat;
+            $invoice->date = $request->date;
+            $invoice->ppn = $request->ppn;
+            // dd($invoice->ppn);
+            $invoice->save();
+            // dd($invoice);
 
         // Redirect atau kembali dengan pesan sukses
         return redirect()->back()->with('success', 'Invoice berhasil diperbarui.');

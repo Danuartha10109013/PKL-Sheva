@@ -161,7 +161,7 @@
                         <td>Rp. {{ number_format($subTotal, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
-                        <td colspan="4" class="right-align">PPN 11%</td>
+                        <td colspan="4" class="right-align">PPN {{ number_format($detail['ppn'] * 100) }}%</td>
                         <td>Rp. {{ number_format($ppn, 0, ',', '.') }}</td>
                     </tr>
                     <tr>

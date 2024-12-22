@@ -68,7 +68,7 @@ Kelola User
 <!-- Add User Modal -->
 <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <form action="{{ route('pm.k-user.store') }}" method="POST" enctype="multipart/form-data">
+        <form id="addUserForm" action="{{ route('pm.k-user.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
@@ -78,62 +78,73 @@ Kelola User
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="name" class="form-label">Name <small class="text-danger">*</small></label>
-                        <input type="text" class="form-control" name="name" id="name" required>
+                        <input type="text" class="form-control" name="name" id="name">
+                        <span class="text-danger error-name"></span>
                     </div>
                     <div class="mb-3">
                         <label for="username" class="form-label">Username <small class="text-danger">*</small></label>
-                        <input type="text" class="form-control" name="username" id="username" required>
+                        <input type="text" class="form-control" name="username" id="username">
+                        <span class="text-danger error-username"></span>
                     </div>
                     <div class="mb-3">
                         <label for="no_pegawai" class="form-label">Employee Number <small class="text-danger">*</small></label>
-                        <input type="text" class="form-control" name="no_pegawai" id="no_pegawai" required>
+                        <input type="text" class="form-control" name="no_pegawai" id="no_pegawai">
+                        <span class="text-danger error-no_pegawai"></span>
                     </div>
                     <div class="mb-3">
                         <label for="jabatan" class="form-label">Position <small class="text-danger">*</small></label>
-                        <input type="text" class="form-control" name="jabatan" id="jabatan" required>
+                        <input type="text" class="form-control" name="jabatan" id="jabatan">
+                        <span class="text-danger error-jabatan"></span>
                     </div>
                     <div class="mb-3">
                         <label for="alamat" class="form-label">Address (Optional)</label>
                         <input type="text" class="form-control" name="alamat" id="alamat">
+                        <span class="text-danger error-alamat"></span>
                     </div>
                     <div class="mb-3">
                         <label for="active" class="form-label">Active Status <small class="text-danger">*</small></label>
-                        <select class="form-select" name="active" id="active" required>
+                        <select class="form-select" name="active" id="active">
                             <option value="" selected disabled>--Select Status--</option>
                             <option value="1">Active</option>
                             <option value="0">Inactive</option>
                         </select>
+                        <span class="text-danger error-active"></span>
                     </div>
                     <div class="mb-3">
                         <label for="role" class="form-label">Role <small class="text-danger">*</small></label>
-                        <select class="form-select" name="role" id="role" required>
+                        <select class="form-select" name="role" id="role">
                             <option value="" selected disabled>--Select Role--</option>
                             <option value="0">Project Manager</option>
                             <option value="1">Team Leader</option>
                             <option value="2">Finance</option>
                             <option value="3">Client</option>
                         </select>
+                        <span class="text-danger error-role"></span>
                     </div>
                     <div class="mb-3">
                         <label for="birthday" class="form-label">Birthday (Optional)</label>
                         <input type="date" class="form-control" name="birthday" id="birthday">
+                        <span class="text-danger error-birthday"></span>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email <small class="text-danger">*</small></label>
-                        <input type="email" class="form-control" name="email" id="email" required>
+                        <input type="email" class="form-control" name="email" id="email">
+                        <span class="text-danger error-email"></span>
                     </div>
                     <div class="mb-3">
                         <label for="profile" class="form-label">Profile Image</label>
                         <input type="file" class="form-control" name="profile" id="profile">
+                        <span class="text-danger error-profile"></span>
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password <small class="text-danger">*</small></label>
-                        <input type="password" class="form-control" name="password" id="password" required minlength="8">
-                        <small class="form-text text-muted">Minimum 8 characters</small>
+                        <input type="password" class="form-control" name="password" id="password">
+                        <span class="text-danger error-password"></span>
                     </div>
                     <div class="mb-3">
                         <label for="password_confirmation" class="form-label">Confirm Password <small class="text-danger">*</small></label>
-                        <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" required minlength="8">
+                        <input type="password" class="form-control" name="password_confirmation" id="password_confirmation">
+                        <span class="text-danger error-password_confirmation"></span>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -144,6 +155,58 @@ Kelola User
         </form>
     </div>
 </div>
+
+<script>
+document.getElementById('addUserForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // Prevent form submission
+
+    let formData = new FormData(this);
+    let actionUrl = this.action;
+
+    fetch(actionUrl, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+        },
+    })
+        .then(response => response.json())
+        .then(data => {
+            // Clear all error messages
+            document.querySelectorAll('.text-danger').forEach(el => el.textContent = '');
+
+            if (data.errors) {
+                // Display validation errors
+                Object.keys(data.errors).forEach(function (key) {
+                    document.querySelector(`.error-${key}`).textContent = data.errors[key][0];
+                });
+            } else if (data.success) {
+                // Show SweetAlert for success
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: data.message,
+                    timer: 1500, // Automatically close alert after 2 seconds
+                    showConfirmButton: false,
+                }).then(() => {
+                    // Manually refresh the page after the alert
+                    window.location.href = window.location.href;
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'An error occurred',
+                text: 'Please try again.',
+            });
+        });
+});
+
+</script>
+
+
 
 <!-- Edit User Modal -->
 @foreach($data as $d)

@@ -75,6 +75,10 @@ Kelola Invoice
                                                     <input type="text" class="form-control" id="no_invoice" name="no_invoice" value="{{ $invoice->no_invoice }}" required>
                                                 </div>
                                                 <div class="mb-3">
+                                                    <label for="ppn" class="form-label">PPN</label>
+                                                    <input type="text" class="form-control" id="ppn" name="ppn" value="{{ $invoice->ppn }}" required>
+                                                </div>
+                                                <div class="mb-3">
                                                     <label for="kepada" class="form-label">Kepada</label>
                                                     <input type="text" class="form-control" id="kepada" name="kepada" value="{{ $invoice->kepada }}" required>
                                                 </div>
@@ -91,7 +95,7 @@ Kelola Invoice
                                                     @if ($d->harga)
                                                     <input type="number" class="form-control" id="harga" name="harga" value="{{ $invoice->harga }}" required>
                                                     @else
-                                                    <input type="number" class="form-control" id="harga" name="harga" value="{{$d->biaya * 0.3}}" required>
+                                                    <input type="number" class="form-control" id="harga" name="harga" value="{{($d->biaya * 0.3)+(($d->biaya * 0.3)*$invoice->ppn)}}" readonly>
 
                                                     @endif
                                                 </div>
@@ -228,6 +232,74 @@ Kelola Invoice
                                 $ids = \App\Models\ProjectPlanM::where('project_id',$d->id)->value('id');
                             @endphp
                             
+
+                            <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateInvoiceModal1{{$d->id}}">
+                                <i class="fa-solid fa-edit"></i>
+                            </a>
+                            <div class="modal fade" id="updateInvoiceModal1{{$d->id}}" tabindex="-1" aria-labelledby="updateInvoiceLabel1{{$d->id}}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="updateInvoiceLabel1{{$d->id}}">Update Invoice</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form action="{{ route('finance.invoice.update', $d->id) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            @php
+                                            $ids1 = \App\Models\InvoiceM::where('project_id',$d->id)->value('id');
+                                            $invoice1 = \App\Models\InvoiceM::find($ids1);
+                                            // dd($invoice1);
+                                            @endphp
+                                            <div class="modal-body">
+                                                    <input type="hidden" class="form-control" id="project_id" name="project_id" value="{{ $d->id }}" required>
+                                                <div class="mb-3">
+                                                    <label for="no_invoice" class="form-label">No Invoice</label>
+                                                    <input type="text" class="form-control" id="no_invoice" name="no_invoice" value="{{ $invoice1->no_invoice }}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="ppn" class="form-label">PPN</label>
+                                                    <input type="text" class="form-control" id="ppn" name="ppn" value="{{ $invoice1->ppn }}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="kepada" class="form-label">Kepada</label>
+                                                    <input type="text" class="form-control" id="kepada" name="kepada" value="{{ $invoice1->kepada }}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="npwp" class="form-label">NPWP</label>
+                                                    <input type="text" class="form-control" id="npwp" name="npwp" value="{{ $invoice1->npwp }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="alamat" class="form-label">Alamat</label>
+                                                    <textarea class="form-control" id="alamat" name="alamat" required>{{ $invoice1->alamat }}</textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="harga" class="form-label">Harga</label>
+                                                    <input type="number" class="form-control" id="harga" name="harga" value="{{($d->biaya * 0.6)-($d->biaya *0.3)+((($d->biaya * 0.6)-($d->biaya *0.3))*$invoice1->ppn)}}" readonly>
+
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="terbilang" class="form-label">Terbilang</label>
+                                                    <input type="text" class="form-control" id="terbilang" name="terbilang" value="{{ $invoice1->terbilang }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="pembuat" class="form-label">Pembuat</label>
+                                                    <input type="text" class="form-control" id="pembuat" name="pembuat" value="{{ $invoice1->pembuat }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="date" class="form-label">Tanggal</label>
+                                                    <input type="date" class="form-control" id="date" name="date" value="{{ $invoice1->date }}">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Update</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <a href="{{route('finance.invoice.print',$d->id)}}" class="btn btn-warning"><i class="fa-solid fa-print"></i></a>
                             <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#progressModal-{{ $d->id }}">
                                 <i class="fa-solid fa-spinner"></i>
@@ -337,6 +409,72 @@ Kelola Invoice
                             @php
                                 $ids = \App\Models\ProjectPlanM::where('project_id',$d->id)->value('id');
                             @endphp
+                            @php
+                            $ids2 = \App\Models\InvoiceM::where('project_id',$d->id)->value('id');
+                            // dd($ids);
+                            $invoice2 = \App\Models\InvoiceM::find($ids2);
+                            @endphp
+                            <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateInvoiceModal{{$d->id}}">
+                                <i class="fa-solid fa-edit"></i>
+                            </a>
+                            <div class="modal fade" id="updateInvoiceModal{{$d->id}}" tabindex="-1" aria-labelledby="updateInvoiceLabel{{$d->id}}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="updateInvoiceLabel{{$d->id}}">Update Invoice</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form action="{{ route('finance.invoice.update', $d->id) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                           
+                                            <div class="modal-body">
+                                                    <input type="hidden" class="form-control" id="project_id" name="project_id" value="{{ $d->id }}" required>
+                                                <div class="mb-3">
+                                                    <label for="no_invoice" class="form-label">No Invoice</label>
+                                                    <input type="text" class="form-control" id="no_invoice" name="no_invoice" value="{{ $invoice2->no_invoice }}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="ppn" class="form-label">PPN</label>
+                                                    <input type="text" class="form-control" id="ppn" name="ppn" value="{{ $invoice2->ppn }}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="kepada" class="form-label">Kepada</label>
+                                                    <input type="text" class="form-control" id="kepada" name="kepada" value="{{ $invoice2->kepada }}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="npwp" class="form-label">NPWP</label>
+                                                    <input type="text" class="form-control" id="npwp" name="npwp" value="{{ $invoice2->npwp }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="alamat" class="form-label">Alamat</label>
+                                                    <textarea class="form-control" id="alamat" name="alamat" required>{{ $invoice2->alamat }}</textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="harga" class="form-label">Harga</label>
+                                                    <input type="number" class="form-control" id="harga" name="harga" value="{{((($d->biaya * 1)-($d->biaya * 0.6))+(($d->biaya)-($d->biaya * 0.6))*$invoice2->ppn)}}" readonly>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="terbilang" class="form-label">Terbilang</label>
+                                                    <input type="text" class="form-control" id="terbilang" name="terbilang" value="{{ $invoice2->terbilang }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="pembuat" class="form-label">Pembuat</label>
+                                                    <input type="text" class="form-control" id="pembuat" name="pembuat" value="{{ $invoice2->pembuat }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="date" class="form-label">Tanggal</label>
+                                                    <input type="date" class="form-control" id="date" name="date" value="{{ $invoice2->date }}">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Update</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                             
                             <a href="{{route('finance.invoice.print',$d->id)}}" class="btn btn-warning"><i class="fa-solid fa-print"></i></a>
                             <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#progressModal-{{ $d->id }}">

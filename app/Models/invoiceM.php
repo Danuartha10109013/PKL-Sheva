@@ -20,5 +20,6 @@ class invoiceM extends Model
         'terbilang',
         'pembuat',
         'date',
+        'ppn',
     ];
 }
