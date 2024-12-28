@@ -50,6 +50,48 @@ Dashboard
                     <div class="modal-body text-center">
                         <canvas id="progressChart-{{ $data->id }}"></canvas>
                     </div>
+                    <div class="container mt-5 mb-5">
+                      @php
+                          $ss = \App\Models\ProjectPlanM::where('project_id', $data->id)->value('fase');
+                          $datain = json_decode($ss);
+                      @endphp
+                      <p class="text-bolder">Detail Fase</p>
+                      <table style="width: 100%; border-collapse: collapse; text-align: left; margin-top: 10px;">
+                          <thead style="background-color: #f2f2f2; border-bottom: 1px solid #ddd;">
+                              <tr>
+                                  <th style="padding: 8px; border: 1px solid #ddd;">No</th>
+                                  <th style="padding: 8px; border: 1px solid #ddd;">Date</th>
+                                  <th style="padding: 8px; border: 1px solid #ddd;">Name</th>
+                                  <th style="padding: 8px; border: 1px solid #ddd;">Status</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              @if($datain) <!-- Check if $datain has valid data -->
+                                  @foreach ($datain as $da)
+                                      <tr>
+                                          <td style="padding: 8px; border: 1px solid #ddd;">{{ $loop->iteration }}</td>
+                                          <td style="padding: 8px; border: 1px solid #ddd;">{{ $da->start ?? '-' }} - {{ $da->end ?? '-' }}</td>
+                                          <td style="padding: 8px; border: 1px solid #ddd; white-space: normal; word-break: break-word;">
+                                              {{ $da->scrum_name ?? '-' }}
+                                          </td>
+                                          <td style="padding: 8px; border: 1px solid #ddd;">
+                                              <span style="color: {{ $da->status == 1 ? 'green' : 'red' }};">
+                                                  {{ $da->status == 1 ? 'Completed' : 'In Progress' }}
+                                              </span>
+                                          </td>
+                                      </tr>
+                                  @endforeach
+                              @else
+                                  <tr>
+                                      <td colspan="4" style="padding: 8px; border: 1px solid #ddd; text-align: center;">No data available</td>
+                                  </tr>
+                              @endif
+                          </tbody>
+                      </table>
+                      
+                      
+
+                  </div>
                     </div>
                 </div>
             </div>
