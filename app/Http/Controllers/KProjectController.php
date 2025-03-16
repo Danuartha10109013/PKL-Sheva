@@ -174,6 +174,7 @@ class KProjectController
             'nilai' => 'string|nullable',
             'pernyataan' => 'string|nullable',
             'catatan' => 'string|nullable',
+            'updated_by' => 'string|nullable',
         ]);
 
         // Find the project plan by ID
@@ -181,6 +182,7 @@ class KProjectController
 
         // Update fields with input data
         $projectPlan->pengantar = $request->pengantar;
+        $projectPlan->update_by = $request->updated_by;
         $projectPlan->ringkasan = $request->ringkasan;
         $projectPlan->ruang_lingkup = $request->ruang_lingkup;
         $projectPlan->jadwal_proyek = $request->jadwal_proyek;
@@ -230,6 +232,7 @@ class KProjectController
             'nilai' => 'string|nullable',
             'pernyataan' => 'string|nullable',
             'catatan' => 'string|nullable',
+            'updated_by' => 'string|nullable',
         ]);
 
         // Find the project plan by ID
@@ -238,6 +241,7 @@ class KProjectController
 
         // Update fields with input data
         $projectPlan->pengantar = $request->pengantar;
+        $projectPlan->update_by = $request->updated_by;
         $projectPlan->ringkasan = $request->ringkasan;
         $projectPlan->ruang_lingkup = $request->ruang_lingkup;
         $projectPlan->jadwal_proyek = $request->jadwal_proyek;

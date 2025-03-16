@@ -30,6 +30,7 @@ class ProjectPlanM extends Model
         'catatan',
         'no_rev',
         'no_projec_plan',
+        'updated_by',
 
         'pengantar_catatan',
         'ringkasan_catatan',

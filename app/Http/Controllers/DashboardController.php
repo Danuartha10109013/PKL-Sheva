@@ -12,18 +12,33 @@ class DashboardController
     public function projectManager ()
     {
         $client = User::where('role', 3)->count(); 
-        return view('page.pm.index',compact('client'));
+        // $data = ProjectM::all()->sort('updated_at','desc');
+        $data = ProjectM::orderBy('updated_at', 'desc')->get();
+
+        $customer = User::all();
+        $team_leader = User::all();
+        return view('page.pm.index',compact('client','data','customer','team_leader'));
     }
     public function team_lead ()
     {
-        $project = ProjectM::where('customer_id',Auth::user()->id)->value('judul');
-        $ids = ProjectM::where('customer_id',Auth::user()->id)->value('id');
+        $project = ProjectM::where('team_leader_id',Auth::user()->id)->value('judul');
+        $ids = ProjectM::where('team_leader_id',Auth::user()->id)->value('id');
+        $datain = ProjectM::where('team_leader_id',Auth::user()->id)->orderBy('updated_at', 'desc')->get();
+        // dd($ids);
+        $customer = User::all();
+        $team_leader = User::all();
         $data= ProjectM::find($ids);
-        return view('page.team_lead.index',compact('project','data'));
+        return view('page.team_lead.index',compact('project','data','datain','customer','team_leader'));
     }
     public function finance ()
     {
-        return view('page.finance.index');
+        $client = User::where('role', 3)->count(); 
+        // $data = ProjectM::all()->sort('updated_at','desc');
+        $data = ProjectM::orderBy('updated_at', 'desc')->get();
+
+        $customer = User::all();
+        $team_leader = User::all();
+        return view('page.finance.index',compact('client','data','customer','team_leader'));
     }
     public function klien ()
     {

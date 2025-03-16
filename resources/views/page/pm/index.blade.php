@@ -107,6 +107,103 @@ Dashboard
     </div>
   </div>
 </div>
+<div class="container">
+  <div class="row mt-4">
+    <div class="scroll-container">
+      @foreach ($data as $d)
+      @php
+        $ids = App\Models\ProjectPlanM::where('project_id', $d->id)->value('id');
+      @endphp
+      <div class="col-3 mr-3 d-inline-block">
+        <a href="{{ route('pm.k-project.plan', ['id' => $ids]) }}">
+          <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="{{asset('bcproject.png')}}" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">{{$d->judul}}</h5>
+              @php
+                $plantarget = App\Models\ProjectPlanM::find($ids);
+                $pmname = App\Models\User::where('id', $plantarget->update_by)->value('name');
+              @endphp
+              <p class="card-text">Last Time updated {{$d->updated_at->format('H:i:s')}} <br> {{$d->updated_at->format('d-m-Y')}}  By {{$pmname}}</p>
+            </div>
+          </div>
+        </a>
+      </div>
+      @endforeach
+    </div>
+  </div>
+</div>
+
+<div class="card mt-4">
+  <div class="card-header pb-0 p-3">
+      <div class="d-flex justify-content-between">
+          <h6 class="mb-2">Project Summary</h6>
+      </div>
+  </div>
+  <div class="table-responsive">
+      <table class="table align-items-center">
+  <thead>
+      <tr>
+          <th>No</th>
+          <th>Judul</th>
+          <th>Customer</th>
+          <th>progres</th>
+          <th>Deadline</th>
+      </tr>
+  </thead>
+  <tbody>
+    @foreach ($data as $d)
+    <tr>
+        <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$loop->iteration}}</td>
+        <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->judul}}</td>
+        <td> &nbsp;&nbsp;&nbsp;&nbsp;
+            {{-- Cari nama customer berdasarkan ID --}}
+            {{ $customer->where('id', $d->customer_id)->pluck('name')->first() ?? 'N/A' }}
+        </td>
+        <td>
+          @php
+            $progresin = App\Models\ProjectM::where('id', $d->id)->value('progres');
+          @endphp 
+           <div class="progress" style="height: 20px; width: 300px;">
+            <div class="progress-bar" role="progressbar" 
+              style="width: {{ $progresin }}%; background-color: #0a3d5f;" 
+              aria-valuenow="{{ $progresin }}" 
+              aria-valuemin="0" 
+              aria-valuemax="100">
+            </div>
+          </div>
+          <span class="ml-2">{{ $progresin }}%</span>
+        
+        </td>
+        <td> &nbsp;&nbsp;&nbsp;&nbsp;{{\Carbon\Carbon::parse($d->end)->format('d-m-Y')}}</td>
+    </tr>
+      @endforeach
+  </tbody>
+</table>
+
+  </div>
+</div>
+
+<style>
+  .scroll-container {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 10px;
+    scroll-behavior: smooth;
+    gap: 20px
+  }
+  .scroll-container::-webkit-scrollbar {
+    height: 8px;
+  }
+  .scroll-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+</style>
+
+
+
 {{-- <div class="row mt-4">
   <div class="col-lg-7 mb-lg-0 mb-4">
     <div class="card z-index-2 h-100">

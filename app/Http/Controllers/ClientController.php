@@ -127,8 +127,9 @@ class ClientController
     public function invoice($id){
         $cc = ProjectM::where('customer_id',$id)->value('id');
         $ids = invoiceM::where('project_id',$cc)->value('id');
+        // dd($ids);
         $data = invoiceM::find($ids);
-        $project = ProjectM::find($id);
+        $project = ProjectM::find($cc);
         $datain = ProjectM::where('id',$id)->get();
         foreach ($datain as $project) {
             $invoice = InvoiceM::where('project_id', $project->id)->first();

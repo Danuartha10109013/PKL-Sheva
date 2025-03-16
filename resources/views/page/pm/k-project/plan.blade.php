@@ -29,6 +29,8 @@ Detail Project Plan
         @endif
             @csrf
             @method('PUT')
+            <input type="hidden" name="updated_by" value="{{ Auth::user()->id }}">
+
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#uploadModal">
                 Generate Image Link
             </button><small class="text-danger">*</small> save first before generating

@@ -16,6 +16,7 @@ class TeamLeadController
     }
 
     public function plan($id){
+        // dd($id);
         // $ids = ProjectM::where('customer_id',$id)->value('id');
         $project = ProjectM::find($id);
         $plan = ProjectPlanM::where('project_id',$project->id)->value('id');
