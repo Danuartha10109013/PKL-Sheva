@@ -22,10 +22,10 @@ class DatabaseSeeder extends Seeder
             'alamat' => 'Tasikmalaya',
             'active' => '1',
             'profile' => null,
-            'role' => '1',
+            'role' => '0',
             'birthday' => '1990-01-01',
             'email' => 'pm@example.com',
-            'password' => Hash::make('pm_user'), // Password same as username
+            'password' => Hash::make('12345'), // Password same as username
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -39,10 +39,10 @@ class DatabaseSeeder extends Seeder
             'alamat' => 'purwakarta',
             'active' => '1',
             'profile' => null,
-            'role' => '2',
+            'role' => '1',
             'birthday' => '1985-05-05',
             'email' => 'teamlead@example.com',
-            'password' => Hash::make('team_lead'), // Password same as username
+            'password' => Hash::make('12345'), // Password same as username
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -54,10 +54,10 @@ class DatabaseSeeder extends Seeder
             'alamat' => 'purwakarta',
             'active' => '1',
             'profile' => null,
-            'role' => '3',
+            'role' => '2',
             'birthday' => '1985-05-05',
             'email' => 'finance@example.com',
-            'password' => Hash::make('finance_user'), // Password same as username
+            'password' => Hash::make('12345'), // Password same as username
             'created_at' => now(),
             'updated_at' => now(),
         ]);

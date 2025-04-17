@@ -16,10 +16,9 @@ class invoiceM extends Model
         'kepada',
         'npwp',
         'alamat',
-        'harga',
-        'terbilang',
         'pembuat',
         'date',
+        'due_date',
         'ppn',
     ];
 }

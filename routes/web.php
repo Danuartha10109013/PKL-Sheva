@@ -67,6 +67,8 @@ Route::middleware([AutoLogout::class])->group(function () {
             Route::get('/launch/{id}', [KProjectController::class, 'launch'])->name('k-project.launch');
             Route::get('/communication/{id}', [KProjectController::class, 'communication'])->name('k-project.communication');
             Route::get('/print/{id}', [KProjectController::class, 'print'])->name('k-project.print');
+            Route::get('/setuju/{id}', [ClientController::class, 'setuju'])->name('k-project.setuju');
+
         });
         Route::prefix('k-progres')->group(function () {
             Route::get('/', [KProgresController::class, 'index'])->name('k-progres');
@@ -105,6 +107,11 @@ Route::middleware([AutoLogout::class])->group(function () {
             Route::get('/', [FinanceController::class, 'index'])->name('invoice');
             Route::get('/print/{id}', [FinanceController::class, 'print'])->name('invoice.print');
             Route::put('/update/{id}', [FinanceController::class, 'update'])->name('invoice.update');
+            Route::post('/mail/{id}', [FinanceController::class, 'mail'])->name('invoice.mail');
+            Route::post('/confirm30/{id}', [FinanceController::class, 'tiga'])->name('invoice.confirm30');
+            Route::post('/confirm60/{id}', [FinanceController::class, 'enam'])->name('invoice.confirm60');
+            Route::post('/confirm90/{id}', [FinanceController::class, 'sembilan'])->name('invoice.confirm90');
+            Route::post('/confirm100/{id}', [FinanceController::class, 'sepuluh'])->name('invoice.confirm100');
         });
         Route::prefix('project')->group(function () {
             Route::get('/', [FinanceController::class, 'project'])->name('project');

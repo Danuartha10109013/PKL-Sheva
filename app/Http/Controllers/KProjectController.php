@@ -89,8 +89,22 @@ class KProjectController
         $forum->project_id = $project->id;
         $forum->save();
 
-        $bill = new invoiceM ;
+        $bill = new invoiceM;
         $bill->project_id = $project->id;
+
+        // Format dasar
+        $today = date('Ymd');
+        $baseInvoice = "INV-$today." . $project->id;
+        $invoiceNumber = $baseInvoice;
+        $counter = 1;
+
+        // Cek apakah invoice nomor ini sudah ada
+        while (invoiceM::where('no_invoice', $invoiceNumber)->exists()) {
+            $invoiceNumber = $baseInvoice . '-' . $counter;
+            $counter++;
+        }
+
+        $bill->no_invoice = $invoiceNumber;
         $bill->save();
 
         // Redirect back with a success message

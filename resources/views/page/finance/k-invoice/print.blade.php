@@ -171,7 +171,7 @@
                 </tfoot>
             </table>
             
-            <p class="terbilang">Terbilang:{{$data->terbilang}}</p>
+            <p class="terbilang">Terbilang:{{$detail['terbilang']}}</p>
             <section class="notes">
                 <p><strong>Note:</strong></p>
                 <p>Pembayaran invoice ini mohon ditransfer ke:</p>

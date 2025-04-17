@@ -53,7 +53,6 @@ Kelola Poject Plan
                   <i class="fa fa-eye"></i>
               </a>
   
-              @if ($plans && $plans->status != 1)
                 {{-- @if ($d->launch != 1) --}}
                     <a href="{{ route('pm.k-project.plan', $plans->id) }}" class="btn btn-primary">
                         <i class="fas fa-keyboard"></i>
@@ -65,7 +64,6 @@ Kelola Poject Plan
                   <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{$d->id}}">
                       <i class="fa fa-trash"></i>
                   </a>
-              @endif
   
               @if ($d->launch == 0)
                   <a class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#launchConfirmModal{{$d->id}}">
@@ -75,6 +73,49 @@ Kelola Poject Plan
                   <a href="{{ route('pm.k-project.communication', $d->id) }}" class="btn btn-light">
                       <i class="fa-solid fa-people-arrows"></i>
                   </a>
+                  <a href="#" data-id="{{ $d->id }}" class="btn btn-primary" id="approveBtn">
+                      <i class="fa-solid fa-key"></i>
+                  </a>
+                  <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="confirmationModalLabel">Confirm Approval</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          Are you sure you want to approve the project plan?
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                          <a id="confirmBtn" href="#" class="btn btn-primary">Approve</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+                
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                      const approveBtn = document.getElementById('approveBtn');
+                      const confirmBtn = document.getElementById('confirmBtn');
+                      const modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+                  
+                      approveBtn.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const projectId = approveBtn.getAttribute('data-id');
+                        const url = '{{ route("pm.k-project.setuju", ":id") }}'.replace(':id', projectId);
+                  
+                        // Set the href of the confirm button to the approval route
+                        confirmBtn.setAttribute('href', url);
+                  
+                        // Show the modal
+                        modal.show();
+                      });
+                    });
+                  </script>
+
               @endif
           </td>
           <td> &nbsp;&nbsp;&nbsp;&nbsp;Rp. {{$d->biaya}}</td>

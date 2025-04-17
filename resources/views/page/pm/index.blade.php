@@ -37,7 +37,7 @@ Dashboard
         <div class="row">
           <div class="col-8">
             <div class="numbers">
-              <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Team Leader</p>
+              <h5 style="font-size: 9px">Total Team Leader</h5>
               <h5 class="font-weight-bolder">
                 @php
                   $tl = \App\Models\User::where('role',1)->count();

@@ -54,12 +54,12 @@
             </div>
           </div>
         </form>
-            @if (Auth::user()->role == 3)
+            {{-- @if (Auth::user()->role == 3)
               @if ($data->status == 1)
               @else
                 <a href="#" data-id="{{ $data->id }}" class="btn btn-primary" id="approveBtn"><i class="fa fa-check"></i> Approve Project Plan</a>
               @endif
-            @endif
+            @endif --}}
         @else
         <p class="text-center text-warning">The Document is in Progres</p>
         @endif

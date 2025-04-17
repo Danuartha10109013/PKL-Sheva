@@ -2,21 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\InvoiceMail;
 use App\Models\invoiceM;
 use App\Models\ProjectM;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 
 class FinanceController
 {
     public function index(){
         $data = ProjectM::all();
-        $tiga = ProjectM::where('progres','>=',30)->where('progres','<',60)->get();
-        $enam = ProjectM::where('progres','>=',60)->where('progres','<',100)->get();
-        $sepuluh = ProjectM::where('progres','>=',100)->get();
+        $nol = ProjectM::where('progres','>=',0)->where('progres','<',30)->orderBy('created_at', 'desc')->get();
+        $tiga = ProjectM::where('progres','>=',30)->where('progres','<',60)->orderBy('created_at', 'desc')->get();
+        $enam = ProjectM::where('progres','>=',30)->where('progres','<',60)->orderBy('created_at', 'desc')->get();
+        $sembilan = ProjectM::where('progres','>=',90)->where('progres','<',100)->orderBy('created_at', 'desc')->get();
+        $sepuluh = ProjectM::where('progres','>=',100,)->orderBy('created_at', 'desc')->get();
 
        
-        return view('page.finance.k-invoice.index',compact('data','tiga','enam','sepuluh'));
+        return view('page.finance.k-invoice.index',compact('data','nol','tiga','enam','sembilan','sepuluh'));
     }
 
     public function print($id)
@@ -38,25 +44,35 @@ class FinanceController
                 empty($invoice->kepada) || 
                 empty($invoice->npwp) || 
                 empty($invoice->alamat) || 
-                empty($invoice->harga) || 
-                empty($invoice->terbilang) || 
                 empty($invoice->pembuat) || 
                 empty($invoice->ppn) || 
-                empty($invoice->date)
+                empty($invoice->date) ||
+                empty($invoice->due_date) 
             ) {
                 return redirect()->back()->with('error', 'Lengkapi data invoice terlebih dahulu untuk project: ' . $project->judul);
             }
         }
     }
 
-    // Perbarui tanggal invoice
-    $data->date = now();
-    $data->save();
 
     // Hitung rincian berdasarkan progres
     $invoiceDetails = [];
-    if ($project->progres >= 30 && $project->progres < 60) {
+    if ($project->progres >= 0 && $project->progres < 30) {
+        $subTotal = $project->biaya * 0;
+        $terbilang = ucfirst(terbilang($subTotal)) . ' Rupiah';
+        $invoiceDetails[] = [
+            'no' => 1,
+            'deskripsi' => "Termin 0 0%, {$project->judul}",
+            'unit' => '0 Pckg',
+            'harga' => $subTotal,
+            'jumlah' => $subTotal,
+            'ppn' => $data->ppn,
+            'terbilang' => $data->terbilang,
+
+        ];
+    }elseif ($project->progres >= 30 && $project->progres < 60) {
         $subTotal = $project->biaya * 0.3;
+        $terbilang = ucfirst(terbilang($subTotal * 0.30 + ($subTotal * $invoice->ppn))) . ' Rupiah';
         $invoiceDetails[] = [
             'no' => 1,
             'deskripsi' => "Termin I 30%, {$project->judul}",
@@ -64,6 +80,7 @@ class FinanceController
             'harga' => $subTotal,
             'jumlah' => $subTotal,
             'ppn' => $data->ppn,
+            'terbilang' => $data->terbilang,
         ];
     } elseif ($project->progres >= 60 && $project->progres < 100) {
         $subTotal = ($project->biaya * 0.6) - ($project->biaya * 0.3);
@@ -122,10 +139,9 @@ class FinanceController
             $invoice->kepada = $request->kepada;
             $invoice->npwp = $request->npwp;
             $invoice->alamat = $request->alamat;
-            $invoice->harga = $request->harga;
-            $invoice->terbilang = $request->terbilang;
             $invoice->pembuat = $request->pembuat;
             $invoice->date = $request->date;
+            $invoice->due_date = $request->due_date;
             $invoice->ppn = $request->ppn;
             // dd($invoice->ppn);
             $invoice->save();
@@ -139,4 +155,136 @@ class FinanceController
         $data = ProjectM::all();
         return view('page.finance.k-project.index',compact('data'));
     }
+
+    public function mail(Request $request, $id){
+        $invoice = invoiceM::findOrFail($id);
+        $project = ProjectM::find($invoice->project_id);
+        // dd($project);
+        $user= User::find($project->customer_id);
+        
+        if($request->type == 30){
+            $totalCostNoPpn = $project->biaya * 0.30;
+            $totalCost = $project->biaya *0.30 + ($project->biaya *0.30 * $invoice->ppn);
+            $terbilang = ucfirst(terbilang($totalCost)) . ' Rupiah';
+    
+            $emailData = [
+                'customerName' => $user->name,
+                'invoiceId'    => $invoice->no_invoice,
+                'amount'       => $project->biaya,
+                'date'      => Carbon::parse($invoice->date)->format('d M Y'),
+                'dueDate'      => Carbon::parse($invoice->due_date)->format('d M Y'),
+                'company'      => 'PT ZEN MULTIMEDIA INDONESIA',
+                'term'         => 'Termin 1',
+                'percentage'   => '30%',
+                'projectName'  => $project->judul,
+                'terbilang'  => $terbilang,
+                'senderName'  => $invoice->pembuat,
+                'npwp'  => $invoice->npwp,
+                'alamat'  => $invoice->alamat,
+                'ppn'  => $invoice->ppn,
+                'totalCostNoPpn'  => $totalCostNoPpn,
+                'totalCost'  => $totalCost,
+            ];
+            // dd($emailData);
+        }elseif($request->type == 60){
+            $totalCostNoPpn = $project->biaya * 0.60 - ($project->biaya * 0.30);
+            $totalCost = ($project->biaya *0.60 + ($project->biaya *0.60 * $invoice->ppn)) - ($project->biaya *0.30 + ($project->biaya *0.30 * $invoice->ppn));
+            $terbilang = ucfirst(terbilang($totalCost)) . ' Rupiah';
+            // dd($totalCostNoPpn);
+            $emailData = [
+                'customerName' => $user->name,
+                'invoiceId'    => $invoice->no_invoice,
+                'amount'       => $project->biaya,
+                'date'      => Carbon::parse($invoice->date)->format('d M Y'),
+                'dueDate'      => Carbon::parse($invoice->due_date)->format('d M Y'),
+                'company'      => 'PT ZEN MULTIMEDIA INDONESIA',
+                'term'         => 'Termin 2',
+                'percentage'   => '60%',
+                'projectName'  => $project->judul,
+                'terbilang'  => $terbilang,
+                'senderName'  => $invoice->pembuat,
+                'npwp'  => $invoice->npwp,
+                'alamat'  => $invoice->alamat,
+                'ppn'  => $invoice->ppn,
+                'totalCostNoPpn'  => $totalCostNoPpn,
+                'totalCost'  => $totalCost,
+            ];
+        }elseif($request->type == 90){
+            $totalCostNoPpn = $project->biaya * 0.90 - ($project->biaya * 0.60);
+            $totalCost = ($project->biaya *0.90 + ($project->biaya *0.90 * $invoice->ppn)) - ($project->biaya *0.60 + ($project->biaya *0.60 * $invoice->ppn));
+            $terbilang = ucfirst(terbilang($totalCost)) . ' Rupiah';
+            // dd($totalCostNoPpn);
+            $emailData = [
+                'customerName' => $user->name,
+                'invoiceId'    => $invoice->no_invoice,
+                'amount'       => $project->biaya,
+                'date'      => Carbon::parse($invoice->date)->format('d M Y'),
+                'dueDate'      => Carbon::parse($invoice->due_date)->format('d M Y'),
+                'company'      => 'PT ZEN MULTIMEDIA INDONESIA',
+                'term'         => 'Termin 3',
+                'percentage'   => '90%',
+                'projectName'  => $project->judul,
+                'terbilang'  => $terbilang,
+                'senderName'  => $invoice->pembuat,
+                'npwp'  => $invoice->npwp,
+                'alamat'  => $invoice->alamat,
+                'ppn'  => $invoice->ppn,
+                'totalCostNoPpn'  => $totalCostNoPpn,
+                'totalCost'  => $totalCost,
+            ];
+        }elseif($request->type == 100){
+            $totalCostNoPpn = $project->biaya * 1 - ($project->biaya * 0.90);
+            $totalCost = ($project->biaya * 1 + ($project->biaya * 1 * $invoice->ppn)) - ($project->biaya *0.90 + ($project->biaya *0.90 * $invoice->ppn));
+            $terbilang = ucfirst(terbilang($totalCost)) . ' Rupiah';
+            // dd($totalCostNoPpn);
+            $emailData = [
+                'customerName' => $user->name,
+                'invoiceId'    => $invoice->no_invoice,
+                'amount'       => $project->biaya,
+                'date'      => Carbon::parse($invoice->date)->format('d M Y'),
+                'dueDate'      => Carbon::parse($invoice->due_date)->format('d M Y'),
+                'company'      => 'PT ZEN MULTIMEDIA INDONESIA',
+                'term'         => 'Termin 4',
+                'percentage'   => '100%',
+                'projectName'  => $project->judul,
+                'terbilang'  => $terbilang,
+                'senderName'  => $invoice->pembuat,
+                'npwp'  => $invoice->npwp,
+                'alamat'  => $invoice->alamat,
+                'ppn'  => $invoice->ppn,
+                'totalCostNoPpn'  => $totalCostNoPpn,
+                'totalCost'  => $totalCost,
+            ];
+        }
+        
+    
+        Mail::to($user->email)->send(new InvoiceMail($emailData));
+        return redirect()->back()->with('success', 'Email telah berhasil dikirim');
+    }
+
+    public function tiga($id) {
+        $inv = invoiceM::find($id);
+        $inv['30'] = 'payed'; // Use array syntax for numeric or unusual column names
+        $inv->save();
+        return redirect()->back()->with('success', 'Pembayaran telah dikonfirmasi');
+    }
+    public function enam($id) {
+        $inv = invoiceM::find($id);
+        $inv['60'] = 'payed'; // Use array syntax for numeric or unusual column names
+        $inv->save();
+        return redirect()->back()->with('success', 'Pembayaran telah dikonfirmasi');
+    }
+    public function sembilan($id) {
+        $inv = invoiceM::find($id);
+        $inv['90'] = 'payed'; // Use array syntax for numeric or unusual column names
+        $inv->save();
+        return redirect()->back()->with('success', 'Pembayaran telah dikonfirmasi');
+    }
+    public function sepuluh($id) {
+        $inv = invoiceM::find($id);
+        $inv['100'] = 'payed'; // Use array syntax for numeric or unusual column names
+        $inv->save();
+        return redirect()->back()->with('success', 'Pembayaran telah dikonfirmasi');
+    }
+    
 }
