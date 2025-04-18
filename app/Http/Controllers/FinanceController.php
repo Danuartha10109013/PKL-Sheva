@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\InvoiceMail;
+use App\Models\HistoryM;
 use App\Models\invoiceM;
 use App\Models\ProjectM;
 use App\Models\User;
@@ -17,7 +18,7 @@ class FinanceController
         $data = ProjectM::all();
         $nol = ProjectM::where('progres','>=',0)->where('progres','<',30)->orderBy('created_at', 'desc')->get();
         $tiga = ProjectM::where('progres','>=',30)->where('progres','<',60)->orderBy('created_at', 'desc')->get();
-        $enam = ProjectM::where('progres','>=',30)->where('progres','<',60)->orderBy('created_at', 'desc')->get();
+        $enam = ProjectM::where('progres','>=',60)->where('progres','<',90)->orderBy('created_at', 'desc')->get();
         $sembilan = ProjectM::where('progres','>=',90)->where('progres','<',100)->orderBy('created_at', 'desc')->get();
         $sepuluh = ProjectM::where('progres','>=',100,)->orderBy('created_at', 'desc')->get();
 
@@ -30,6 +31,8 @@ class FinanceController
     // Ambil ID invoice terkait project
     $ids = InvoiceM::where('project_id', $id)->value('id');
     $data = InvoiceM::find($ids);
+
+    $history = HistoryM::all();
 
     // Ambil data project
     $project = ProjectM::find($id);
@@ -59,7 +62,9 @@ class FinanceController
     $invoiceDetails = [];
     if ($project->progres >= 0 && $project->progres < 30) {
         $subTotal = $project->biaya * 0;
-        $terbilang = ucfirst(terbilang($subTotal)) . ' Rupiah';
+        $ppn = $subTotal * $data->ppn;
+        $total = $subTotal + $ppn;
+        $terbilang = ucfirst(terbilang($total)) . ' Rupiah';
         $invoiceDetails[] = [
             'no' => 1,
             'deskripsi' => "Termin 0 0%, {$project->judul}",
@@ -67,47 +72,76 @@ class FinanceController
             'harga' => $subTotal,
             'jumlah' => $subTotal,
             'ppn' => $data->ppn,
-            'terbilang' => $data->terbilang,
+            'terbilang' => $terbilang,
 
         ];
     }elseif ($project->progres >= 30 && $project->progres < 60) {
         $subTotal = $project->biaya * 0.3;
-        $terbilang = ucfirst(terbilang($subTotal * 0.30 + ($subTotal * $invoice->ppn))) . ' Rupiah';
+        $ppn = $subTotal * $data->ppn;
+        $total = $subTotal + $ppn;
+        $terbilang = ucfirst(terbilang($total)) . ' Rupiah';
         $invoiceDetails[] = [
             'no' => 1,
-            'deskripsi' => "Termin I 30%, {$project->judul}",
+            'deskripsi' => "Termin 1 30%, {$project->judul}",
             'unit' => '1 Pckg',
             'harga' => $subTotal,
             'jumlah' => $subTotal,
             'ppn' => $data->ppn,
-            'terbilang' => $data->terbilang,
+            'terbilang' => $terbilang,
         ];
-    } elseif ($project->progres >= 60 && $project->progres < 100) {
+    } elseif ($project->progres >= 60 && $project->progres < 90) {
         $subTotal = ($project->biaya * 0.6) - ($project->biaya * 0.3);
+        $ppn = $subTotal * $data->ppn;
+        $total = $subTotal + $ppn;
+        $terbilang = ucfirst(terbilang($total)) . ' Rupiah';
         $invoiceDetails[] = [
             'no' => 1,
-            'deskripsi' => "Termin II 60%, {$project->judul}",
+            'deskripsi' => "Termin 2 60%, {$project->judul}",
             'unit' => '1 Pckg',
             'harga' => $subTotal,
             'jumlah' => $subTotal,
             'ppn' => $data->ppn,
+            'terbilang' => $terbilang,
         ];
-    } elseif ($project->progres >= 100) {
-        $subTotal = ($project->biaya * 1) - ($project->biaya * 0.6);
+    } elseif ($project->progres >= 90 && $project->progres < 100) {
+        $subTotal = ($project->biaya * 0.9) - ($project->biaya * 0.6);
+        $ppn = $subTotal * $data->ppn;
+        $total = $subTotal + $ppn;
+        $terbilang = ucfirst(terbilang($total)) . ' Rupiah';
         $invoiceDetails[] = [
             'no' => 1,
-            'deskripsi' => "Termin III 100%, {$project->judul}",
+            'deskripsi' => "Termin 3 90%, {$project->judul}",
             'unit' => '1 Pckg',
             'harga' => $subTotal,
             'jumlah' => $subTotal,
             'ppn' => $data->ppn,
+            'terbilang' => $terbilang,
+        ];
+    }elseif ($project->progres >= 100) {
+        $subTotal = ($project->biaya * 0.9) - ($project->biaya * 0.6);
+        $ppn = $subTotal * $data->ppn;
+        $total = $subTotal + $ppn;
+        $terbilang = ucfirst(terbilang($total)) . ' Rupiah';
+        $invoiceDetails[] = [
+            'no' => 1,
+            'deskripsi' => "Termin 4 100%, {$project->judul}",
+            'unit' => '1 Pckg',
+            'harga' => $subTotal,
+            'jumlah' => $subTotal,
+            'ppn' => $data->ppn,
+            'terbilang' => $terbilang,
         ];
     }
 
     $ppn = $subTotal * $data->ppn;
     $total = $subTotal + $ppn;
 
-    return view('page.finance.k-invoice.print', compact('data', 'project', 'invoiceDetails', 'subTotal', 'ppn', 'total'));
+    return view('page.finance.k-invoice.print', compact('data','history','project', 'invoiceDetails', 'subTotal', 'ppn', 'total'));
+}
+
+public function printInvoice($id){
+    $data = HistoryM::find($id);
+    return view('page.finance.k-invoice.printInvoice',compact('data'));
 }
 
 
@@ -185,6 +219,27 @@ class FinanceController
                 'totalCostNoPpn'  => $totalCostNoPpn,
                 'totalCost'  => $totalCost,
             ];
+            $subTotal = $totalCostNoPpn;
+
+            $history = [
+                'project_id' => $project->id,
+                'invoice' => $invoice->id,
+                'no_invoice' => $invoice->no_invoice,
+                'date' => $invoice->date,
+                'kepada' => $invoice->kepada,
+                'npwp' => $invoice->npwp,
+                'alamat' => $invoice->alamat,
+                'subTotal' => $subTotal,
+                'no' => 1,
+                'deskripsi' => "Termin I 30%, {$project->judul}",
+                'unit' => '1 Pckg',
+                'harga' => $subTotal,
+                'jumlah' => $subTotal,
+                'ppn' => $invoice->ppn,
+                'terbilang' => $terbilang,
+                'pembuat' => $invoice->pembuat,
+                'total' => $totalCost,
+            ];
             // dd($emailData);
         }elseif($request->type == 60){
             $totalCostNoPpn = $project->biaya * 0.60 - ($project->biaya * 0.30);
@@ -209,6 +264,28 @@ class FinanceController
                 'totalCostNoPpn'  => $totalCostNoPpn,
                 'totalCost'  => $totalCost,
             ];
+
+            $subTotal = $totalCostNoPpn;
+            
+            $history = [
+                'project_id' => $project->id,
+                'invoice' => $invoice->id,
+                'no_invoice' => $invoice->no_invoice,
+                'date' => $invoice->date,
+                'kepada' => $invoice->kepada,
+                'npwp' => $invoice->npwp,
+                'alamat' => $invoice->alamat,
+                'subTotal' => $subTotal,
+                'no' => 1,
+                'deskripsi' => "Termin 2 60%, {$project->judul}",
+                'unit' => '1 Pckg',
+                'harga' => $subTotal,
+                'jumlah' => $subTotal,
+                'ppn' => $invoice->ppn,
+                'terbilang' => $terbilang,
+                'pembuat' => $invoice->pembuat,
+                'total' => $totalCost,
+            ];
         }elseif($request->type == 90){
             $totalCostNoPpn = $project->biaya * 0.90 - ($project->biaya * 0.60);
             $totalCost = ($project->biaya *0.90 + ($project->biaya *0.90 * $invoice->ppn)) - ($project->biaya *0.60 + ($project->biaya *0.60 * $invoice->ppn));
@@ -232,6 +309,28 @@ class FinanceController
                 'totalCostNoPpn'  => $totalCostNoPpn,
                 'totalCost'  => $totalCost,
             ];
+
+            $subTotal = $totalCostNoPpn;
+            
+        $history = [
+            'project_id' => $project->id,
+            'invoice' => $invoice->id,
+            'no_invoice' => $invoice->no_invoice,
+            'date' => $invoice->date,
+            'kepada' => $invoice->kepada,
+            'npwp' => $invoice->npwp,
+            'alamat' => $invoice->alamat,
+            'subTotal' => $subTotal,
+            'no' => 1,
+            'deskripsi' => "Termin 3 90%, {$project->judul}",
+            'unit' => '1 Pckg',
+            'harga' => $subTotal,
+            'jumlah' => $subTotal,
+            'ppn' => $invoice->ppn,
+            'terbilang' => $terbilang,
+            'pembuat' => $invoice->pembuat,
+            'total' => $totalCost,
+        ];
         }elseif($request->type == 100){
             $totalCostNoPpn = $project->biaya * 1 - ($project->biaya * 0.90);
             $totalCost = ($project->biaya * 1 + ($project->biaya * 1 * $invoice->ppn)) - ($project->biaya *0.90 + ($project->biaya *0.90 * $invoice->ppn));
@@ -255,10 +354,34 @@ class FinanceController
                 'totalCostNoPpn'  => $totalCostNoPpn,
                 'totalCost'  => $totalCost,
             ];
+
+            $subTotal = $totalCostNoPpn;
+            
+        $history = [
+            'project_id' => $project->id,
+            'invoice' => $invoice->id,
+            'no_invoice' => $invoice->no_invoice,
+            'date' => $invoice->date,
+            'kepada' => $invoice->kepada,
+            'npwp' => $invoice->npwp,
+            'alamat' => $invoice->alamat,
+            'subTotal' => $subTotal,
+            'no' => 1,
+            'deskripsi' => "Termin 4 100%, {$project->judul}",
+            'unit' => '1 Pckg',
+            'harga' => $subTotal,
+            'jumlah' => $subTotal,
+            'ppn' => $invoice->ppn,
+            'terbilang' => $terbilang,
+            'pembuat' => $invoice->pembuat,
+            'total' => $totalCost,
+        ];
         }
         
-    
-        Mail::to($user->email)->send(new InvoiceMail($emailData));
+        if ($emailData != null) {
+            Mail::to($user->email)->send(new InvoiceMail($emailData));
+            HistoryM::create($history);
+        }
         return redirect()->back()->with('success', 'Email telah berhasil dikirim');
     }
 

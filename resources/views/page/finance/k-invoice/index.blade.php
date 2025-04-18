@@ -75,6 +75,7 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                             <th>60%</th>
                             <th>90%</th>
                             <th>100%</th>
+                            <th>History Inovice</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -475,7 +476,14 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                             </div>
                                             </div>
                                     </td>
-            
+                                    <td>
+                                        @php
+                                            $history = \App\Models\HistoryM::where('project_id',$d->id)->where('invoice',$invoice->id)->get();
+                                        @endphp
+                                        @foreach ($history as $his)
+                                        &nbsp;&nbsp;&nbsp;&nbsp;<a href="{{route('finance.invoice.printInvoice',$his->id)}}" style="color: blue"><span style="color: green">Terkirim</span> Invoice {{$his->deskripsi}}</a><br>
+                                        @endforeach
+                                    </td>
                                 </tr>
                                 @endforeach
                                 @else

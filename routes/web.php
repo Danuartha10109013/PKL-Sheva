@@ -112,6 +112,7 @@ Route::middleware([AutoLogout::class])->group(function () {
             Route::post('/confirm60/{id}', [FinanceController::class, 'enam'])->name('invoice.confirm60');
             Route::post('/confirm90/{id}', [FinanceController::class, 'sembilan'])->name('invoice.confirm90');
             Route::post('/confirm100/{id}', [FinanceController::class, 'sepuluh'])->name('invoice.confirm100');
+            Route::get('/printInvoice/{id}', [FinanceController::class, 'printInvoice'])->name('invoice.printInvoice');
         });
         Route::prefix('project')->group(function () {
             Route::get('/', [FinanceController::class, 'project'])->name('project');

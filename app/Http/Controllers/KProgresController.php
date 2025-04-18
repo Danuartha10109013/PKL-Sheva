@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\InvoiceMail;
+use App\Models\HistoryM;
 use App\Models\invoiceM;
 use App\Models\ProjectM;
 use App\Models\ProjectPlanM;
@@ -64,7 +65,7 @@ class KProgresController
     $invoice = invoiceM::find($inv);
     $project = ProjectM::find($id);
     $user= User::find($project->customer_id);
-
+    $emailData = null;
     // dd($project);
     $user= User::find($project->customer_id);
     if ($completion_percentage >= 30 && $completion_percentage < 60) {
@@ -90,6 +91,29 @@ class KProgresController
                 'totalCostNoPpn'  => $totalCostNoPpn,
                 'totalCost'  => $totalCost,
             ];
+
+            $subTotal = $totalCostNoPpn;
+
+            $history = [
+                'project_id' => $project->id,
+                'invoice' => $invoice->id,
+                'no_invoice' => $invoice->no_invoice,
+                'date' => $invoice->date,
+                'kepada' => $invoice->kepada,
+                'npwp' => $invoice->npwp,
+                'alamat' => $invoice->alamat,
+                'subTotal' => $subTotal,
+                'no' => 1,
+                'deskripsi' => "Termin I 30%, {$project->judul}",
+                'unit' => '1 Pckg',
+                'harga' => $subTotal,
+                'jumlah' => $subTotal,
+                'ppn' => $invoice->ppn,
+                'terbilang' => $terbilang,
+                'pembuat' => $invoice->pembuat,
+                'total' => $totalCost,
+            ];
+
     }elseif($completion_percentage >= 60 && $completion_percentage < 90){
         $totalCostNoPpn = $project->biaya * 0.60 - ($project->biaya * 0.30);
             $totalCost = ($project->biaya *0.60 + ($project->biaya *0.60 * $invoice->ppn)) - ($project->biaya *0.30 + ($project->biaya *0.30 * $invoice->ppn));
@@ -112,6 +136,28 @@ class KProgresController
                 'ppn'  => $invoice->ppn,
                 'totalCostNoPpn'  => $totalCostNoPpn,
                 'totalCost'  => $totalCost,
+            ];
+
+            $subTotal = $totalCostNoPpn;
+            
+            $history = [
+                'project_id' => $project->id,
+                'invoice' => $invoice->id,
+                'no_invoice' => $invoice->no_invoice,
+                'date' => $invoice->date,
+                'kepada' => $invoice->kepada,
+                'npwp' => $invoice->npwp,
+                'alamat' => $invoice->alamat,
+                'subTotal' => $subTotal,
+                'no' => 1,
+                'deskripsi' => "Termin 2 60%, {$project->judul}",
+                'unit' => '1 Pckg',
+                'harga' => $subTotal,
+                'jumlah' => $subTotal,
+                'ppn' => $invoice->ppn,
+                'terbilang' => $terbilang,
+                'pembuat' => $invoice->pembuat,
+                'total' => $totalCost,
             ];
     }elseif($completion_percentage >= 90 && $completion_percentage < 100){
         $totalCostNoPpn = $project->biaya * 0.90 - ($project->biaya * 0.60);
@@ -136,6 +182,27 @@ class KProgresController
             'totalCostNoPpn'  => $totalCostNoPpn,
             'totalCost'  => $totalCost,
         ];
+        $subTotal = $totalCostNoPpn;
+            
+        $history = [
+            'project_id' => $project->id,
+            'invoice' => $invoice->id,
+            'no_invoice' => $invoice->no_invoice,
+            'date' => $invoice->date,
+            'kepada' => $invoice->kepada,
+            'npwp' => $invoice->npwp,
+            'alamat' => $invoice->alamat,
+            'subTotal' => $subTotal,
+            'no' => 1,
+            'deskripsi' => "Termin 3 90%, {$project->judul}",
+            'unit' => '1 Pckg',
+            'harga' => $subTotal,
+            'jumlah' => $subTotal,
+            'ppn' => $invoice->ppn,
+            'terbilang' => $terbilang,
+            'pembuat' => $invoice->pembuat,
+            'total' => $totalCost,
+        ];
     }elseif($completion_percentage >= 100 ){
         $totalCostNoPpn = $project->biaya * 1 - ($project->biaya * 0.90);
             $totalCost = ($project->biaya * 1 + ($project->biaya * 1 * $invoice->ppn)) - ($project->biaya *0.90 + ($project->biaya *0.90 * $invoice->ppn));
@@ -159,9 +226,33 @@ class KProgresController
                 'totalCostNoPpn'  => $totalCostNoPpn,
                 'totalCost'  => $totalCost,
             ];
+        $subTotal = $totalCostNoPpn;
+            
+        $history = [
+            'project_id' => $project->id,
+            'invoice' => $invoice->id,
+            'no_invoice' => $invoice->no_invoice,
+            'date' => $invoice->date,
+            'kepada' => $invoice->kepada,
+            'npwp' => $invoice->npwp,
+            'alamat' => $invoice->alamat,
+            'subTotal' => $subTotal,
+            'no' => 1,
+            'deskripsi' => "Termin 4 100%, {$project->judul}",
+            'unit' => '1 Pckg',
+            'harga' => $subTotal,
+            'jumlah' => $subTotal,
+            'ppn' => $invoice->ppn,
+            'terbilang' => $terbilang,
+            'pembuat' => $invoice->pembuat,
+            'total' => $totalCost,
+        ];
     }
-
-    Mail::to($user->email)->send(new InvoiceMail($emailData));
+    if ($emailData != null) {
+        Mail::to($user->email)->send(new InvoiceMail($emailData));
+        HistoryM::create($history);
+    }
+    
 
 
     return redirect()->route('pm.k-progres')->with('success', 'Data telah diperbarui');
