@@ -73,9 +73,14 @@ Kelola Poject Plan
                   <a href="{{ route('pm.k-project.communication', $d->id) }}" class="btn btn-light">
                       <i class="fa-solid fa-people-arrows"></i>
                   </a>
+                  @php
+                    $planss = \App\Models\ProjectPlanM::where('project_id',$d->id)->value('status');
+                  @endphp
+                  @if ($planss != 1)
                   <a href="#" data-id="{{ $d->id }}" class="btn btn-primary" id="approveBtn">
                       <i class="fa-solid fa-key"></i>
                   </a>
+                  @endif
                   <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">
@@ -84,7 +89,7 @@ Kelola Poject Plan
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                          Are you sure you want to approve the project plan?
+                          Are you sure you want to Lock the project plan?
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
