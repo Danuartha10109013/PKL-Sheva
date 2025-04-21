@@ -45,6 +45,8 @@ class KProgresController
             'end' => $request->end[$index] ?? null,
             'description' => $request->fase_1[$index] ?? null,
             'status' => isset($request->status[$index]) ? 1 : 0, // Handle checkbox
+            'note' =>  $fase[$index]->note ?? null,
+            'notes' =>  $fase[$index]->notes ?? null,
         ];
     }
 
