@@ -7,7 +7,7 @@
     <p>
         Saya <strong>{{ $senderName }}</strong>, Finance Staff PT ZEN MULTIMEDIA INDONESIA.
         Bersama email ini, terlampir invoice untuk <strong> {{ $term }} ({{ $percentage }}%)</strong> proyek <strong>{{ $projectName }}</strong> senilai <strong>Rp{{ number_format($totalCost, 0, ',', '.') }}</strong>
-        ({{ $terbilang }}), dengan tanggal jatuh tempo sesuai yang tercantum di invoice.
+        ({{ $terbilang }}), dengan tanggal jatuh tempo sampai dengan {{$dueDate}}.
     </p>
 
     <p>Pembayaran dapat ditransfer ke:</p>
@@ -95,10 +95,11 @@
                 Bank BRI - Rek. 005.002.202.100.1<br>
                 Atas Nama: PT. ZEN MULTIMEDIA INDONESIA
             </p>
+            <p><strong>Tenggat Pembayaran sampai {{$dueDate}}</strong></p>
         </div>
 
         <div style="margin-top: 40px; text-align: right;">
-            <p>Purwakarta, {{ $dueDate }}</p>
+            <p>Purwakarta, {{ $date }}</p>
             <p><strong>Hormat Kami,</strong></p>
             <p><strong>{{ $senderName }}</strong></p>
         </div>

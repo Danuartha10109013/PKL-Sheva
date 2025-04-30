@@ -14,6 +14,7 @@ class InvoiceMail extends Mailable
     public function __construct($data)
     {
         $this->data = $data;
+        // dd($data);
     }
 
     public function build()
@@ -25,6 +26,7 @@ class InvoiceMail extends Mailable
                     ->with('customerName', $this->data['customerName'])
                     ->with('invoiceId', $this->data['invoiceId'])
                     ->with('amount', $this->data['amount'])
+                    ->with('date', $this->data['date'])
                     ->with('dueDate', $this->data['dueDate'])
                     ->with('senderName', $this->data['senderName'])
                     ->with('company', $this->data['company'])

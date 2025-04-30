@@ -254,9 +254,23 @@ Kelola Poject Plan
                         <input type="date" class="form-control" id="end" name="end" >
                     </div>
                     <div class="mb-3">
-                        <label for="biaya" class="form-label">Total Cost</label>
-                        <input type="number" class="form-control" id="biaya" name="biaya">
-                    </div>
+                      <label for="biaya" class="form-label">Total Cost</label>
+                      <input type="text" class="form-control" id="biaya" name="biaya_display">
+                      <input type="hidden" id="biaya_hidden" name="biaya">
+                  </div>
+                  <script>
+                    const inputDisplay = document.getElementById('biaya');
+                    const inputHidden = document.getElementById('biaya_hidden');
+                    
+                    inputDisplay.addEventListener('input', function(e) {
+                        let value = this.value.replace(/[^0-9]/g, ''); // ambil hanya angka
+                        let formatted = new Intl.NumberFormat('id-ID').format(value); // format pakai titik
+                    
+                        this.value = 'Rp ' + formatted;
+                        inputHidden.value = value; // hanya angka, tanpa Rp dan titik
+                    });
+                    </script>
+                                      
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

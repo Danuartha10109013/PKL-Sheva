@@ -230,6 +230,8 @@
                     Bank BRI - Rek. 005.002.202.100.1<br>
                     Atas Nama: PT. ZEN MULTIMEDIA INDONESIA
                 </p>
+            <p><strong>Tenggat Pembayaran sampai {{$data->due_date}}</strong></p>
+
             </section>
         </main>
         <footer>

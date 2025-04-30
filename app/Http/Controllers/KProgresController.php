@@ -24,7 +24,20 @@ class KProgresController
         $ids = ProjectPlanM::where('project_id',$id)->value('id');
         $plan = ProjectPlanM::find($ids);
         $data = json_decode($plan->fase, true);
-        // dd($plan); 
+        $in = invoiceM::where('project_id',$id)->value('id');
+        $invoice = InvoiceM::find($in);
+
+if (
+    empty($invoice->no_invoice) ||
+    empty($invoice->ppn) ||
+    empty($invoice->kepada) ||
+    empty($invoice->npwp) ||
+    empty($invoice->alamat) ||
+    empty($invoice->pembuat) 
+) {
+    return back()->with('error', 'Data Invoice belum dilengkapi oleh Finance.');
+}
+// dd($plan); 
         return view('page.pm.k-progres.progres',compact('data','id'));
     }
 
@@ -79,8 +92,9 @@ class KProgresController
                 'customerName' => $user->name,
                 'invoiceId'    => $invoice->no_invoice,
                 'amount'       => $project->biaya,
-                'date'      => Carbon::parse($invoice->date)->format('d M Y'),
-                'dueDate'      => Carbon::parse($invoice->due_date)->format('d M Y'),
+                'date'     => Carbon::now()->format('Y-m-d'),
+                'dueDate' => Carbon::now()->addDays(14)->format('Y-m-d'),
+
                 'company'      => 'PT ZEN MULTIMEDIA INDONESIA',
                 'term'         => 'Termin 1',
                 'percentage'   => '30%',
@@ -93,14 +107,17 @@ class KProgresController
                 'totalCostNoPpn'  => $totalCostNoPpn,
                 'totalCost'  => $totalCost,
             ];
-
+            $invoice->date = $emailData['date'];
+            $invoice->due_date = $emailData['dueDate'];
+            $invoice->save();
             $subTotal = $totalCostNoPpn;
 
             $history = [
                 'project_id' => $project->id,
                 'invoice' => $invoice->id,
                 'no_invoice' => $invoice->no_invoice,
-                'date' => $invoice->date,
+                'date'     => Carbon::now()->format('Y-m-d'),
+                'dueDate' => Carbon::now()->addDays(14)->format('Y-m-d'),
                 'kepada' => $invoice->kepada,
                 'npwp' => $invoice->npwp,
                 'alamat' => $invoice->alamat,
@@ -125,8 +142,9 @@ class KProgresController
                 'customerName' => $user->name,
                 'invoiceId'    => $invoice->no_invoice,
                 'amount'       => $project->biaya,
-                'date'      => Carbon::parse($invoice->date)->format('d M Y'),
-                'dueDate'      => Carbon::parse($invoice->due_date)->format('d M Y'),
+                'date'     => Carbon::now()->format('Y-m-d'),
+                'dueDate' => Carbon::now()->addDays(14)->format('Y-m-d'),
+
                 'company'      => 'PT ZEN MULTIMEDIA INDONESIA',
                 'term'         => 'Termin 2',
                 'percentage'   => '60%',
@@ -139,14 +157,17 @@ class KProgresController
                 'totalCostNoPpn'  => $totalCostNoPpn,
                 'totalCost'  => $totalCost,
             ];
-
+            $invoice->date = $emailData['date'];
+            $invoice->due_date = $emailData['dueDate'];
+            $invoice->save();
             $subTotal = $totalCostNoPpn;
             
             $history = [
                 'project_id' => $project->id,
                 'invoice' => $invoice->id,
                 'no_invoice' => $invoice->no_invoice,
-                'date' => $invoice->date,
+                'date'     => Carbon::now()->format('Y-m-d'),
+                'dueDate' => Carbon::now()->addDays(14)->format('Y-m-d'),
                 'kepada' => $invoice->kepada,
                 'npwp' => $invoice->npwp,
                 'alamat' => $invoice->alamat,
@@ -170,8 +191,8 @@ class KProgresController
             'customerName' => $user->name,
             'invoiceId'    => $invoice->no_invoice,
             'amount'       => $project->biaya,
-            'date'      => Carbon::parse($invoice->date)->format('d M Y'),
-            'dueDate'      => Carbon::parse($invoice->due_date)->format('d M Y'),
+            'date'     => Carbon::now()->format('d M Y'),
+            'dueDate'  => Carbon::now()->addDays(14)->format('d M Y'),
             'company'      => 'PT ZEN MULTIMEDIA INDONESIA',
             'term'         => 'Termin 3',
             'percentage'   => '90%',
@@ -184,13 +205,17 @@ class KProgresController
             'totalCostNoPpn'  => $totalCostNoPpn,
             'totalCost'  => $totalCost,
         ];
+        $invoice->date = $emailData['date'];
+            $invoice->due_date = $emailData['dueDate'];
+            $invoice->save();
         $subTotal = $totalCostNoPpn;
             
         $history = [
             'project_id' => $project->id,
             'invoice' => $invoice->id,
             'no_invoice' => $invoice->no_invoice,
-            'date' => $invoice->date,
+            'date'     => Carbon::now()->format('Y-m-d'),
+                'dueDate' => Carbon::now()->addDays(14)->format('Y-m-d'),
             'kepada' => $invoice->kepada,
             'npwp' => $invoice->npwp,
             'alamat' => $invoice->alamat,
@@ -214,8 +239,9 @@ class KProgresController
                 'customerName' => $user->name,
                 'invoiceId'    => $invoice->no_invoice,
                 'amount'       => $project->biaya,
-                'date'      => Carbon::parse($invoice->date)->format('d M Y'),
-                'dueDate'      => Carbon::parse($invoice->due_date)->format('d M Y'),
+                'date'     => Carbon::now()->format('Y-m-d'),
+                'dueDate' => Carbon::now()->addDays(14)->format('Y-m-d'),
+
                 'company'      => 'PT ZEN MULTIMEDIA INDONESIA',
                 'term'         => 'Termin 4',
                 'percentage'   => '100%',
@@ -228,13 +254,17 @@ class KProgresController
                 'totalCostNoPpn'  => $totalCostNoPpn,
                 'totalCost'  => $totalCost,
             ];
+            $invoice->date = $emailData['date'];
+            $invoice->due_date = $emailData['dueDate'];
+            $invoice->save();
         $subTotal = $totalCostNoPpn;
             
         $history = [
             'project_id' => $project->id,
             'invoice' => $invoice->id,
             'no_invoice' => $invoice->no_invoice,
-            'date' => $invoice->date,
+            'date'     => Carbon::now()->format('Y-m-d'),
+                'dueDate' => Carbon::now()->addDays(14)->format('Y-m-d'),
             'kepada' => $invoice->kepada,
             'npwp' => $invoice->npwp,
             'alamat' => $invoice->alamat,

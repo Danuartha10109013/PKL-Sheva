@@ -137,6 +137,28 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                                                     <option value="100">100%</option>
                                                                 </select>
                                                             </div>
+                                                            @php
+                                                                $today = \Carbon\Carbon::now()->format('Y-m-d');
+                                                                $dueDate = \Carbon\Carbon::now()->addDays(14)->format('Y-m-d');
+                                                            @endphp
+
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="dateInput{{ $d->id }}" class="form-label">Date</label>
+                                                                        <input type="date" name="date" id="dateInput{{ $d->id }}" class="form-input" value="{{ $today }}" required readonly>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="dueDateInput{{ $d->id }}" class="form-label">Due Date</label>
+                                                                        <input type="date" name="dueDate" id="dueDateInput{{ $d->id }}" class="form-input" value="{{ $dueDate }}" required>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            
+                                                            
                                                         </div>
                                         
                                                         <div class="modal-footer">
@@ -177,7 +199,10 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="kepada" class="form-label">Kepada</label>
-                                                                <input type="text" class="form-control" id="kepada" name="kepada" placeholder="Masukan Nama Customer" value="{{ $invoice->kepada }}" required>
+                                                                @php
+                                                                    $username = \App\Models\User::find($d->customer_id);
+                                                                @endphp
+                                                                <input type="text" class="form-control" id="kepada" name="kepada" placeholder="Masukan Nama Customer" value="{{ $invoice->kepada ?? $username->username}}" required>
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="npwp" class="form-label">NPWP</label>
@@ -192,14 +217,14 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                                                 <label for="pembuat" class="form-label">Pembuat</label>
                                                                 <input type="text" class="form-control" id="pembuat" name="pembuat" value="{{ $invoice->pembuat ?? Auth::user()->name}}">
                                                             </div>
-                                                            <div class="mb-3">
+                                                            {{-- <div class="mb-3">
                                                                 <label for="date" class="form-label">Tanggal</label>
                                                                 <input type="date" class="form-control" id="date" name="date" value="{{ $invoice->date }}">
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="date" class="form-label">Batas Pembayaran</label>
                                                                 <input type="date" class="form-control" id="date" name="due_date" value="{{ $invoice->due_date }}">
-                                                            </div>
+                                                            </div> --}}
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

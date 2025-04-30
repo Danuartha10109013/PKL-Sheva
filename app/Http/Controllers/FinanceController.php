@@ -48,9 +48,7 @@ class FinanceController
                 empty($invoice->npwp) || 
                 empty($invoice->alamat) || 
                 empty($invoice->pembuat) || 
-                empty($invoice->ppn) || 
-                empty($invoice->date) ||
-                empty($invoice->due_date) 
+                empty($invoice->ppn) 
             ) {
                 return redirect()->back()->with('error', 'Lengkapi data invoice terlebih dahulu untuk project: ' . $project->judul);
             }
@@ -159,7 +157,6 @@ public function printInvoice($id){
             'ppn' => 'nullable',
             'terbilang' => 'nullable|string|max:255',
             'pembuat' => 'nullable|string|max:255',
-            'date' => 'nullable|date',
         ]);
 
         // Temukan data berdasarkan ID
@@ -174,8 +171,8 @@ public function printInvoice($id){
             $invoice->npwp = $request->npwp;
             $invoice->alamat = $request->alamat;
             $invoice->pembuat = $request->pembuat;
-            $invoice->date = $request->date;
-            $invoice->due_date = $request->due_date;
+            // $invoice->date = $request->date;
+            // $invoice->due_date = $request->due_date;
             $invoice->ppn = $request->ppn;
             // dd($invoice->ppn);
             $invoice->save();
@@ -191,6 +188,7 @@ public function printInvoice($id){
     }
 
     public function mail(Request $request, $id){
+        // dd($request->all());
         $invoice = invoiceM::findOrFail($id);
         $project = ProjectM::find($invoice->project_id);
         // dd($project);
@@ -205,8 +203,8 @@ public function printInvoice($id){
                 'customerName' => $user->name,
                 'invoiceId'    => $invoice->no_invoice,
                 'amount'       => $project->biaya,
-                'date'      => Carbon::parse($invoice->date)->format('d M Y'),
-                'dueDate'      => Carbon::parse($invoice->due_date)->format('d M Y'),
+                'date'      => Carbon::parse($request->date)->format('d M Y'),
+                'dueDate'      => Carbon::parse($request->dueDate)->format('d M Y'),
                 'company'      => 'PT ZEN MULTIMEDIA INDONESIA',
                 'term'         => 'Termin 1',
                 'percentage'   => '30%',
@@ -225,7 +223,8 @@ public function printInvoice($id){
                 'project_id' => $project->id,
                 'invoice' => $invoice->id,
                 'no_invoice' => $invoice->no_invoice,
-                'date' => $invoice->date,
+                'date'      => Carbon::parse($request->date)->format('Y-m-d'),
+                'dueDate'      => Carbon::parse($request->dueDate)->format('Y-m-d'),
                 'kepada' => $invoice->kepada,
                 'npwp' => $invoice->npwp,
                 'alamat' => $invoice->alamat,
@@ -250,8 +249,8 @@ public function printInvoice($id){
                 'customerName' => $user->name,
                 'invoiceId'    => $invoice->no_invoice,
                 'amount'       => $project->biaya,
-                'date'      => Carbon::parse($invoice->date)->format('d M Y'),
-                'dueDate'      => Carbon::parse($invoice->due_date)->format('d M Y'),
+                'date'      => Carbon::parse($request->date)->format('d M Y'),
+                'dueDate'      => Carbon::parse($request->dueDate)->format('d M Y'),
                 'company'      => 'PT ZEN MULTIMEDIA INDONESIA',
                 'term'         => 'Termin 2',
                 'percentage'   => '60%',
@@ -271,7 +270,8 @@ public function printInvoice($id){
                 'project_id' => $project->id,
                 'invoice' => $invoice->id,
                 'no_invoice' => $invoice->no_invoice,
-                'date' => $invoice->date,
+                'date'      => Carbon::parse($request->date)->format('Y-m-d'),
+                'dueDate'      => Carbon::parse($request->dueDate)->format('Y-m-d'),
                 'kepada' => $invoice->kepada,
                 'npwp' => $invoice->npwp,
                 'alamat' => $invoice->alamat,
@@ -295,8 +295,8 @@ public function printInvoice($id){
                 'customerName' => $user->name,
                 'invoiceId'    => $invoice->no_invoice,
                 'amount'       => $project->biaya,
-                'date'      => Carbon::parse($invoice->date)->format('d M Y'),
-                'dueDate'      => Carbon::parse($invoice->due_date)->format('d M Y'),
+                'date'      => Carbon::parse($request->date)->format('d M Y'),
+                'dueDate'      => Carbon::parse($request->dueDate)->format('d M Y'),
                 'company'      => 'PT ZEN MULTIMEDIA INDONESIA',
                 'term'         => 'Termin 3',
                 'percentage'   => '90%',
@@ -316,7 +316,8 @@ public function printInvoice($id){
             'project_id' => $project->id,
             'invoice' => $invoice->id,
             'no_invoice' => $invoice->no_invoice,
-            'date' => $invoice->date,
+            'date'      => Carbon::parse($request->date)->format('Y-m-d'),
+                'dueDate'      => Carbon::parse($request->dueDate)->format('Y-m-d'),
             'kepada' => $invoice->kepada,
             'npwp' => $invoice->npwp,
             'alamat' => $invoice->alamat,
@@ -340,8 +341,8 @@ public function printInvoice($id){
                 'customerName' => $user->name,
                 'invoiceId'    => $invoice->no_invoice,
                 'amount'       => $project->biaya,
-                'date'      => Carbon::parse($invoice->date)->format('d M Y'),
-                'dueDate'      => Carbon::parse($invoice->due_date)->format('d M Y'),
+                'date'      => Carbon::parse($request->date)->format('d M Y'),
+                'dueDate'      => Carbon::parse($request->dueDate)->format('d M Y'),
                 'company'      => 'PT ZEN MULTIMEDIA INDONESIA',
                 'term'         => 'Termin 4',
                 'percentage'   => '100%',
@@ -361,7 +362,8 @@ public function printInvoice($id){
             'project_id' => $project->id,
             'invoice' => $invoice->id,
             'no_invoice' => $invoice->no_invoice,
-            'date' => $invoice->date,
+            'date'      => Carbon::parse($request->date)->format('Y-m-d'),
+                'dueDate'      => Carbon::parse($request->dueDate)->format('Y-m-d'),
             'kepada' => $invoice->kepada,
             'npwp' => $invoice->npwp,
             'alamat' => $invoice->alamat,

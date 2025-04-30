@@ -24,6 +24,7 @@ class KProjectController
 
     public function store(Request $request)
     {
+        // dd($request->all());
         // Validate the form data
         $request->validate([
             'judul' => 'required|string|max:255',
@@ -34,10 +35,10 @@ class KProjectController
         ]);
 
         // Check if the customer already has a project
-        $customerExists = ProjectM::where('customer_id', $request->customer)->exists();
-        if ($customerExists) {
-            return redirect()->back()->with('error', 'User Telah memiliki Project');
-        }
+        // $customerExists = ProjectM::where('customer_id', $request->customer)->exists();
+        // if ($customerExists) {
+        //     return redirect()->back()->with('error', 'User Telah memiliki Project');
+        // }
 
         // Create a new project with the provided data
         $project = new ProjectM();

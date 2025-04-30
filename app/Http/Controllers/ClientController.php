@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HistoryM;
 use App\Models\invoiceM;
 use App\Models\ProjectM;
 use App\Models\ProjectPlanM;
@@ -9,14 +10,24 @@ use Illuminate\Http\Request;
 
 class ClientController
 {
+    public function project($id){
+        $project = ProjectM::where('customer_id',$id)->get();
+
+        return view('page.Klien.before_plan',compact('project'));
+    }
+    public function bef_invoice($id){
+        $project = ProjectM::where('customer_id',$id)->get();
+
+        return view('page.Klien.before_invoice',compact('project'));
+    }
+
     public function plan($id){
-        $ids = ProjectM::where('customer_id',$id)->value('id');
-        $project = ProjectM::find($ids);
-        $plan = ProjectPlanM::where('project_id',$ids)->value('id');
+        $project = ProjectM::find($id);
+        $plan = ProjectPlanM::where('project_id',$id)->value('id');
         $data = ProjectPlanM::find($plan);
         // dd($data);
         
-        $fase = json_decode(ProjectPlanM::where('project_id', $ids)->value('fase'));
+        $fase = json_decode(ProjectPlanM::where('project_id', $id)->value('fase'));
         $sections = [
             ['title' => 'Pengantar', 'content' => $data->pengantar, 'note' => $data->pengantar_catatan, 'name' => 'pengantar_catatan'],
             ['title' => 'Ringkasan Eksekutif', 'content' => $data->ringkasan, 'note' => $data->ringkasan_catatan, 'name' => 'ringkasan_catatan'],
@@ -125,40 +136,132 @@ class ClientController
     }
 
     public function invoice($id){
-        $cc = ProjectM::where('customer_id',$id)->value('id');
-        $ids = invoiceM::where('project_id',$cc)->value('id');
+        // $cc = ProjectM::where('customer_id',$id)->value('id');
+        $ids = invoiceM::where('project_id',$id)->value('id');
         // dd($ids);
         $data = invoiceM::find($ids);
-        $project = ProjectM::find($cc);
+        $project = ProjectM::find($id);
         $datain = ProjectM::where('id',$id)->get();
-        foreach ($datain as $project) {
-            $invoice = InvoiceM::where('project_id', $project->id)->first();
-            if ($invoice) {
-                if (empty($invoice->no_invoice) || empty($invoice->kepada) || empty($invoice->npwp) || empty($invoice->alamat) || empty($invoice->harga) || empty($invoice->terbilang) || empty($invoice->pembuat) || empty($invoice->date)) {
-                    return redirect()->back()->with('error' , 'Lengkapi data invoice terlebih dahulu untuk project: ' . $project->judul);
-                }
-            }
-        }
-        $data->date= now();
-        $data->save();
+        // foreach ($datain as $project) {
+        //     $invoice = InvoiceM::where('project_id', $project->id)->first();
+        //     if ($invoice) {
+        //         if (empty($invoice->no_invoice) || empty($invoice->kepada) || empty($invoice->npwp) || empty($invoice->alamat) || empty($invoice->harga) || empty($invoice->terbilang) || empty($invoice->pembuat) || empty($invoice->date)) {
+        //             return redirect()->back()->with('error' , 'Lengkapi data invoice terlebih dahulu untuk project: ' . $project->judul);
+        //         }
+        //     }
+        // }
+        // $data->date= now();
+        // $data->save();
         return view('page.Klien.invoice',compact('data','project'));
     }
 
     public function p_invoice($id){
-        $ids = invoiceM::where('project_id',$id)->value('id');
-        $data = invoiceM::find($ids);
-        $project = ProjectM::find($id);
-        $datain = ProjectM::where('id',$id)->get();
-        foreach ($datain as $project) {
-            $invoice = InvoiceM::where('project_id', $project->id)->first();
-            if ($invoice) {
-                if (empty($invoice->no_invoice) || empty($invoice->kepada) || empty($invoice->npwp) || empty($invoice->alamat) || empty($invoice->harga) || empty($invoice->terbilang) || empty($invoice->pembuat) || empty($invoice->date)) {
-                    return redirect()->back()->with('error' , 'Lengkapi data invoice terlebih dahulu untuk project: ' . $project->judul);
-                }
+        $ids = InvoiceM::where('project_id', $id)->value('id');
+    $data = InvoiceM::find($ids);
+
+    $history = HistoryM::all();
+
+    // Ambil data project
+    $project = ProjectM::find($id);
+
+    // Validasi data invoice untuk project terkait
+    $datain = ProjectM::where('id', $id)->get();
+    foreach ($datain as $project) {
+        $invoice = InvoiceM::where('project_id', $project->id)->first();
+        if ($invoice) {
+            if (
+                empty($invoice->no_invoice) || 
+                empty($invoice->kepada) || 
+                empty($invoice->npwp) || 
+                empty($invoice->alamat) || 
+                empty($invoice->pembuat) || 
+                empty($invoice->ppn) 
+            ) {
+                return redirect()->back()->with('error', 'Lengkapi data invoice terlebih dahulu untuk project: ' . $project->judul);
             }
         }
-        $data->date= now();
-        $data->save();
-        return view('page.finance.k-invoice.print',compact('data','project'));
     }
+
+
+    // Hitung rincian berdasarkan progres
+    $invoiceDetails = [];
+    if ($project->progres >= 0 && $project->progres < 30) {
+        $subTotal = $project->biaya * 0;
+        $ppn = $subTotal * $data->ppn;
+        $total = $subTotal + $ppn;
+        $terbilang = ucfirst(terbilang($total)) . ' Rupiah';
+        dd($terbilang);
+        $invoiceDetails[] = [
+            'no' => 1,
+            'deskripsi' => "Termin 0 0%, {$project->judul}",
+            'unit' => '0 Pckg',
+            'harga' => $subTotal,
+            'jumlah' => $subTotal,
+            'ppn' => $data->ppn,
+            'terbilang' => $terbilang,
+
+        ];
+    }elseif ($project->progres >= 30 && $project->progres < 60) {
+        $subTotal = $project->biaya * 0.3;
+        $ppn = $subTotal * $data->ppn;
+        $total = $subTotal + $ppn;
+        $terbilang = ucfirst(terbilang($total)) . ' Rupiah';
+        $invoiceDetails[] = [
+            'no' => 1,
+            'deskripsi' => "Termin 1 30%, {$project->judul}",
+            'unit' => '1 Pckg',
+            'harga' => $subTotal,
+            'jumlah' => $subTotal,
+            'ppn' => $data->ppn,
+            'terbilang' => $terbilang,
+        ];
+    } elseif ($project->progres >= 60 && $project->progres < 90) {
+        $subTotal = ($project->biaya * 0.6) - ($project->biaya * 0.3);
+        $ppn = $subTotal * $data->ppn;
+        $total = $subTotal + $ppn;
+        $terbilang = ucfirst(terbilang($total)) . ' Rupiah';
+        $invoiceDetails[] = [
+            'no' => 1,
+            'deskripsi' => "Termin 2 60%, {$project->judul}",
+            'unit' => '1 Pckg',
+            'harga' => $subTotal,
+            'jumlah' => $subTotal,
+            'ppn' => $data->ppn,
+            'terbilang' => $terbilang,
+        ];
+    } elseif ($project->progres >= 90 && $project->progres < 100) {
+        $subTotal = ($project->biaya * 0.9) - ($project->biaya * 0.6);
+        $ppn = $subTotal * $data->ppn;
+        $total = $subTotal + $ppn;
+        $terbilang = ucfirst(terbilang($total)) . ' Rupiah';
+        $invoiceDetails[] = [
+            'no' => 1,
+            'deskripsi' => "Termin 3 90%, {$project->judul}",
+            'unit' => '1 Pckg',
+            'harga' => $subTotal,
+            'jumlah' => $subTotal,
+            'ppn' => $data->ppn,
+            'terbilang' => $terbilang,
+        ];
+    }elseif ($project->progres >= 100) {
+        $subTotal = ($project->biaya * 0.9) - ($project->biaya * 0.6);
+        $ppn = $subTotal * $data->ppn;
+        $total = $subTotal + $ppn;
+        $terbilang = ucfirst(terbilang($total)) . ' Rupiah';
+        $invoiceDetails[] = [
+            'no' => 1,
+            'deskripsi' => "Termin 4 100%, {$project->judul}",
+            'unit' => '1 Pckg',
+            'harga' => $subTotal,
+            'jumlah' => $subTotal,
+            'ppn' => $data->ppn,
+            'terbilang' => $terbilang,
+        ];
+    }
+
+    $ppn = $subTotal * $data->ppn;
+    $total = $subTotal + $ppn;
+
+    return view('page.finance.k-invoice.print', compact('data','history','project', 'invoiceDetails', 'subTotal', 'ppn', 'total'));
+}
 }

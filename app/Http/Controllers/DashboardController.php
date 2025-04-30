@@ -42,8 +42,12 @@ class DashboardController
     }
     public function klien ()
     {
-        $project = ProjectM::where('customer_id',Auth::user()->id)->value('judul');
-        $ids = ProjectM::where('customer_id',Auth::user()->id)->value('id');
+        $project = ProjectM::where('customer_id', Auth::user()->id)
+                   ->latest()
+                   ->value('judul');
+        $ids = ProjectM::where('customer_id', Auth::user()->id)
+                    ->latest()
+                    ->value('id');
         $data= ProjectM::find($ids);
         return view('page.Klien.index',compact('project','data'));
     }

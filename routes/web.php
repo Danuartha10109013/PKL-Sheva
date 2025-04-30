@@ -21,6 +21,7 @@ Route::middleware([AutoLogout::class])->group(function () {
 
     //Forum
     Route::prefix('forum')->group(function () {
+        Route::get('list/{id}',[ForumDiskusiController::class,'index_bef'])->name('forum.before');
         Route::get('/{id}',[ForumDiskusiController::class,'index'])->name('forum');
         Route::post('/message/{id}',[ForumDiskusiController::class,'message'])->name('forum.message');
         Route::post('/post',[ForumDiskusiController::class,'foumstore'])->name('forum.post');
@@ -126,13 +127,15 @@ Route::middleware([AutoLogout::class])->group(function () {
         //Dashboard
         Route::get('/', [DashboardController::class, 'klien'])->name('klien');
         Route::prefix('project')->group(function () {
+            Route::get('list/{id}', [ClientController::class, 'project'])->name('project.before');
             Route::get('/{id}', [ClientController::class, 'plan'])->name('project');
             Route::post('/update/{id}', [ClientController::class, 'update'])->name('project.update');
             Route::get('/setuju/{id}', [ClientController::class, 'setuju'])->name('project.setuju');
             Route::get('/print/{id}', [KProjectController::class, 'print'])->name('project.print');
         });
         Route::prefix('invoice')->group(function () {
-            Route::get('/{id}', [ClientController::class, 'invoice'])->name('invoice');
+            Route::get('list/{id}', [ClientController::class, 'bef_invoice'])->name('invoice.before');
+            Route::get('/{id}', [ClientController::class, 'p_invoice'])->name('invoice');
             Route::get('/print/{id}', [ClientController::class, 'p_invoice'])->name('p.invoice');
 
         });

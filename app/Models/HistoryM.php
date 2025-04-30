@@ -15,6 +15,7 @@ class HistoryM extends Model
         'project_id',
         'invoice',
         'no_invoice',
+        'dueDate',
         'date',
         'kepada',
         'npwp',

@@ -26,6 +26,11 @@ class ForumDiskusiController
     return view('page.fourm_diskusi.pm', compact('data'));
 }
 
+public function index_bef($id){
+    $project = ProjectM::where('customer_id',$id)->get();
+
+    return view('page.Klien.before_forum',compact('project'));
+}
 
 public function index($id)
 {

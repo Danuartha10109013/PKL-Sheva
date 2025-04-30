@@ -196,7 +196,7 @@ Dashboard
         <h6 class="text-capitalize">Project Plan</h6>
       </div>
       <div class="card-body p-3">
-        <a href="{{route('klien.project',Auth::user()->id)}}" class="text-decoration-none text-dark">
+        <a href="{{route('klien.project',$data->id)}}" class="text-decoration-none text-dark">
             <div class="row align-items-center">
                 <div class="col-md-4 d-flex align-items-center">
                     <i class="fa-solid fa-right-from-bracket me-2"></i> Go To Project Plan
@@ -215,7 +215,7 @@ Dashboard
         <h6 class="text-capitalize">Invoice</h6>
       </div>
       <div class="card-body p-3">
-        <a href="{{route('klien.invoice',Auth::user()->id)}}" class="text-decoration-none text-dark">
+        <a href="{{route('klien.invoice',$data->id)}}" class="text-decoration-none text-dark">
             <div class="row align-items-center">
                 <div class="col-md-4 d-flex align-items-center">
                     <i class="fa-solid fa-right-from-bracket me-2"></i> Go To Invoice
@@ -253,7 +253,45 @@ Dashboard
     </div>
   </div>
   <div class="col-lg-5">
-  
+    <div class="card z-index-2 h-100">
+      <div class="card-header pb-0 pt-3 bg-transparent">
+        <h6 class="text-capitalize">Pembayaran</h6>
+      </div>
+      <div class="card-body p-3">
+        @php
+            $in = \App\Models\InvoiceM::where('project_id', $data->id)->value('id');
+            $invoice = \App\Models\InvoiceM::find($in);
+        @endphp
+    
+        <div class="row">
+            <div class="col-12 mb-2">
+                <strong>Status Pembayaran:</strong>
+            </div>
+    
+            <div class="col-md-6">
+                Termin I (30%) : <span class="badge bg-{{ ($invoice['30'] ?? '') == 'payed' ? 'success' : 'secondary' }}">
+                    {{ ($invoice['30'] ?? '') == 'payed' ? 'Lunas' : 'Belum Lunas' }}
+                </span>
+            </div>
+            <div class="col-md-6">
+                Termin II (60%) : <span class="badge bg-{{ ($invoice['60'] ?? '') == 'payed' ? 'success' : 'secondary' }}">
+                    {{ ($invoice['60'] ?? '') == 'payed' ? 'Lunas' : 'Belum Lunas' }}
+                </span>
+            </div>
+            <div class="col-md-6">
+                Termin III (90%) : <span class="badge bg-{{ ($invoice['90'] ?? '') == 'payed' ? 'success' : 'secondary' }}">
+                    {{ ($invoice['90'] ?? '') == 'payed' ? 'Lunas' : 'Belum Lunas' }}
+                </span>
+            </div>
+            <div class="col-md-6">
+                Termin IV (100%) : <span class="badge bg-{{ ($invoice['100'] ?? '') == 'payed' ? 'success' : 'secondary' }}">
+                    {{ ($invoice['100'] ?? '') == 'payed' ? 'Lunas' : 'Belum Lunas' }}
+                </span>
+            </div>
+        </div>
+    </div>
+    
+    </div>
   </div>
 </div>
 @endsection
