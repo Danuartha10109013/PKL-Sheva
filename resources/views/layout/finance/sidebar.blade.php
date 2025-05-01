@@ -7,7 +7,7 @@
 <hr class="horizontal dark mt-0">
 <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
   <ul class="navbar-nav">
-      <li class="nav-item">
+      <li class="nav-item-sidebar">
         <a class="nav-link {{ request()->routeIs('finance.finance') ? 'active' : '' }}" href="{{ route('finance.finance') }}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                 <i class="ni ni-tv-2 text-dark text-sm opacity-10"></i>
@@ -16,7 +16,7 @@
         </a>
     </li>
     
-    <li class="nav-item">
+    <li class="nav-item-sidebar">
         <a class="nav-link {{ request()->routeIs('finance.invoice') ? 'active' : '' }}" href="{{ route('finance.invoice') }}">
 
         <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -26,7 +26,7 @@
       </a>
     </li>
 
-    <li class="nav-item">
+    <li class="nav-item-sidebar">
       <a class="nav-link {{ request()->routeIs('finance.project') ? 'active' : '' }}" href="{{ route('finance.project') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="fa-solid fa-diagram-project text-dark text-sm opacity-10"></i>

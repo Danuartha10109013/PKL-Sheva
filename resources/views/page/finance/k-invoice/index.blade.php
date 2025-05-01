@@ -7,17 +7,17 @@ Kelola Invoice
 @endsection
 @section('content')
 <style>
-    .nav-tabs .nav-link {
+    .nav-tabs .nav-link not-sidebar {
         color: white; /* Warna teks default */
         background-color: transparent;
     }
 
-    .nav-tabs .nav-link.active {
+    .nav-tabs .nav-link not-sidebar.active {
         background-color: #007bff; /* Warna latar belakang aktif */
         color: white; /* Warna teks aktif */
     }
 
-    .nav-tabs .nav-link:hover {
+    .nav-tabs .nav-link not-sidebar:hover {
         color: #f8f9fa; /* Warna teks saat hover */
     }
 
@@ -37,7 +37,7 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
 <ul class="nav nav-tabs" id="tableTabs">
     @foreach ($index as $key => $i)
         <li class="nav-item">
-            <a class="nav-link {{ $key == 0 ? 'active' : '' }}" data-bs-toggle="tab" href="#table{{ $i }}">{{ $labels[$key] }}</a>
+            <a class="nav-link not-sidebar {{ $key == 0 ? 'active' : '' }}" data-bs-toggle="tab" href="#table{{ $i }}">{{ $labels[$key] }}</a>
         </li>
     @endforeach
 </ul>
@@ -526,7 +526,7 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const tabs = document.querySelectorAll(".nav-link");
+        const tabs = document.querySelectorAll(".nav-link not-sidebar");
         const tabContents = document.querySelectorAll(".tab-pane");
     
         tabs.forEach(tab => {
