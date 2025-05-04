@@ -6,6 +6,7 @@ use App\Mail\InvoiceMail;
 use App\Models\HistoryM;
 use App\Models\invoiceM;
 use App\Models\ProjectM;
+use App\Models\ProjectPlanM;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -193,8 +194,20 @@ public function printInvoice($id){
         $project = ProjectM::find($invoice->project_id);
         // dd($project);
         $user= User::find($project->customer_id);
-        
+        if (
+            empty($invoice->no_invoice) ||
+            empty($invoice->ppn) ||
+            empty($invoice->kepada) ||
+            empty($invoice->npwp) ||
+            empty($invoice->alamat) ||
+            empty($invoice->pembuat) 
+        ) {
+            return back()->with('error', 'Data Invoice belum dilengkapi oleh Finance.');
+        }
         if($request->type == 30){
+            if ($project->progres < 30){
+                return back()->with('error', 'Progres belum mencapai 30%.');
+            }
             $totalCostNoPpn = $project->biaya * 0.30;
             $totalCost = $project->biaya *0.30 + ($project->biaya *0.30 * $invoice->ppn);
             $terbilang = ucfirst(terbilang($totalCost)) . ' Rupiah';
@@ -241,6 +254,9 @@ public function printInvoice($id){
             ];
             // dd($emailData);
         }elseif($request->type == 60){
+            if ($project->progres < 60){
+                return back()->with('error', 'Progres belum mencapai 60%.');
+            }
             $totalCostNoPpn = $project->biaya * 0.60 - ($project->biaya * 0.30);
             $totalCost = ($project->biaya *0.60 + ($project->biaya *0.60 * $invoice->ppn)) - ($project->biaya *0.30 + ($project->biaya *0.30 * $invoice->ppn));
             $terbilang = ucfirst(terbilang($totalCost)) . ' Rupiah';
@@ -287,6 +303,9 @@ public function printInvoice($id){
                 'total' => $totalCost,
             ];
         }elseif($request->type == 90){
+            if ($project->progres < 90){
+                return back()->with('error', 'Progres belum mencapai 90%.');
+            }
             $totalCostNoPpn = $project->biaya * 0.90 - ($project->biaya * 0.60);
             $totalCost = ($project->biaya *0.90 + ($project->biaya *0.90 * $invoice->ppn)) - ($project->biaya *0.60 + ($project->biaya *0.60 * $invoice->ppn));
             $terbilang = ucfirst(terbilang($totalCost)) . ' Rupiah';
@@ -333,6 +352,9 @@ public function printInvoice($id){
             'total' => $totalCost,
         ];
         }elseif($request->type == 100){
+            if ($project->progres < 100){
+                return back()->with('error', 'Progres belum mencapai 100%.');
+            }
             $totalCostNoPpn = $project->biaya * 1 - ($project->biaya * 0.90);
             $totalCost = ($project->biaya * 1 + ($project->biaya * 1 * $invoice->ppn)) - ($project->biaya *0.90 + ($project->biaya *0.90 * $invoice->ppn));
             $terbilang = ucfirst(terbilang($totalCost)) . ' Rupiah';

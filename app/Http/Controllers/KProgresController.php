@@ -27,16 +27,16 @@ class KProgresController
         $in = invoiceM::where('project_id',$id)->value('id');
         $invoice = InvoiceM::find($in);
 
-if (
-    empty($invoice->no_invoice) ||
-    empty($invoice->ppn) ||
-    empty($invoice->kepada) ||
-    empty($invoice->npwp) ||
-    empty($invoice->alamat) ||
-    empty($invoice->pembuat) 
-) {
-    return back()->with('error', 'Data Invoice belum dilengkapi oleh Finance.');
-}
+        if (
+            empty($invoice->no_invoice) ||
+            empty($invoice->ppn) ||
+            empty($invoice->kepada) ||
+            empty($invoice->npwp) ||
+            empty($invoice->alamat) ||
+            empty($invoice->pembuat) 
+        ) {
+            return back()->with('error', 'Data Invoice belum dilengkapi oleh Finance.');
+        }
 // dd($plan); 
         return view('page.pm.k-progres.progres',compact('data','id'));
     }
