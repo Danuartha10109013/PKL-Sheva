@@ -167,8 +167,9 @@ Kelola Poject Plan
                     <label for="customer{{$d->id}}" class="form-label">Customer</label>
                     <select class="form-control" id="customer{{$d->id}}" name="customer" required>
                       <option value="" disabled>--Pilih Customer Or Add New</option>
+                     
                       @foreach ($customer as $c)
-                        <option value="{{ $c->id }}" {{ $d->customer == $c->id ? 'selected' : '' }}>{{ $c->name }}</option>
+                        <option value="{{ $c->id }}" {{ $d->customer_id == $c->id ? 'selected' : '' }}>{{ $c->name }}</option>
                       @endforeach
                     </select>
                   </div>
@@ -178,7 +179,7 @@ Kelola Poject Plan
                     <select class="form-control" id="team_leader{{$d->id}}" name="team_leader" required>
                       <option value="" disabled>--Pilih Team Lead Or Add New</option>
                       @foreach ($team_leader as $tl)
-                        <option value="{{ $tl->id }}" {{ $d->team_leader == $tl->id ? 'selected' : '' }}>{{ $tl->name }}</option>
+                        <option value="{{ $tl->id }}" {{ $d->team_leader_id == $tl->id ? 'selected' : '' }}>{{ $tl->name }}</option>
                       @endforeach
                     </select>
                   </div>

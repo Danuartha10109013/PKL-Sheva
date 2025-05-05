@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Mail;
 class KProgresController
 {
     public function index(){
-        $data = ProjectM::all();
+        $data = ProjectM::orderBy('created_at','desc')->get();
 
         return view('page.pm.k-progres.index',compact('data'));
     }

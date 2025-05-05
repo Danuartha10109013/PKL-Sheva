@@ -11,7 +11,7 @@ use Illuminate\Validation\Rules;
 class KelolaUser
 {
     public function index(){
-        $data= User::all();
+        $data= User::orderBy('created_at','desc')->get();
         return view('page.pm.k-user.index',compact('data'));
     }
     public function update(Request $request, $id)
