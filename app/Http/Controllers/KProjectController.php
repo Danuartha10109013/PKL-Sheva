@@ -16,7 +16,7 @@ use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 class KProjectController
 {
     public function index(){
-        $data =ProjectM::all();
+        $data =ProjectM::orderBy('created_at','desc')->get();
         $customer = User::where('role',3)->get();
         $team_leader = User::where('role',1)->get();
         return view('page.pm.k-project.index',compact('data','customer','team_leader'));
@@ -114,12 +114,15 @@ class KProjectController
 
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         // Validate the request data
         $request->validate([
             'judul' => 'required|string|max:255',
             'start' => 'required|date',
             'end' => 'required|date|after_or_equal:start',
             'biaya' => 'required|numeric',
+            'customer' => 'required',
+            'team_leader' => 'required',
         ]);
 
         // Find the project by ID
@@ -130,6 +133,8 @@ class KProjectController
         $project->start = $request->start;
         $project->end = $request->end;
         $project->biaya = $request->biaya;
+        $project->customer_id = $request->customer;
+        $project->team_leader_id = $request->team_leader;
 
         // Save the changes to the database
         $project->save();

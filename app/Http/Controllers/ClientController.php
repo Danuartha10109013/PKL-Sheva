@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class ClientController
 {
     public function project($id){
-        $project = ProjectM::where('customer_id',$id)->get();
+        $project = ProjectM::where('customer_id',$id)->orderBy('created_at','desc')->get();
 
         return view('page.Klien.before_plan',compact('project'));
     }

@@ -11,7 +11,7 @@ class TeamLeadController
 {
     public function project(){
         $id = Auth::user()->id;
-        $data = ProjectM::where('team_leader_id',$id)->get();
+        $data = ProjectM::where('team_leader_id',$id)->orderBy('created_at','desc')->get();
         return view('page.team_lead.project.index',compact('data'));
     }
 

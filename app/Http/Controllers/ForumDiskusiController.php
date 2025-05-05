@@ -18,9 +18,9 @@ class ForumDiskusiController
 
     // Check the current route and fetch data accordingly
     if (Route::currentRouteName() == 'team_lead.project.forum') {
-        $data = ProjectM::where('team_leader_id', $id)->get();
+        $data = ProjectM::where('team_leader_id', $id)->orderBy('created_at','desc')->get();
     } else {
-        $data = ProjectM::all();
+        $data = ProjectM::orderBy('created_at','desc')->get();
     }
 
     return view('page.fourm_diskusi.pm', compact('data'));

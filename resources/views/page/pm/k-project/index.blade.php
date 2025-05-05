@@ -156,15 +156,38 @@ Kelola Poject Plan
                   <h5 class="modal-title" id="editModalLabel{{$d->id}}">Edit Data</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                
                 <div class="modal-body">
                   <div class="mb-3">
                     <label for="judul{{$d->id}}" class="form-label">Judul</label>
                     <input type="text" class="form-control" id="judul{{$d->id}}" name="judul" value="{{ $d->judul }}">
                   </div>
+                
+                  <div class="mb-3">
+                    <label for="customer{{$d->id}}" class="form-label">Customer</label>
+                    <select class="form-control" id="customer{{$d->id}}" name="customer" required>
+                      <option value="" disabled>--Pilih Customer Or Add New</option>
+                      @foreach ($customer as $c)
+                        <option value="{{ $c->id }}" {{ $d->customer == $c->id ? 'selected' : '' }}>{{ $c->name }}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                
+                  <div class="mb-3">
+                    <label for="team_leader{{$d->id}}" class="form-label">Team Lead</label>
+                    <select class="form-control" id="team_leader{{$d->id}}" name="team_leader" required>
+                      <option value="" disabled>--Pilih Team Lead Or Add New</option>
+                      @foreach ($team_leader as $tl)
+                        <option value="{{ $tl->id }}" {{ $d->team_leader == $tl->id ? 'selected' : '' }}>{{ $tl->name }}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                
                   <div class="mb-3">
                     <label for="start{{$d->id}}" class="form-label">Start Date</label>
                     <input type="date" class="form-control" id="start{{$d->id}}" name="start" value="{{ $d->start }}">
                   </div>
+                
                   <div class="mb-3">
                     <label for="end{{$d->id}}" class="form-label">End Date</label>
                     <input type="date" class="form-control" id="end{{$d->id}}" name="end" value="{{ $d->end }}">

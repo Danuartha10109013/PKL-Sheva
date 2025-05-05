@@ -16,7 +16,7 @@ use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 class FinanceController
 {
     public function index(){
-        $data = ProjectM::all();
+        $data = ProjectM::orderBy('created_at','desc')->get();
         $nol = ProjectM::where('progres','>=',0)->where('progres','<',30)->orderBy('created_at', 'desc')->get();
         $tiga = ProjectM::where('progres','>=',30)->where('progres','<',60)->orderBy('created_at', 'desc')->get();
         $enam = ProjectM::where('progres','>=',60)->where('progres','<',90)->orderBy('created_at', 'desc')->get();
