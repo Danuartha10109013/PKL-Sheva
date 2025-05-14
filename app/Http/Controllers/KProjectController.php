@@ -64,7 +64,7 @@ class KProjectController
 
         // Ambil data terakhir dari database
         $lastPlan = ProjectPlanM::orderBy('id', 'desc')->first();
-        $lastNoProjectPlan = $lastPlan ? $lastPlan->no_project_plan : null;
+        $lastNoProjectPlan = $lastPlan ? $lastPlan->no_projec_plan : null;
 
         if ($lastNoProjectPlan) {
             // Ekstrak nomor urut dari format "001/DOK-PRP/ZMI/VII/2024"
