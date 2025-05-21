@@ -78,8 +78,11 @@ Detail Project Plan
                         <div class="mb-3 dynamic-input">
                             <label for="fase_{{ $index + 1 }}">Fase {{ $index + 1 }}</label>
                             <input type="text" name="scrum_name[]" value="{{ $item['scrum_name'] }}" placeholder="Fase {{ $index + 1 }}">
-                            <input type="date" name="start[]" value="{{ $item['start'] }}">
-                            <input type="date" name="end[]" value="{{ $item['end'] }}">
+                            <input type="date" name="start[]" value="{{ $item['start'] }}"
+                                min="{{ $project->start }}" max="{{ $project->end }}">
+
+                            <input type="date" name="end[]" value="{{ $item['end'] }}"
+                                min="{{ $project->start }}" max="{{ $project->end }}">
                             <textarea name="fase_1[]" id="fase_{{ $index + 1 }}" class="form-control ck-editor" cols="30" rows="3" placeholder="Fase {{ $index + 1 }}">{{ $item['description'] }}</textarea>
                             <button type="button" class="btn btn-danger btn-sm remove-input" onclick="removeInput(this)">Hapus</button>
                         </div>
@@ -88,14 +91,63 @@ Detail Project Plan
                     <div class="mb-3 dynamic-input">
                         <label for="fase_1">Fase 1</label>
                         <input type="text" name="scrum_name[]" placeholder="Fase 1">
-                        <input type="date" name="start[]">
-                        <input type="date" name="end[]">
+                        <input type="date" name="start[]" min="{{ $project->start }}" max="{{ $project->end }}">
+                        <input type="date" name="end[]" min="{{ $project->start }}" max="{{ $project->end }}">
                         <textarea name="fase_1[]" id="fase_1" class="form-control ck-editor" cols="30" rows="3" placeholder="Fase 1"></textarea>
                         <button type="button" class="btn btn-danger btn-sm remove-input" onclick="removeInput(this)">Hapus</button>
                     </div>
                 @endif
             </div>
             <button type="button" class="btn btn-primary btn-sm" onclick="addInput()">Tambah Fase</button>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const minDate = "{{ $project->start }}";
+                    const maxDate = "{{ $project->end }}";
+
+                    function validateDate(input) {
+                        const value = input.value;
+                        if (value) {
+                            if (value < minDate || value > maxDate) {
+                                alert(`Tanggal harus antara ${minDate} dan ${maxDate}`);
+                                input.value = ''; // Kosongkan input jika tidak valid
+                            }
+                        }
+                    }
+
+                    // Awal: pas DOM sudah siap, cek semua input[type="date"]
+                    document.querySelectorAll('input[type="date"]').forEach(input => {
+                        input.addEventListener('change', function () {
+                            validateDate(this);
+                        });
+
+                        // Jika user ketik manual, tetap validasi saat blur
+                        input.addEventListener('blur', function () {
+                            validateDate(this);
+                        });
+                    });
+
+                    // Untuk input yang ditambahkan dinamis (misal pakai tombol tambah fase)
+                    const container = document.getElementById('dynamic-form-container');
+                    const observer = new MutationObserver(function (mutations) {
+                        mutations.forEach(function (mutation) {
+                            mutation.addedNodes.forEach(function (node) {
+                                if (node.querySelectorAll) {
+                                    node.querySelectorAll('input[type="date"]').forEach(input => {
+                                        input.addEventListener('change', function () {
+                                            validateDate(this);
+                                        });
+                                        input.addEventListener('blur', function () {
+                                            validateDate(this);
+                                        });
+                                    });
+                                }
+                            });
+                        });
+                    });
+
+                    observer.observe(container, { childList: true, subtree: true });
+                });
+                </script>
 
             <script>
                 let phaseCounter = {{ !empty($fase) ? count($fase) + 1 : 2 }}; // Mulai dari fase berikutnya
@@ -121,8 +173,8 @@ Detail Project Plan
                     newInput.innerHTML = `
                         <label for="${uniqueId}">Fase ${phaseCounter}</label>
                         <input type="text" name="scrum_name[]" placeholder="Fase ${phaseCounter}">
-                        <input type="date" name="start[]">
-                        <input type="date" name="end[]">
+                        <input type="date" name="start[]" min="{{ $project->start }}" max="{{ $project->end }}">
+                        <input type="date" name="end[]" min="{{ $project->start }}" max="{{ $project->end }}">
                         <textarea name="fase_1[]" id="${uniqueId}" class="form-control ck-editor" cols="30" rows="3" placeholder="Fase ${phaseCounter}"></textarea>
                         <button type="button" class="btn btn-danger btn-sm remove-input" onclick="removeInput(this)">Hapus</button>
                     `;

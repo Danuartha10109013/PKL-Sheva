@@ -49,7 +49,7 @@ Kelola Poject
                     $ids = \App\Models\ProjectPlanM::where('project_id',$d->id)->value('id');
                 @endphp
                 
-                <a href="{{route('forum',$d->id)}}" class="btn btn-light"><i class="fab fa-rocketchat"></i></a>
+                <a href="{{route('forum',$d->id)}}" class="btn btn-light" data-bs-toggle="tooltip" title="Go to Forum"><i class="fab fa-rocketchat"></i></a>
 
                 
 

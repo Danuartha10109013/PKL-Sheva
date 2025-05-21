@@ -52,9 +52,9 @@ Kelola User
                     <td class="align-middle text-sm">
                         <div class="col text-left">
                             <p class="text-xs font-weight-bold mb-0">Action:</p>
-                            <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#showUserModal{{ $d->id }}"><i class="fa fa-eye"></i> </a>
-                            <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editUserModal{{$d->id}}"><i class="fa fa-pencil-square"></i></a>
-                            <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal{{$d->id}}"><i class="fa fa-trash"></i></a>
+                            <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#showUserModal{{ $d->id }}" title="Show User"><i class="fa fa-eye"></i> </a>
+                            <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editUserModal{{$d->id}}" title="Edit User"><i class="fa fa-pencil-square"></i></a>
+                            <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal{{$d->id}}" title="Delete User"><i class="fa fa-trash"></i></a>
                         </div>
                     </td>
                 </tr>
@@ -95,6 +95,11 @@ Kelola User
                         <label for="jabatan" class="form-label">Position <small class="text-danger">*</small></label>
                         <input type="text" class="form-control" name="jabatan" id="jabatan">
                         <span class="text-danger error-jabatan"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="npwp" class="form-label">NPWP <small class="text-danger">*</small></label>
+                        <input type="number" maxlength="16" min="0" class="form-control" name="npwp" id="npwp">
+                        <span class="text-danger error-npwp"></span>
                     </div>
                     <div class="mb-3">
                         <label for="alamat" class="form-label">Address (Optional)</label>
@@ -238,6 +243,7 @@ document.getElementById('addUserForm').addEventListener('submit', function (e) {
                     <p><strong>Employee No:</strong> {{ $d->no_pegawai }}</p>
                     <p><strong>Birthday:</strong> {{ $d->birthday }}</p>
                     <p><strong>Address:</strong> {{ $d->alamat ?? 'N/A' }}</p>
+                    <p><strong>Address:</strong> {{ $d->npwp ?? 'N/A' }}</p>
                     <p><strong>Status:</strong> <span class="badge {{ $d->active ? 'bg-success' : 'bg-danger' }}">{{ $d->active ? 'Active' : 'Inactive' }}</span></p>
                 </div>
             </div>
@@ -274,6 +280,12 @@ document.getElementById('addUserForm').addEventListener('submit', function (e) {
                         <input type="text" class="form-control" name="role" id="role" 
                                value="{{ $d->role == 0 ? 'Project Manager' : ($d->role == 1 ? 'Team Leader' : ($d->role == 2 ? 'Finance' : 'Client')) }}" 
                                readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="npwp" class="form-label">npwp</label>
+                        <input type="number" maxlength="16" class="form-control" name="npwp" id="npwp" 
+                               value="{{ $d->npwp }}" 
+                               >
                     </div>
                     <div class="mb-3">
                         <label for="profile" class="form-label">New Profile (optional)</label>

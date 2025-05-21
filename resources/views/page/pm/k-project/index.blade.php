@@ -44,43 +44,58 @@ Kelola Poject Plan
           </td>
           <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->start}}</td>
           <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->end}}</td>
-          <td> &nbsp;&nbsp;&nbsp;&nbsp;
+          <td > &nbsp;&nbsp;&nbsp;&nbsp;
               {{-- Mengambil project plan ID --}}
               @php
                   $plans = \App\Models\ProjectPlanM::where('project_id', $d->id)->first();
               @endphp
-              <a href="{{ route('pm.k-project.show', $d->id) }}" class="btn btn-success">
-                  <i class="fa fa-eye"></i>
+              <a href="{{ route('pm.k-project.show', $d->id) }}" class="btn btn-success" data-bs-toggle="tooltip" title="Show">
+                  <i class="fa fa-eye"></i> 
               </a>
-  
-                {{-- @if ($d->launch != 1) --}}
-                    <a href="{{ route('pm.k-project.plan', $plans->id) }}" class="btn btn-primary">
-                        <i class="fas fa-keyboard"></i>
-                    </a>
-                {{-- @endif --}}
-                  <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal{{$d->id}}">
-                      <i class="fa fa-pencil-square"></i>
-                  </a>
-                  <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{$d->id}}">
-                      <i class="fa fa-trash"></i>
-                  </a>
-  
+
+              <a href="{{ route('pm.k-project.plan', $plans->id) }}" class="btn btn-primary" data-bs-toggle="tooltip" title="Project Plan">
+                  <i class="fas fa-keyboard"></i> 
+              </a>
+
+              <a href="#" 
+                class="btn btn-warning" 
+                data-bs-toggle="modal" 
+                data-bs-target="#editModal{{ $d->id }}" 
+                title="Edit Project">
+                  <i class="fa fa-pencil-square"></i> 
+              </a>
+
+
+              <a href="#" 
+                class="btn btn-danger" 
+                data-bs-toggle="modal" 
+                data-bs-target="#deleteModal{{ $d->id }}" 
+                title="Delete Project">
+                  <i class="fa fa-trash"></i>
+              </a>
+
+
               @if ($d->launch == 0)
-                  <a class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#launchConfirmModal{{$d->id}}">
+                  <a class="btn btn-dark" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#launchConfirmModal{{ $d->id }}" 
+                    title="Launch Project">
                       <i class="fa fa-rocket"></i>
                   </a>
+
               @else
-                  <a href="{{ route('pm.k-project.communication', $d->id) }}" class="btn btn-light">
-                      <i class="fa-solid fa-people-arrows"></i>
+                  <a href="{{ route('pm.k-project.communication', $d->id) }}" class="btn btn-light" data-bs-toggle="tooltip" title="Comment Project">
+                      <i class="fa-solid fa-people-arrows"></i> 
                   </a>
                   @php
-                    $planss = \App\Models\ProjectPlanM::where('project_id',$d->id)->value('status');
+                      $planss = \App\Models\ProjectPlanM::where('project_id', $d->id)->value('status');
                   @endphp
                   @if ($planss != 1)
-                  <a href="#" data-id="{{ $d->id }}" class="btn btn-primary" id="approveBtn">
-                      <i class="fa-solid fa-key"></i>
-                  </a>
+                      <a href="#" data-id="{{ $d->id }}" class="btn btn-primary" id="approveBtn" data-bs-toggle="tooltip" title="Lock Project">
+                          <i class="fa-solid fa-key"></i> 
+                      </a>
                   @endif
+
                   <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">

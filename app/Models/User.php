@@ -24,6 +24,7 @@ class User extends Authenticatable
         'alamat',
         'active',
         'role',
+        'npwp',
         'birthday',
         'email',
         'profile',

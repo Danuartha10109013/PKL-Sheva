@@ -45,7 +45,7 @@
                         {{$team_lead->name}}</td>
                         <td>&nbsp;&nbsp;&nbsp;&nbsp;{{$p->start}}</td>
                         <td>&nbsp;&nbsp;&nbsp;&nbsp;{{$p->end}}</td>
-                        <td>&nbsp;&nbsp;&nbsp;&nbsp; <a href="{{route('klien.project',$p->id)}}" class="btn btn-primary">Project Plan</a></td>
+                        <td>&nbsp;&nbsp;&nbsp;&nbsp; <a href="{{route('klien.project',$p->id)}}" class="btn btn-primary" title="Go to Project Plan"><i class="fa fa-file"></i></a></td>
                         <td>&nbsp;&nbsp;&nbsp;&nbsp;Rp. {{ number_format($p->biaya, 2, ',', '.') }}</td>
                 </tr>
                 @endforeach

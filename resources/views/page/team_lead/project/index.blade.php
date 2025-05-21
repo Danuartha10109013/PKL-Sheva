@@ -46,11 +46,11 @@ Kelola Poject
                 @php
                     $ids = \App\Models\ProjectPlanM::where('project_id',$d->id)->value('id');
                 @endphp
-                <a href="{{route('team_lead.project.show',$d->id)}}" class="btn btn-success"><i class="fa fa-eye"></i></a>
+                <a href="{{route('team_lead.project.show',$d->id)}}" class="btn btn-success" title="Show Project Plan"><i class="fa fa-eye"></i></a>
                 
                 
                 @if ($d->launch == 1)
-                <a href="{{route('team_lead.project.plan',$d->id)}}" class="btn btn-light"><i class="fa-solid fa-people-arrows"></i></a>
+                <a href="{{route('team_lead.project.plan',$d->id)}}" class="btn btn-light" title="Comment"><i class="fa-solid fa-people-arrows"></i></a>
                 @endif
 
                 

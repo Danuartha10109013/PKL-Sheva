@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AddNewProjectMail;
+use App\Mail\LaunchMail;
 use App\Models\forumM;
 use App\Models\invoiceM;
 use App\Models\ProjectM;
@@ -9,6 +11,7 @@ use App\Models\ProjectPlanM;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use PhpParser\Node\Expr\New_;
 use SebastianBergmann\CodeCoverage\Report\Xml\Project;
@@ -107,6 +110,8 @@ class KProjectController
 
         $bill->no_invoice = $invoiceNumber;
         $bill->save();
+        $finance = User::find(3);
+        Mail::to($finance->email)->send(new AddNewProjectMail($project));
 
         // Redirect back with a success message
         return redirect()->back()->with('success', 'Project created successfully!');
@@ -359,7 +364,8 @@ class KProjectController
                 $forum->project_id = $data->id;
                 // $forum->project_id = $data->id;
                 $forum->save();
-
+                $klien = User::find($data->customer_id);
+                Mail::to($klien->email)->send(new LaunchMail($data));
                 return redirect()->back()->with('success', 'Your project has been launched.');
             } else {
                 return redirect()->back()->with('error', 'Project not found.');

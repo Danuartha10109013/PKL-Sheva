@@ -34,7 +34,7 @@ Dashboard
         <div class="row">
           <div class="col-8">
             <div class="numbers">
-                <a href="#"  data-bs-toggle="modal" data-bs-target="#progressModal-{{ $data->id }}">
+                <a href="#"  data-bs-toggle="modal" data-bs-target="#progressModal-{{ $data->id }}" title="Show Progres">
                 <p class="text-sm mb-0 text-uppercase font-weight-bold">Progres</p>
                 <h5 class="font-weight-bolder">
                   {{ number_format($data->progres, 2) }}%

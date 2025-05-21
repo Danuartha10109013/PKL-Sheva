@@ -7,18 +7,18 @@ Kelola Invoice
 @endsection
 @section('content')
 <style>
-    .nav-tabs .nav-link not-sidebar {
-        color: white; /* Warna teks default */
+    .nav-tabs .nav-link.not-sidebar {
+        color: white;
         background-color: transparent;
     }
 
-    .nav-tabs .nav-link not-sidebar.active {
-        background-color: #007bff; /* Warna latar belakang aktif */
-        color: white; /* Warna teks aktif */
+    .nav-tabs .nav-link.not-sidebar.active {
+        background-color: #007bff;
+        color: white;
     }
 
-    .nav-tabs .nav-link not-sidebar:hover {
-        color: #f8f9fa; /* Warna teks saat hover */
+    .nav-tabs .nav-link.not-sidebar:hover {
+        color: #f8f9fa;
     }
 
     /* Background navbar untuk memastikan semua tab terlihat */
@@ -37,10 +37,13 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
 <ul class="nav nav-tabs" id="tableTabs">
     @foreach ($index as $key => $i)
         <li class="nav-item">
-            <a class="nav-link not-sidebar {{ $key == 0 ? 'active' : '' }}" data-bs-toggle="tab" href="#table{{ $i }}">{{ $labels[$key] }}</a>
+           <a class="nav-link not-sidebar {{ $key == 0 ? 'active' : '' }}" data-bs-toggle="tab" href="#table{{ $i }}">
+            {{ $labels[$key] }}
+        </a>
         </li>
     @endforeach
 </ul>
+
 <div class="tab-content mt-3">
     @foreach ($index as $key => $i)
     <div class="tab-pane fade {{ $key == 0 ? 'show active' : '' }}" id="table{{ $i }}">
@@ -107,7 +110,7 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                         @endphp
                                         
                                         <!-- Button -->
-                                        <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#mailModal{{$d->id}}">
+                                        <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#mailModal{{$d->id}}" title="Send Mail">
                                             <i class="fa-solid fa-envelope"></i>
                                         </a>
 
@@ -173,7 +176,7 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                          
 
 
-                                        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateInvoiceModal{{$d->id}}">
+                                        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateInvoiceModal{{$d->id}}" title="Edit Invoice">
                                             <i class="fa-solid fa-edit"></i>
                                         </a>
                                         <div class="modal fade" id="updateInvoiceModal{{$d->id}}" tabindex="-1" aria-labelledby="updateInvoiceLabel{{$d->id}}" aria-hidden="true">
@@ -236,8 +239,8 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                         </div>
                                         
                                         
-                                        <a href="{{route('finance.invoice.print',$d->id)}}" class="btn btn-warning"><i class="fa-solid fa-print"></i></a>
-                                        <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#progressModal-{{ $d->id }}">
+                                        <a href="{{route('finance.invoice.print',$d->id)}}" class="btn btn-warning" title="Print Current Invoice"><i class="fa-solid fa-print"></i></a>
+                                        <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#progressModal-{{ $d->id }}" title="Show Progres">
                                             <i class="fa-solid fa-spinner"></i>
                                         </a>
                                         
@@ -354,7 +357,7 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                             &nbsp;&nbsp;&nbsp;&nbsp;Belum Di Bayar  
                                             <br>
                                             &nbsp;&nbsp;&nbsp;
-                                            <a href="#" class="text text-danger" data-bs-toggle="modal" data-bs-target="#confirmModal30{{ $invoice->id }}">
+                                            <a href="#" class="text text-danger" data-bs-toggle="modal" data-bs-target="#confirmModal30{{ $invoice->id }}" title="Confirm Payment">
                                                 Konfirmasi
                                             </a>
                                         @endif

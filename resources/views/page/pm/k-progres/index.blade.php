@@ -51,9 +51,9 @@ Kelola Progres
                         @endphp
                         
                         @if (Auth::user()->role == 0)
-                        <a href="{{route('pm.k-progres.progres',$d->id)}}" class="btn btn-light"><i class="fa-solid fa-bars-progress"></i></a>
+                        <a href="{{route('pm.k-progres.progres',$d->id)}}" class="btn btn-light" data-bs-toggle="toltip" title="Kelola Progres"><i class="fa-solid fa-bars-progress"></i></a>
                         @endif
-                        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#progressModal-{{ $d->id }}">
+                        <a href="#" class="btn btn-primary" data-bs-toggle="modal" title="Show Progres" data-bs-target="#progressModal-{{ $d->id }}">
                             <i class="fa-solid fa-spinner"></i>
                           </a>
                           

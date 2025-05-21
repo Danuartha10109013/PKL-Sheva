@@ -46,11 +46,11 @@ Kelola Poject
                 @php
                     $ids = \App\Models\ProjectPlanM::where('project_id',$d->id)->value('id');
                 @endphp
-                <a href="{{route('finance.project.plan',$d->id)}}" class="btn btn-success"><i class="fa fa-eye"></i></a>
+                <a href="{{route('finance.project.plan',$d->id)}}" class="btn btn-success" title="Go to Project Plan"><i class="fa fa-eye"></i></a>
                 
                 
                 @if ($d->launch == 1)
-                <a href="{{route('forum',$d->id)}}" class="btn btn-light"><i class="fab fa-rocketchat"></i></a>
+                <a href="{{route('forum',$d->id)}}" class="btn btn-light" title="Go To Forum"><i class="fab fa-rocketchat"></i></a>
                 @endif
 
                 
