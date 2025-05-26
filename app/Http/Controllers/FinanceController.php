@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\InvoiceMail;
 use App\Models\HistoryM;
 use App\Models\invoiceM;
+use App\Models\NotifM;
 use App\Models\ProjectM;
 use App\Models\ProjectPlanM;
 use App\Models\User;
@@ -22,8 +23,14 @@ class FinanceController
         $enam = ProjectM::where('progres','>=',60)->where('progres','<',90)->orderBy('created_at', 'desc')->get();
         $sembilan = ProjectM::where('progres','>=',90)->where('progres','<',100)->orderBy('created_at', 'desc')->get();
         $sepuluh = ProjectM::where('progres','>=',100,)->orderBy('created_at', 'desc')->get();
-
-       
+        // dd(request('id'));
+       if(request('id')){
+        $notif = NotifM::where('invoice_id',request('id'))->first();
+        if($notif){
+            $notif->status = 1;
+            $notif->save();
+        }
+       }
         return view('page.finance.k-invoice.index',compact('data','nol','tiga','enam','sembilan','sepuluh'));
     }
 

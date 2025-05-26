@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\NotifM;
 use App\Models\ProjectM;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -9,6 +10,21 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController
 {
+    public function readnotif(Request $request)
+{
+    // Validate that 'notif_ids' is an array
+    $request->validate([
+        'notif_ids' => 'required|array',
+        'notif_ids.*' => 'integer|exists:notification,id',
+    ]);
+
+    // Update the status to 1 (read)
+    NotifM::whereIn('id', $request->notif_ids)
+        ->where('user_id', Auth::user()->id) // Ensure users can only update their own notifs
+        ->update(['status' => 1]);
+
+    return back()->with('success', 'Notifikasi berhasil ditandai sebagai telah dibaca.');
+}
     public function projectManager ()
     {
         $client = User::where('role', 3)->count(); 

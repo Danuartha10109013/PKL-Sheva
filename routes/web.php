@@ -126,6 +126,7 @@ Route::middleware([AutoLogout::class])->group(function () {
     Route::group(['prefix' => 'klien', 'middleware' => ['klien'], 'as' => 'klien.'], function () {
         //Dashboard
         Route::get('/', [DashboardController::class, 'klien'])->name('klien');
+        Route::post('/notif/readselected', [DashboardController::class, 'readnotif'])->name('notif.readselected');
         Route::prefix('project')->group(function () {
             Route::get('list/{id}', [ClientController::class, 'project'])->name('project.before');
             Route::get('/{id}', [ClientController::class, 'plan'])->name('project');

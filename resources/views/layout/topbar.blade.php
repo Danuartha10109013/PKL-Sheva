@@ -1,29 +1,105 @@
-<nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl " id="navbarBlur" data-scroll="false">
+<!-- Make sure Font Awesome is loaded -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="false">
   <div class="container-fluid py-1 px-3">
+    
+    <!-- Breadcrumb -->
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="javascript:;">Pages</a></li>
+        <li class="breadcrumb-item text-sm">
+          <a class="opacity-5 text-white" href="javascript:;">Pages</a>
+        </li>
         <li class="breadcrumb-item text-sm text-white active" aria-current="page">@yield('pages')</li>
       </ol>
       <h6 class="font-weight-bolder text-white mb-0">@yield('pages')</h6>
     </nav>
+
+    <!-- Navbar Right Side -->
     <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-      <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-        
-      </div>
-      <ul class="navbar-nav  justify-content-end">
+      <ul class="navbar-nav ms-auto justify-content-end align-items-center">
+
+        <!-- Notification Bell for Role 3 -->
+        @php
+            $role = Auth::user()->role;
+        @endphp
+
+        @if ($role == 3)
+            @php
+                $notif = \App\Models\NotifM::where('user_id', Auth::id())
+                            ->orderBy('created_at','desc')
+                            ->where('invoice_id',null)
+                            ->get();
+                $baru = $notif->where('status', 0)->count();
+            @endphp
+        @elseif ($role == 2)
+            @php
+                $notif = \App\Models\NotifM::whereNotNull('invoice_id')
+                            ->orderBy('created_at','desc')
+                            ->get();
+                $baru = $notif->where('status', 0)->count();
+            @endphp
+        @endif
+
+        @if ($role == 3 || $role == 2)
+            <li class="nav-item dropdown" style="margin-right: 1em">
+                <a class="nav-link dropdown-toggle position-relative text-white" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-bell"></i>
+                    @if ($baru > 0)
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{ $baru }}
+                            <span class="visually-hidden">unread messages</span>
+                        </span>
+                    @endif
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-end p-2" style="width: 320px;" aria-labelledby="notifDropdown">
+                    <form action="{{ route('klien.notif.readselected') }}" method="POST">
+                        @csrf
+                        <li>
+                            <button type="submit" class="btn btn-sm btn-primary w-100 mb-2">Tandai Telah Dibaca</button>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+
+                        @forelse ($notif as $n)
+                            @php
+                                $readClass = $n->status == 1 ? 'text-muted opacity-75' : 'fw-bold';
+                                $link = $role == 3
+                                    ? route('klien.project', $n->project_id)
+                                    : route('finance.invoice', ['id' => $n->invoice_id]);
+
+                            @endphp
+                            <li class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="notif_ids[]" value="{{ $n->id }}" id="notif{{ $n->id }}">
+                                <label class="form-check-label w-100" for="notif{{ $n->id }}">
+                                    <a href="{{ $link }}" class="text-decoration-none d-block {{ $readClass }}">
+                                        <div>{{ $n->title }}</div>
+                                        <small>{{ $n->value }}</small>
+                                    </a>
+                                </label>
+                            </li>
+                        @empty
+                            <li class="dropdown-item text-muted">Tidak ada notifikasi</li>
+                        @endforelse
+                    </form>
+                </ul>
+            </li>
+        @endif
+
+
+        <!-- User Dropdown -->
         <li class="nav-item dropdown d-flex align-items-center">
           <a href="#" class="nav-link text-white font-weight-bold px-0 dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="{{ asset('storage/user_profile/'.Auth::user()->id.'/'.Auth::user()->profile) }}" alt="Profile" style="border-radius: 9px; border: 2px solid white;" class="avatar avatar-sm rounded-circle me-2">
-            <span class="d-sm-inline d-none">{{Auth::user()->username}}</span>
+            <img src="{{ asset('storage/user_profile/'.Auth::user()->id.'/'.Auth::user()->profile) }}" alt="Profile" class="avatar avatar-sm rounded-circle me-2" style="border-radius: 9px; border: 2px solid white;">
+            <span class="d-sm-inline d-none">{{ Auth::user()->username }}</span>
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-            <li><a class="dropdown-item" href="{{ route('profile',Auth::user()->id) }}">Edit Profile</a></li>
+            <li><a class="dropdown-item" href="{{ route('profile', Auth::user()->id) }}">Edit Profile</a></li>
             <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
           </ul>
         </li>
-        
-        
+
+        <!-- Sidebar Toggler (Mobile) -->
         <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
           <a href="javascript:;" class="nav-link text-white p-0" id="iconNavbarSidenav">
             <div class="sidenav-toggler-inner">
@@ -33,12 +109,14 @@
             </div>
           </a>
         </li>
+
+        <!-- Settings Icon -->
         <li class="nav-item px-3 d-flex align-items-center">
           <a href="javascript:;" class="nav-link text-white p-0">
-            <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
+            <i class="fas fa-cog cursor-pointer"></i>
           </a>
         </li>
-        
+
       </ul>
     </div>
   </div>

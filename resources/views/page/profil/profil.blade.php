@@ -31,7 +31,15 @@
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
-
+                @if ($data->role == 3)
+                    <div class="form-group">
+                    <label for="npwp">npwp</label>
+                    <input type="text" name="npwp" class="form-control" value="{{ old('npwp', $data->npwp) }}" required>
+                    @error('npwp')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+                @else
                 <div class="form-group">
                     <label for="no_pegawai">No Pegawai</label>
                     <input type="text" name="no_pegawai" class="form-control" value="{{ old('no_pegawai', $data->no_pegawai) }}" required>
@@ -47,6 +55,7 @@
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
+                @endif
             </div>
 
             <div class="col-md-6">

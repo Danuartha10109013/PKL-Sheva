@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\HistoryM;
 use App\Models\invoiceM;
+use App\Models\NotifM;
 use App\Models\ProjectM;
 use App\Models\ProjectPlanM;
 use Illuminate\Http\Request;
@@ -26,6 +27,12 @@ class ClientController
         $plan = ProjectPlanM::where('project_id',$id)->value('id');
         $data = ProjectPlanM::find($plan);
         // dd($data);
+        $notif = NotifM::where('project_id', $id)->first();
+        if ($notif) {
+            $notif->status = 1;
+            $notif->save();
+        }
+
         
         $fase = json_decode(ProjectPlanM::where('project_id', $id)->value('fase'));
         $sections = [

@@ -6,6 +6,7 @@ use App\Mail\AddNewProjectMail;
 use App\Mail\LaunchMail;
 use App\Models\forumM;
 use App\Models\invoiceM;
+use App\Models\NotifM;
 use App\Models\ProjectM;
 use App\Models\ProjectPlanM;
 use App\Models\User;
@@ -111,7 +112,15 @@ class KProjectController
         $bill->no_invoice = $invoiceNumber;
         $bill->save();
         $finance = User::find(3);
-        Mail::to($finance->email)->send(new AddNewProjectMail($project));
+        $notif = new NotifM();
+                $notif->user_id = $project->customer_id;
+                $notif->status = 0;
+                $notif->title = 'New Project '. $project->judul . ' Has Been Created';
+                $notif->value = 'Silahkan lengkapi detail invoice untuk project ini';
+                $notif->project_id = $project->id;
+                $notif->invoice_id = $bill->id;
+                $notif->save();
+        // Mail::to($finance->email)->send(new AddNewProjectMail($project));
 
         // Redirect back with a success message
         return redirect()->back()->with('success', 'Project created successfully!');
@@ -365,7 +374,17 @@ class KProjectController
                 // $forum->project_id = $data->id;
                 $forum->save();
                 $klien = User::find($data->customer_id);
-                Mail::to($klien->email)->send(new LaunchMail($data));
+                // Mail::to($klien->email)->send(new LaunchMail($data));
+                $invoice = invoiceM::where('project_id',$data->id)->value('id');
+                $notif = new NotifM();
+                $notif->user_id = $data->customer_id;
+                $notif->status = 0;
+                $notif->title = 'Project '. $data->judul . ' Has Been Launched';
+                $notif->value = 'Silahkan periksa detail project plan dan lakukan komentar serta persetujuan project plan';
+                $notif->project_id = $data->id;
+                // $notif->invoice_id = $invoice;
+                $notif->save();
+
                 return redirect()->back()->with('success', 'Your project has been launched.');
             } else {
                 return redirect()->back()->with('error', 'Project not found.');

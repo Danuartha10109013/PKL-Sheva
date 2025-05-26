@@ -34,13 +34,13 @@ Kelola User
                     <td>
                         <div class="text-left">
                             <p class="text-xs font-weight-bold mb-0">Employee No:</p>
-                            <h6 class="text-sm mb-0">{{$d->no_pegawai}}</h6>
+                            <h6 class="text-sm mb-0">{{$d->no_pegawai ?? 'N/A'}}</h6>
                         </div>
                     </td>
                     <td>
                         <div class="text-left">
                             <p class="text-xs font-weight-bold mb-0">Position:</p>
-                            <h6 class="text-sm mb-0">{{$d->jabatan}}</h6>
+                            <h6 class="text-sm mb-0">{{$d->jabatan ?? 'Client'}}</h6>
                         </div>
                     </td>
                     <td class="align-middle text-sm">
@@ -87,6 +87,17 @@ Kelola User
                         <span class="text-danger error-username"></span>
                     </div>
                     <div class="mb-3">
+                        <label for="role" class="form-label">Role <small class="text-danger">*</small></label>
+                        <select class="form-select" name="role" id="role">
+                            <option value="" selected disabled>--Select Role--</option>
+                            <option value="0">Project Manager</option>
+                            <option value="1">Team Leader</option>
+                            <option value="2">Finance</option>
+                            <option value="3">Client</option>
+                        </select>
+                        <span class="text-danger error-role"></span>
+                    </div>
+                    <div class="mb-3">
                         <label for="no_pegawai" class="form-label">Employee Number <small class="text-danger">*</small></label>
                         <input type="text" class="form-control" name="no_pegawai" id="no_pegawai">
                         <span class="text-danger error-no_pegawai"></span>
@@ -98,9 +109,47 @@ Kelola User
                     </div>
                     <div class="mb-3">
                         <label for="npwp" class="form-label">NPWP <small class="text-danger">*</small></label>
-                        <input type="number" maxlength="16" min="0" class="form-control" name="npwp" id="npwp">
+                        <input type="text"  class="form-control" name="npwp" id="npwp">
                         <span class="text-danger error-npwp"></span>
                     </div>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const roleSelect = document.getElementById('role');
+                            const npwpDiv = document.getElementById('npwp').closest('.mb-3');
+                            const noPegawaiDiv = document.getElementById('no_pegawai').closest('.mb-3');
+                            const jabatanDiv = document.getElementById('jabatan').closest('.mb-3');
+
+                            const npwpInput = document.getElementById('npwp');
+                            const noPegawaiInput = document.getElementById('no_pegawai');
+                            const jabatanInput = document.getElementById('jabatan');
+
+                            // Fungsi untuk menampilkan/menyembunyikan field sesuai role
+                            function toggleFields() {
+                                const role = roleSelect.value;
+
+                                if (role === "3") { // Client
+                                    npwpDiv.style.display = 'block';
+
+                                    noPegawaiDiv.style.display = 'none';
+                                    jabatanDiv.style.display = 'none';
+                                } else if (role === "0" || role === "1" || role === "2") {
+                                    npwpDiv.style.display = 'none';
+                                    noPegawaiDiv.style.display = 'block';
+                                    jabatanDiv.style.display = 'block';
+                                } else {
+                                    // Default: hide all optional fields
+                                    npwpDiv.style.display = 'none';
+                                    noPegawaiDiv.style.display = 'none';
+                                    jabatanDiv.style.display = 'none';
+                                }
+                            }
+
+                            // Jalankan saat halaman dimuat dan ketika role berubah
+                            toggleFields();
+                            roleSelect.addEventListener('change', toggleFields);
+                        });
+                    </script>
+
                     <div class="mb-3">
                         <label for="alamat" class="form-label">Address (Optional)</label>
                         <input type="text" class="form-control" name="alamat" id="alamat">
@@ -115,17 +164,7 @@ Kelola User
                         </select>
                         <span class="text-danger error-active"></span>
                     </div>
-                    <div class="mb-3">
-                        <label for="role" class="form-label">Role <small class="text-danger">*</small></label>
-                        <select class="form-select" name="role" id="role">
-                            <option value="" selected disabled>--Select Role--</option>
-                            <option value="0">Project Manager</option>
-                            <option value="1">Team Leader</option>
-                            <option value="2">Finance</option>
-                            <option value="3">Client</option>
-                        </select>
-                        <span class="text-danger error-role"></span>
-                    </div>
+                    
                     <div class="mb-3">
                         <label for="birthday" class="form-label">Birthday (Optional)</label>
                         <input type="date" class="form-control" name="birthday" id="birthday">
@@ -162,54 +201,65 @@ Kelola User
 </div>
 
 <script>
-document.getElementById('addUserForm').addEventListener('submit', function (e) {
-    e.preventDefault(); // Prevent form submission
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('addUserForm');
 
-    let formData = new FormData(this);
-    let actionUrl = this.action;
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
 
-    fetch(actionUrl, {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-        },
-    })
-        .then(response => response.json())
-        .then(data => {
-            // Clear all error messages
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+        })
+        .then(async response => {
+            const contentType = response.headers.get("content-type");
+            if (!contentType || !contentType.includes("application/json")) {
+                throw new Error('Invalid JSON response');
+            }
+
+            const data = await response.json();
+
+            // Clear previous errors
             document.querySelectorAll('.text-danger').forEach(el => el.textContent = '');
 
             if (data.errors) {
-                // Display validation errors
-                Object.keys(data.errors).forEach(function (key) {
-                    document.querySelector(`.error-${key}`).textContent = data.errors[key][0];
+                Object.keys(data.errors).forEach(key => {
+                    const errorElement = document.querySelector(`.error-${key}`);
+                    if (errorElement) {
+                        errorElement.textContent = data.errors[key][0];
+                    }
                 });
             } else if (data.success) {
-                // Show SweetAlert for success
                 Swal.fire({
                     icon: 'success',
                     title: 'Success!',
                     text: data.message,
-                    timer: 1500, // Automatically close alert after 2 seconds
+                    timer: 1500,
                     showConfirmButton: false,
                 }).then(() => {
-                    // Manually refresh the page after the alert
-                    window.location.href = window.location.href;
+                    // Reload the page or update table
+                    window.location.reload();
                 });
             }
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Fetch error:', error);
             Swal.fire({
                 icon: 'error',
-                title: 'An error occurred',
-                text: 'Please try again.',
+                title: 'Oops...',
+                text: 'Terjadi kesalahan. Silakan coba lagi.',
             });
         });
+    });
 });
-
 </script>
+
 
 
 
@@ -240,10 +290,15 @@ document.getElementById('addUserForm').addEventListener('submit', function (e) {
                 <div class="mt-4">
                     <h6 class="text-primary mb-3">Contact Information</h6>
                     <p><strong>Email:</strong> {{ $d->email }}</p>
+                    @if ($d->role != 3)
+                        
                     <p><strong>Employee No:</strong> {{ $d->no_pegawai }}</p>
+                    @endif
                     <p><strong>Birthday:</strong> {{ $d->birthday }}</p>
                     <p><strong>Address:</strong> {{ $d->alamat ?? 'N/A' }}</p>
-                    <p><strong>Address:</strong> {{ $d->npwp ?? 'N/A' }}</p>
+                    @if ($d->role == 3)
+                    <p><strong>NPWP:</strong> {{ $d->npwp ?? 'N/A' }}</p>
+                    @endif
                     <p><strong>Status:</strong> <span class="badge {{ $d->active ? 'bg-success' : 'bg-danger' }}">{{ $d->active ? 'Active' : 'Inactive' }}</span></p>
                 </div>
             </div>

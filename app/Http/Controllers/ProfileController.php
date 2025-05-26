@@ -27,8 +27,9 @@ class ProfileController
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username,' . $user->id,
-            'no_pegawai' => 'required|string|max:50',
-            'jabatan' => 'required|string|max:100',
+            'no_pegawai' => 'nullable|string|max:50',
+            'jabatan' => 'nullable|string|max:100',
+            'npwp' => 'nullable',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|min:8|confirmed',
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
@@ -44,6 +45,7 @@ class ProfileController
         $user->username = $request->username;
         $user->no_pegawai = $request->no_pegawai;
         $user->jabatan = $request->jabatan;
+        $user->npwp = $request->npwp;
         $user->email = $request->email;
     
         // Check if password was provided and update it

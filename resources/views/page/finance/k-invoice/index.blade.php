@@ -33,6 +33,7 @@ $index = ['nol', 'tiga', 'enam', 'sembilan', 'sepuluh'];
 $labels = ['<30%', '30%', '60%', '90%', '100%'];
 @endphp
 
+
 <!-- TAB HEADER -->
 <ul class="nav nav-tabs" id="tableTabs">
     @foreach ($index as $key => $i)
@@ -87,7 +88,31 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                         @endphp
                         @if (!empty($isi))
                             @foreach ($isi as $d)
-                                <tr>
+                            <style>
+                                .blink {
+                                animation: blink-animation 1s steps(5, start) infinite;
+                                }
+
+                                @keyframes blink-animation {
+                                to {
+                                    visibility: hidden;
+                                }
+                                }
+
+                                /* Atau bisa pakai perubahan background warna yang lebih halus */
+                                .menyala {
+                                animation: pulse 1.5s infinite;
+                                background-color: #ffff99; /* kuning cerah */
+                                }
+
+                                @keyframes pulse {
+                                0% { background-color: #ffff99; }
+                                50% { background-color: #ffeb3b; }
+                                100% { background-color: #ffff99; }
+                                }
+
+                            </style>
+                                <tr class="{{ $d->id == request('id') ? 'menyala blink' : '' }}">
                                     <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$loop->iteration}}</td>
                                     <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->judul}}</td>
                                 
@@ -205,11 +230,11 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                                                 @php
                                                                     $username = \App\Models\User::find($d->customer_id);
                                                                 @endphp
-                                                                <input type="text" class="form-control" id="kepada" name="kepada" placeholder="Masukan Nama Customer" value="{{ $invoice->kepada ?? $username->username}}" required>
+                                                                <input type="text" class="form-control" id="kepada" name="kepada" placeholder="Masukan Nama Customer" value="{{ $invoice->kepada ?? $username->username}}" readonly required>
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="npwp" class="form-label">NPWP</label>
-                                                                <input type="text" class="form-control" id="npwp" name="npwp" placeholder="Masukan NPWP" value="{{ $invoice->npwp }}">
+                                                                <input type="text" class="form-control" id="npwp" name="npwp" placeholder="Masukan NPWP" value="{{ $invoice->npwp ?? $username->npwp}}">
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="alamat" class="form-label">Alamat</label>
@@ -342,7 +367,7 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                         @elseif ($i == 'sembilan')
                                         &nbsp;&nbsp;&nbsp;&nbsp; {{'Rp. ' . number_format(($d->biaya * 0.90) - ($d->biaya * 0.60), 0, ',', '.')}}
                                         @elseif ($i == 'sepuluh')
-                                        &nbsp;&nbsp;&nbsp;&nbsp; {{'Rp. ' . number_format(($d->biaya * 0.100) - ($d->biaya * 0.9), 0, ',', '.')}}
+                                        &nbsp;&nbsp;&nbsp;&nbsp; {{'Rp. ' . number_format(($d->biaya * 1) - ($d->biaya * 0.9), 0, ',', '.')}}
                                         @endif
                                     </td>
                                     <td> &nbsp;&nbsp;&nbsp;&nbsp;Rp. {{number_format($d->biaya, 0, ',', '.')}}</td>
