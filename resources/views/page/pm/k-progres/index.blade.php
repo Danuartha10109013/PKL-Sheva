@@ -20,6 +20,7 @@ Kelola Progres
                     <th>No</th>
                     <th>Judul</th>
                     <th>Progres</th>
+                    <th>Status</th>
                     <th>Customer</th>
                     <th>Team Leader</th>
                     <th>Start Date</th>
@@ -32,9 +33,36 @@ Kelola Progres
                 @foreach ($data as $d)
                 <tr>
                     <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$loop->iteration}}</td>
-                    <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->judul}}</td>
-                   
-                    <td> &nbsp;&nbsp;&nbsp;&nbsp; {{ number_format($d->progres, 2) }}%</td>
+                    <td class="text-wrap text-break px-1">
+                        {{ $d->judul }}
+                    </td>
+
+                   @php
+                      $progres = $d->progres;
+                      $pesan = '';
+
+                      if ($progres >= 100) {
+                          $pesan = 'Invoice telah dikirim untuk termin 4';
+                      } elseif ($progres >= 90) {
+                          $pesan = 'Invoice telah dikirim untuk termin 3';
+                      } elseif ($progres >= 60) {
+                          $pesan = 'Invoice telah dikirim untuk termin 2';
+                      } elseif ($progres >= 30) {
+                          $pesan = 'Invoice telah dikirim untuk termin 1';
+                      }
+                  @endphp
+                  <td> &nbsp;&nbsp;&nbsp;&nbsp; {{ number_format($d->progres, 2) }}%</td>
+
+                  <td >&nbsp;&nbsp;&nbsp;&nbsp;
+                      {{-- {{ number_format($progres, 2) }}% --}}
+                      @if ($pesan)
+                          <small class="text-muted">{{ $pesan }}</small>
+                      @else
+                      <small>Progres belum dimulai</small>
+                      @endif
+                  </td>
+
+                    {{-- <td> &nbsp;&nbsp;&nbsp;&nbsp; {{ number_format($d->progres, 2) ?? >30|>60|>90|100 Invoice telah dikirim untuk termin 1 | 2 | 3 | 4}}%</td> --}}
                     <td> &nbsp;&nbsp;&nbsp;&nbsp;
                         @php
                             $name = \App\Models\User::where('id', $d->customer_id)->value('name');
