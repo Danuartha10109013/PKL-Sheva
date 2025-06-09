@@ -37,26 +37,57 @@ Kelola Progres
                         {{ $d->judul }}
                     </td>
 
-                   @php
+                  
+                  <td> &nbsp;&nbsp;&nbsp;&nbsp; {{ number_format($d->progres, 2) }}%</td>
+                     @php
                       $progres = $d->progres;
                       $pesan = '';
-
+                      $invoice = \App\Models\InvoiceM::where('project_id',$d->id)->first();
+                      // dd($invoice->{'30'});
                       if ($progres >= 100) {
                           $pesan = 'Invoice telah dikirim untuk termin 4';
+                          if($invoice->{'100'} == 'payed'){
+                            $sts = 'Tagihan Telah Dibayar';
+                            $color = 'success';
+                          }else {
+                            $sts = 'Tagihan Belum DIbayar';
+                            $color = 'danger';
+                          }
                       } elseif ($progres >= 90) {
                           $pesan = 'Invoice telah dikirim untuk termin 3';
+                          if($invoice->{'90'} == 'payed'){
+                             $sts = 'Tagihan Telah Dibayar';
+                            $color = 'success';
+                          }else {
+                            $sts = 'Tagihan Belum DIbayar';
+                            $color = 'danger';
+                          }
                       } elseif ($progres >= 60) {
                           $pesan = 'Invoice telah dikirim untuk termin 2';
+                          if($invoice->{'60'} == 'payed'){
+                            $sts = 'Tagihan Telah Dibayar';
+                            $color = 'success';
+                          }else {
+                            $sts = 'Tagihan Belum DIbayar';
+                            $color = 'danger';
+                          }
                       } elseif ($progres >= 30) {
                           $pesan = 'Invoice telah dikirim untuk termin 1';
+                          if($invoice->{'30'} == 'payed'){
+                             $sts = 'Tagihan Telah Dibayar';
+                            $color = 'success';
+                          }else {
+                            $sts = 'Tagihan Belum DIbayar';
+                            $color = 'danger';
+                          }
                       }
                   @endphp
-                  <td> &nbsp;&nbsp;&nbsp;&nbsp; {{ number_format($d->progres, 2) }}%</td>
-
                   <td >&nbsp;&nbsp;&nbsp;&nbsp;
                       {{-- {{ number_format($progres, 2) }}% --}}
-                      @if ($pesan)
+                      @if ($pesan && $sts && $color)
                           <small class="text-muted">{{ $pesan }}</small>
+                          <br>
+                          &nbsp;&nbsp;&nbsp;&nbsp;<small class="text text-{{$color}}">{{ $sts }}</small>
                       @else
                       <small>Progres belum dimulai</small>
                       @endif

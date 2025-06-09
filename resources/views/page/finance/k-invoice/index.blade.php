@@ -208,7 +208,7 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="updateInvoiceLabel{{$d->id}}">Update Invoice</h5>
+                                                        <h5 class="modal-title" id="updateInvoiceLabel{{$d->id}}">Update Detail Invoice</h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <form action="{{ route('finance.invoice.update', $d->id) }}" method="POST">
@@ -375,6 +375,7 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                         @php
                                             $inv = \App\Models\InvoiceM::where('project_id',$d->id)->value('id');
                                             $invoice = \App\Models\InvoiceM::find($inv);
+                                            // dd($d->progres);
                                         @endphp
                                         @if (!empty($invoice->{'30'}))
                                             &nbsp;&nbsp;&nbsp;&nbsp;{{ $invoice->{'30'} }}
@@ -382,9 +383,22 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                             &nbsp;&nbsp;&nbsp;&nbsp;Belum Di Bayar  
                                             <br>
                                             &nbsp;&nbsp;&nbsp;
-                                            <a href="#" class="text text-danger" data-bs-toggle="modal" data-bs-target="#confirmModal30{{ $invoice->id }}" title="Confirm Payment">
+                                            <a href="#" 
+                                                class="text text-danger {{ $d->progres < 30 ? 'disabled-link' : '' }}" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#confirmModal30{{ $invoice->id }}" 
+                                                title="Confirm Payment 30%"
+                                                {{ $d->progres < 30 ? 'onclick=return false;' : '' }}>
                                                 Konfirmasi
                                             </a>
+                                        <style>
+                                            .disabled-link {
+                                            pointer-events: none;
+                                            opacity: 0.5;
+                                            text-decoration: none;
+                                        }
+
+                                        </style>
                                         @endif
 
                                         <div class="modal fade" id="confirmModal30{{$invoice->id}}" tabindex="-1" aria-labelledby="confirmModal30Label{{$invoice->id}}" aria-hidden="true">
@@ -422,7 +436,15 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                             &nbsp;&nbsp;&nbsp;&nbsp;Belum Di Bayar  
                                             <br>
                                             &nbsp;&nbsp;&nbsp;
-                                            <a href="#" class="text text-danger" data-bs-toggle="modal" data-bs-target="#confirmModal60{{ $invoice->id }}">
+                                            {{-- <a href="#" class="text text-danger" data-bs-toggle="modal" data-bs-target="#confirmModal60{{ $invoice->id }}">
+                                                Konfirmasi
+                                            </a> --}}
+                                            <a href="#" 
+                                                class="text text-danger {{ $d->progres < 60 ? 'disabled-link' : '' }}" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#confirmModal60{{ $invoice->id }}" 
+                                                title="Confirm Payment 60%"
+                                                {{ $d->progres < 60 ? 'onclick=return false;' : '' }}>
                                                 Konfirmasi
                                             </a>
                                         @endif
@@ -460,7 +482,15 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                             &nbsp;&nbsp;&nbsp;&nbsp;Belum Di Bayar  
                                             <br>
                                             &nbsp;&nbsp;&nbsp;
-                                            <a href="#" class="text text-danger" data-bs-toggle="modal" data-bs-target="#confirmModal90{{ $invoice->id }}">
+                                            {{-- <a href="#" class="text text-danger" data-bs-toggle="modal" data-bs-target="#confirmModal90{{ $invoice->id }}">
+                                                Konfirmasi
+                                            </a> --}}
+                                            <a href="#" 
+                                                class="text text-danger {{ $d->progres < 90 ? 'disabled-link' : '' }}" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#confirmModal90{{ $invoice->id }}" 
+                                                title="Confirm Payment 60%"
+                                                {{ $d->progres < 90 ? 'onclick=return false;' : '' }}>
                                                 Konfirmasi
                                             </a>
                                         @endif
@@ -498,7 +528,15 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                             &nbsp;&nbsp;&nbsp;&nbsp;Belum Di Bayar  
                                             <br>
                                             &nbsp;&nbsp;&nbsp;
-                                            <a href="#" class="text text-danger" data-bs-toggle="modal" data-bs-target="#confirmModal100{{ $invoice->id }}">
+                                            {{-- <a href="#" class="text text-danger" data-bs-toggle="modal" data-bs-target="#confirmModal100{{ $invoice->id }}">
+                                                Konfirmasi
+                                            </a> --}}
+                                            <a href="#" 
+                                                class="text text-danger {{ $d->progres < 100 ? 'disabled-link' : '' }}" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#confirmModal100{{ $invoice->id }}" 
+                                                title="Confirm Payment 60%"
+                                                {{ $d->progres < 100 ? 'onclick=return false;' : '' }}>
                                                 Konfirmasi
                                             </a>
                                         @endif

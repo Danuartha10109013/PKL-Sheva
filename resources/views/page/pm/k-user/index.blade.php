@@ -7,7 +7,7 @@ Kelola User
 @endsection
 @section('content')
 
-<a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal"><i class="fa fa-user-plus"> Add new User</i></a>
+<a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal" title="Add New User"><i class="fa fa-user-plus"> </i> </a>
 
 <div class="card">
     <div class="card-header pb-0 p-3">
@@ -98,8 +98,8 @@ Kelola User
                         <span class="text-danger error-role"></span>
                     </div>
                     <div class="mb-3">
-                        <label for="no_pegawai" class="form-label">Employee Number <small class="text-danger">*</small></label>
-                        <input type="text" class="form-control" name="no_pegawai" id="no_pegawai">
+                        <label for="no_pegawai" class="form-label">NIK <small class="text-danger">*</small></label>
+                        <input type="number"  class="form-control" name="no_pegawai" id="no_pegawai">
                         <span class="text-danger error-no_pegawai"></span>
                     </div>
                     <div class="mb-3">

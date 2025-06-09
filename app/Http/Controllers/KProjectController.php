@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Mail\AddNewProjectMail;
 use App\Mail\LaunchMail;
+use App\Models\ChatM;
 use App\Models\forumM;
 use App\Models\invoiceM;
 use App\Models\NotifM;
+use App\Models\PostM;
 use App\Models\ProjectM;
 use App\Models\ProjectPlanM;
 use App\Models\User;
@@ -167,6 +169,16 @@ class KProjectController
         $ids = ProjectPlanM::where('project_id',$id)->value('id');
         $projectplan = ProjectPlanM::find($ids);
         $projectplan->delete();
+        $forum = forumM::where('project_id',$id)->first();
+        $forum->delete();
+        $post = PostM::where('forum_id',$forum->id)->get();
+        foreach ($post as $p){
+            $chat = ChatM::where('post_id',$p->id)->get();
+            foreach ($chat as $c){
+                $c->delete();
+            }
+            $p->delete();
+        }
         // Delete the project from the database
         $project->delete();
 
@@ -374,7 +386,7 @@ class KProjectController
                 // $forum->project_id = $data->id;
                 $forum->save();
                 $klien = User::find($data->customer_id);
-                // Mail::to($klien->email)->send(new LaunchMail($data));
+                Mail::to($klien->email)->send(new LaunchMail($data));
                 $invoice = invoiceM::where('project_id',$data->id)->value('id');
                 $notif = new NotifM();
                 $notif->user_id = $data->customer_id;
