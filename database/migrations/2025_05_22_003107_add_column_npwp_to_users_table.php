@@ -12,7 +12,7 @@ return new class extends Migration
         public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->date('npwp')->nullable()->after('role'); // ganti 'date' dengan kolom yang ingin didahului
+            $table->string('npwp')->nullable()->after('role'); // ganti 'date' dengan kolom yang ingin didahului
         });
     }
 
