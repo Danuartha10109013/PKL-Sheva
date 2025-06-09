@@ -39,6 +39,8 @@ class KelolaUser
         $user->name = $request->name;
         $user->username = $request->username;
         $user->email = $request->email;
+        $user->no_pegawai = $request->no_pegawai;
+        $user->npwp = $request->npwp;
 
         // Update password if provided
         if ($request->filled('password')) {

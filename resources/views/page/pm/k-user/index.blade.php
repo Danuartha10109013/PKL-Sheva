@@ -32,10 +32,17 @@ Kelola User
                         </div>
                     </td>
                     <td>
+                        @if ($d->role == 3)
                         <div class="text-left">
-                            <p class="text-xs font-weight-bold mb-0">Employee No:</p>
+                            <p class="text-xs font-weight-bold mb-0">NPWP:</p>
+                            <h6 class="text-sm mb-0">{{$d->npwp ?? 'N/A'}}</h6>
+                        </div>
+                        @else
+                        <div class="text-left">
+                            <p class="text-xs font-weight-bold mb-0">NIK:</p>
                             <h6 class="text-sm mb-0">{{$d->no_pegawai ?? 'N/A'}}</h6>
                         </div>
+                        @endif
                     </td>
                     <td>
                         <div class="text-left">
@@ -292,7 +299,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <p><strong>Email:</strong> {{ $d->email }}</p>
                     @if ($d->role != 3)
                         
-                    <p><strong>Employee No:</strong> {{ $d->no_pegawai }}</p>
+                    <p><strong>NIK:</strong> {{ $d->no_pegawai }}</p>
                     @endif
                     <p><strong>Birthday:</strong> {{ $d->birthday }}</p>
                     <p><strong>Address:</strong> {{ $d->alamat ?? 'N/A' }}</p>
@@ -336,12 +343,23 @@ document.addEventListener('DOMContentLoaded', function () {
                                value="{{ $d->role == 0 ? 'Project Manager' : ($d->role == 1 ? 'Team Leader' : ($d->role == 2 ? 'Finance' : 'Client')) }}" 
                                readonly>
                     </div>
+                    @if ($d->role == 3)
+                        
                     <div class="mb-3">
                         <label for="npwp" class="form-label">npwp</label>
                         <input type="number" maxlength="16" class="form-control" name="npwp" id="npwp" 
                                value="{{ $d->npwp }}" 
                                >
                     </div>
+                    @else
+                    <div class="mb-3">
+                        <label for="NIK" class="form-label">NIK</label>
+                        <input type="number" maxlength="16" class="form-control" name="no_pegawai" id="npwp" 
+                               value="{{ $d->no_pegawai }}" 
+                               >
+                    </div>
+                    @endif
+
                     <div class="mb-3">
                         <label for="profile" class="form-label">New Profile (optional)</label>
                         <input type="file" class="form-control" name="profile" id="profile">

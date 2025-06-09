@@ -33,7 +33,7 @@
                 </div>
                 @if ($data->role == 3)
                     <div class="form-group">
-                    <label for="npwp">npwp</label>
+                    <label for="npwp">NPWP</label>
                     <input type="text" name="npwp" class="form-control" value="{{ old('npwp', $data->npwp) }}" required>
                     @error('npwp')
                         <span class="text-danger">{{ $message }}</span>
@@ -41,7 +41,7 @@
                 </div>
                 @else
                 <div class="form-group">
-                    <label for="no_pegawai">No Pegawai</label>
+                    <label for="no_pegawai">NIK</label>
                     <input type="text" name="no_pegawai" class="form-control" value="{{ old('no_pegawai', $data->no_pegawai) }}" required>
                     @error('no_pegawai')
                         <span class="text-danger">{{ $message }}</span>

@@ -380,7 +380,9 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                         @if (!empty($invoice->{'30'}))
                                             &nbsp;&nbsp;&nbsp;&nbsp;{{ $invoice->{'30'} }}
                                         @else
-                                            &nbsp;&nbsp;&nbsp;&nbsp;Belum Di Bayar  
+                                            &nbsp;&nbsp;&nbsp;&nbsp;{!! $d->progres < 30 ? 'Progres 30% belum tercapai,<br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;Tagihan Belum Dikirim' : 'Tagihan Belum Dibayar' !!}
+
                                             <br>
                                             &nbsp;&nbsp;&nbsp;
                                             <a href="#" 
@@ -394,7 +396,7 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                         <style>
                                             .disabled-link {
                                             pointer-events: none;
-                                            opacity: 0.5;
+                                            opacity: 0.0;
                                             text-decoration: none;
                                         }
 
@@ -433,7 +435,8 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                         @if (!empty($invoice->{'60'}))
                                             &nbsp;&nbsp;&nbsp;&nbsp;{{ $invoice->{'60'} }}
                                         @else
-                                            &nbsp;&nbsp;&nbsp;&nbsp;Belum Di Bayar  
+                                            &nbsp;&nbsp;&nbsp;&nbsp;{!! $d->progres < 60 ? 'Progres 60% belum tercapai,<br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;Tagihan Belum Dikirim' : 'Tagihan Belum Dibayar' !!}
                                             <br>
                                             &nbsp;&nbsp;&nbsp;
                                             {{-- <a href="#" class="text text-danger" data-bs-toggle="modal" data-bs-target="#confirmModal60{{ $invoice->id }}">
@@ -479,7 +482,8 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                         @if (!empty($invoice->{'90'}))
                                             &nbsp;&nbsp;&nbsp;&nbsp;{{ $invoice->{'90'} }}
                                         @else
-                                            &nbsp;&nbsp;&nbsp;&nbsp;Belum Di Bayar  
+                                            &nbsp;&nbsp;&nbsp;&nbsp;{!! $d->progres < 90 ? 'Progres 90% belum tercapai,<br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;Tagihan Belum Dikirim' : 'Tagihan Belum Dibayar' !!}
                                             <br>
                                             &nbsp;&nbsp;&nbsp;
                                             {{-- <a href="#" class="text text-danger" data-bs-toggle="modal" data-bs-target="#confirmModal90{{ $invoice->id }}">
@@ -525,7 +529,8 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                         @if (!empty($invoice->{'100'}))
                                             &nbsp;&nbsp;&nbsp;&nbsp;{{ $invoice->{'100'} }}
                                         @else
-                                            &nbsp;&nbsp;&nbsp;&nbsp;Belum Di Bayar  
+                                            &nbsp;&nbsp;&nbsp;&nbsp;{!! $d->progres < 100 ? 'Progres 100% belum tercapai,<br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;Tagihan Belum Dikirim' : 'Tagihan Belum Dibayar' !!}
                                             <br>
                                             &nbsp;&nbsp;&nbsp;
                                             {{-- <a href="#" class="text text-danger" data-bs-toggle="modal" data-bs-target="#confirmModal100{{ $invoice->id }}">
