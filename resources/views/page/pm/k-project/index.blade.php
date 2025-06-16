@@ -87,14 +87,14 @@ Kelola Poject Plan
                   <a href="{{ route('pm.k-project.communication', $d->id) }}" class="btn btn-light" data-bs-toggle="tooltip" title="Comment Project">
                       <i class="fa-solid fa-people-arrows"></i> 
                   </a>
-                  @php
+                  {{-- @php
                       $planss = \App\Models\ProjectPlanM::where('project_id', $d->id)->value('status');
                   @endphp
                   @if ($planss != 1)
                       <a href="#" data-id="{{ $d->id }}" class="btn btn-primary" id="approveBtn" data-bs-toggle="tooltip" title="Lock Project">
                           <i class="fa-solid fa-key"></i> 
                       </a>
-                  @endif
+                  @endif --}}
 
                   <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
                     <div class="modal-dialog">

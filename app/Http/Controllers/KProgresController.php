@@ -45,7 +45,11 @@ class KProgresController
 {
     $projecplan = ProjectPlanM::where('project_id', $id)->value('id');
     $plan = ProjectPlanM::find($projecplan);
-    
+    if($plan->status == 0 || $plan->status == 2){
+        return redirect()->back()->with('error','Project Plan Belum Disetujui');
+    }
+    $inn = invoiceM::where('project_id',$plan->project_id)->first();
+    // dd($inn);
     // Decode the existing fase data
     $existingFaseData = json_decode($plan->fase, true) ?? [];
 
@@ -134,6 +138,9 @@ class KProgresController
             ];
 
     }elseif($completion_percentage >= 60 && $completion_percentage < 90){
+        if($inn->{'30'} == null){
+            return redirect()->back()->with('error','Progres 30% belom dibayar');
+        }
         $totalCostNoPpn = $project->biaya * 0.60 - ($project->biaya * 0.30);
             $totalCost = ($project->biaya *0.60 + ($project->biaya *0.60 * $invoice->ppn)) - ($project->biaya *0.30 + ($project->biaya *0.30 * $invoice->ppn));
             $terbilang = ucfirst(terbilang($totalCost)) . ' Rupiah';
@@ -183,6 +190,9 @@ class KProgresController
                 'total' => $totalCost,
             ];
     }elseif($completion_percentage >= 90 && $completion_percentage < 100){
+        if($inn->{'60'} == null){
+            return redirect()->back()->with('error','Progres 60% belom dibayar');
+        }
         $totalCostNoPpn = $project->biaya * 0.90 - ($project->biaya * 0.60);
         $totalCost = ($project->biaya *0.90 + ($project->biaya *0.90 * $invoice->ppn)) - ($project->biaya *0.60 + ($project->biaya *0.60 * $invoice->ppn));
         $terbilang = ucfirst(terbilang($totalCost)) . ' Rupiah';
@@ -231,6 +241,9 @@ class KProgresController
             'total' => $totalCost,
         ];
     }elseif($completion_percentage >= 100 ){
+        if($inn->{'90'} == null){
+            return redirect()->back()->with('error','Progres 90% belom dibayar');
+        }
         $totalCostNoPpn = $project->biaya * 1 - ($project->biaya * 0.90);
             $totalCost = ($project->biaya * 1 + ($project->biaya * 1 * $invoice->ppn)) - ($project->biaya *0.90 + ($project->biaya *0.90 * $invoice->ppn));
             $terbilang = ucfirst(terbilang($totalCost)) . ' Rupiah';
