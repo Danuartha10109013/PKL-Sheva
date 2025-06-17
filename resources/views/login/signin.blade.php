@@ -79,9 +79,27 @@
                     <div class="mb-3">
                       <input type="text" name="username" class="form-control form-control-lg" placeholder="Email" aria-label="Email Or Username" value="{{ old('username', request('cc')) }}">
                   </div>
-                  <div class="mb-3">
-                    <input type="password" name="password" class="form-control form-control-lg"  placeholder="Password" aria-label="Password" <div>
+                  <div class="mb-3 position-relative">
+                    <input type="password" id="password" name="password" class="form-control form-control-lg" placeholder="Password" aria-label="Password">
+                    <button type="button" class="btn btn-sm btn-outline-secondary position-absolute top-50 end-0 translate-middle-y me-2" onclick="togglePasswordVisibility()">
+                      <i id="toggleIcon" class="bi bi-eye-slash"></i>
+                    </button>
                   </div>
+
+                  <!-- Tambahkan Bootstrap Icons jika belum -->
+                  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+                  <script>
+                    function togglePasswordVisibility() {
+                      const passwordInput = document.getElementById('password');
+                      const toggleIcon = document.getElementById('toggleIcon');
+                      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                      passwordInput.setAttribute('type', type);
+                      toggleIcon.classList.toggle('bi-eye');
+                      toggleIcon.classList.toggle('bi-eye-slash');
+                    }
+                  </script>
+
                   </div>
                     <div class="text-center">
                       <button type="submit" class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0">Sign in</button>

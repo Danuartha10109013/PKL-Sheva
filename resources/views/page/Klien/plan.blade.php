@@ -29,7 +29,32 @@
             <h3 class="mb-4">{{ $project->judul }}</h3>
               
             @foreach ($sections as $section)
-                <div class="row mb-4">
+            
+            <div class="row mb-4">
+                  @if (Auth::user()->role == 1)
+                    <div class="col-md-6">
+                        <p class="font-weight-bold">{{ $section['title'] }}</p>
+                        <div class="border p-3 bg-light">
+                            {!! $section['content'] !!}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <p class="font-weight-bold">Catatan</p>
+                        @if ($data->status == 1)
+                        <textarea name="{{ $section['name'] }}" class="form-control" rows="4" readonly>{{ old($section['name'], $section['note']) }}</textarea>
+                        @else
+                        <textarea name="{{ $section['name'] }}" class="form-control" rows="4">{{ old($section['name'], $section['note']) }}</textarea>
+                        @endif
+                    </div>
+                      
+                    <div class="col-md-3">
+                        <p class="font-weight-bold">Catatan Klien</p>
+
+                      <div class="border p-3 bg-light">
+                        {{ $section['note_klien'] ?? '-' }}
+                      </div>
+                    </div>
+                    @else
                     <div class="col-md-9">
                         <p class="font-weight-bold">{{ $section['title'] }}</p>
                         <div class="border p-3 bg-light">
@@ -44,6 +69,7 @@
                         <textarea name="{{ $section['name'] }}" class="form-control" rows="4">{{ old($section['name'], $section['note']) }}</textarea>
                         @endif
                     </div>
+                    @endif
                 </div>
             @endforeach
             <div class="text-end">

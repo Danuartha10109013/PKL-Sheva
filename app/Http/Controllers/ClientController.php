@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\HistoryM;
 use App\Models\invoiceM;
+use App\Models\NotifKlienM;
 use App\Models\NotifM;
 use App\Models\ProjectM;
 use App\Models\ProjectPlanM;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ClientController
 {
@@ -128,6 +130,14 @@ class ClientController
             'catatan_catatan' => $validatedData['catatan_catatan'] ?? $projectPlan->catatan_catatan,
             'status' => 2,
         ]);
+
+        $notif = new NotifKlienM();
+        $notif->user_id = Auth::user()->id;
+        $notif->project_id = $projectPlan->project_id;
+        $project = ProjectM::find($projectPlan->project_id);
+        $notif->title = 'Klien telah memberikan komentar pada '. $project->judul;
+        $notif->value = 'Silahkan segera periksa komentar dan lakukan tanggapan terhadap komentar';
+        $notif->save();
 
         // Redirect back to the project details page with a success message
         return redirect()->back()

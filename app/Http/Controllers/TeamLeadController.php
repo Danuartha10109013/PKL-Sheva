@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\NotifKlienM;
 use App\Models\ProjectM;
 use App\Models\ProjectPlanM;
 use Illuminate\Http\Request;
@@ -41,19 +42,20 @@ class TeamLeadController
                 ];
             }
         }
-        $sections = array_merge($sections, [
+       $sections = array_merge($sections, [
 
-            ['title' => 'Tim Proyek', 'content' => $data->team_proyek, 'note' => $data->team_proyek_catatantl, 'name' => 'team_proyek_catatan'],
-            ['title' => 'Manajemen Risiko', 'content' => $data->manajemen_proyek, 'note' => $data->manajemen_proyek_catatantl, 'name' => 'manajemen_proyek_catatan'],
-            ['title' => 'Fitur Utama Aplikasi', 'content' => $data->fitur_utama, 'note' => $data->fitur_utama_catatantl, 'name' => 'fitur_utama_catatan'],
-            ['title' => 'Rincian Teknis & Tugas', 'content' => $data->rincian_teknis, 'note' => $data->rincian_teknis_catatantl, 'name' => 'rincian_teknis_catatan'],
-            ['title' => 'Topologi Microservices Cloud Server dengan AWS', 'content' => $data->topologi, 'note' => $data->topologi_catatantl, 'name' => 'topologi_catatan'],
-            ['title' => 'Diagram Arsitektur', 'content' => $data->diagram, 'note' => $data->diagram_catatantl, 'name' => 'diagram_catatan'],
-            ['title' => 'Anggaran Pengerjaan', 'content' => $data->anggaran, 'note' => $data->anggaran_catatantl, 'name' => 'anggaran_catatan'],
-            ['title' => 'Nilai Proyek', 'content' => $data->nilai, 'note' => $data->nilai_catatantl, 'name' => 'nilai_catatan'],
-            ['title' => 'Pernyataan Kesepakatan Dokumen Perencanaan Proyek', 'content' => $data->pernyataan, 'note' => $data->pernyataan_catatantl, 'name' => 'pernyataan_catatan'],
-            ['title' => 'Catatan Tambahan', 'content' => $data->catatan, 'note' => $data->catatan_catatantl, 'name' => 'catatan_catatan'],
+            ['title' => 'Tim Proyek', 'content' => $data->team_proyek, 'note' => $data->team_proyek_catatantl, 'name' => 'team_proyek_catatan', 'note_klien' => $data->team_proyek_catatan],
+            ['title' => 'Manajemen Risiko', 'content' => $data->manajemen_proyek, 'note' => $data->manajemen_proyek_catatantl, 'name' => 'manajemen_proyek_catatan', 'note_klien' => $data->manajemen_proyek_catatan],
+            ['title' => 'Fitur Utama Aplikasi', 'content' => $data->fitur_utama, 'note' => $data->fitur_utama_catatantl, 'name' => 'fitur_utama_catatan', 'note_klien' => $data->fitur_utama_catatan],
+            ['title' => 'Rincian Teknis & Tugas', 'content' => $data->rincian_teknis, 'note' => $data->rincian_teknis_catatantl, 'name' => 'rincian_teknis_catatan', 'note_klien' => $data->rincian_teknis_catatan],
+            ['title' => 'Topologi Microservices Cloud Server dengan AWS', 'content' => $data->topologi, 'note' => $data->topologi_catatantl, 'name' => 'topologi_catatan', 'note_klien' => $data->topologi_catatan],
+            ['title' => 'Diagram Arsitektur', 'content' => $data->diagram, 'note' => $data->diagram_catatantl, 'name' => 'diagram_catatan', 'note_klien' => $data->diagram_catatan],
+            ['title' => 'Anggaran Pengerjaan', 'content' => $data->anggaran, 'note' => $data->anggaran_catatantl, 'name' => 'anggaran_catatan', 'note_klien' => $data->anggaran_catatan],
+            ['title' => 'Nilai Proyek', 'content' => $data->nilai, 'note' => $data->nilai_catatantl, 'name' => 'nilai_catatan', 'note_klien' => $data->nilai_catatan],
+            ['title' => 'Pernyataan Kesepakatan Dokumen Perencanaan Proyek', 'content' => $data->pernyataan, 'note' => $data->pernyataan_catatantl, 'name' => 'pernyataan_catatan', 'note_klien' => $data->pernyataan_catatan],
+            ['title' => 'Catatan Tambahan', 'content' => $data->catatan, 'note' => $data->catatan_catatantl, 'name' => 'catatan_catatan', 'note_klien' => $data->catatan_catatan],
         ]);
+
 
         return view('page.Klien.plan',compact('data','project','sections'));
     }
@@ -111,6 +113,14 @@ class TeamLeadController
             'pernyataan_catatantl' => $validatedData['pernyataan_catatan'] ?? $projectPlan->pernyataan_catatantl,
             'catatan_catatantl' => $validatedData['catatan_catatan'] ?? $projectPlan->catatan_catatantl,
         ]);
+
+         $notif = new NotifKlienM();
+        $notif->user_id = Auth::user()->id;
+        $notif->project_id = $projectPlan->project_id;
+        $project = ProjectM::find($projectPlan->project_id);
+        $notif->title = 'Team Lead telah memberikan komentar pada '. $project->judul;
+        $notif->value = 'Silahkan segera periksa komentar dan lakukan tanggapan terhadap komentar';
+        $notif->save();
 
         // Redirect back to the project details page with a success message
         return redirect()->back()

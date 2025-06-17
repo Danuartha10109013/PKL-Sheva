@@ -34,6 +34,8 @@ Route::middleware([AutoLogout::class])->group(function () {
     });
     
     Route::group(['prefix' => 'pm', 'middleware' => ['pm'], 'as' => 'pm.'], function () {
+        Route::post('/notif/readselected', [DashboardController::class, 'readnotifpm'])->name('notif.readselected');
+        Route::post('/notif/deleteselected', [DashboardController::class, 'deletenotifpm'])->name('notif.deleteselected');
 
         Route::get('/download/{filename}', function ($filename) {
             $filePath = public_path($filename);
@@ -85,6 +87,9 @@ Route::middleware([AutoLogout::class])->group(function () {
     });
     Route::group(['prefix' => 'team_lead', 'middleware' => ['team_lead'], 'as' => 'team_lead.'], function () {
         //Dashboard
+        Route::post('/notif/readselected', [DashboardController::class, 'readnotifpm'])->name('notif.readselected');
+        Route::post('/notif/deleteselected', [DashboardController::class, 'deletenotifpm'])->name('notif.deleteselected');
+
         Route::get('/', [DashboardController::class, 'team_lead'])->name('team_lead');
         Route::prefix('project')->group(function () {
             Route::get('/', [TeamLeadController::class, 'project'])->name('project');
@@ -103,6 +108,8 @@ Route::middleware([AutoLogout::class])->group(function () {
     });
     Route::group(['prefix' => 'finance', 'middleware' => ['finance'], 'as' => 'finance.'], function () {
         //Dashboard
+                Route::post('/notif/readselected', [DashboardController::class, 'readnotif'])->name('notif.readselected');
+        Route::post('/notif/deleteselected', [DashboardController::class, 'deletenotif'])->name('notif.deleteselected');
         Route::get('/', [DashboardController::class, 'finance'])->name('finance');
         Route::prefix('invoice')->group(function () {
             Route::get('/', [FinanceController::class, 'index'])->name('invoice');
@@ -127,6 +134,7 @@ Route::middleware([AutoLogout::class])->group(function () {
         //Dashboard
         Route::get('/', [DashboardController::class, 'klien'])->name('klien');
         Route::post('/notif/readselected', [DashboardController::class, 'readnotif'])->name('notif.readselected');
+        Route::post('/notif/deleteselected', [DashboardController::class, 'deletenotif'])->name('notif.deleteselected');
         Route::prefix('project')->group(function () {
             Route::get('list/{id}', [ClientController::class, 'project'])->name('project.before');
             Route::get('/{id}', [ClientController::class, 'plan'])->name('project');

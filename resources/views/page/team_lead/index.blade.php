@@ -10,17 +10,29 @@ Dashboard
   .scroll-container {
     display: flex;
     overflow-x: auto;
-    white-space: nowrap;
-    padding: 10px;
-    scroll-behavior: smooth;
-    gap: 20px
+    gap: 1.5rem; /* Gap antar card */
+    padding-bottom: 1rem;
   }
+
   .scroll-container::-webkit-scrollbar {
     height: 8px;
   }
+
   .scroll-container::-webkit-scrollbar-thumb {
-    background: #888;
+    background: #ccc;
     border-radius: 4px;
+  }
+
+  .card-utama {
+    min-width: 18rem;
+    max-width: 18rem;
+    flex: 0 0 auto;
+  }
+
+  .card-title, .card-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 </style>
 <div class="row">
@@ -124,78 +136,78 @@ Dashboard
     </div>
   </div>
 </div>
-<div class="container">
-  <div class="row mt-4">
-    <div class="scroll-container">
-      @foreach ($datain as $d)
-      @php
-        $ids = App\Models\ProjectPlanM::where('project_id', $d->id)->value('id');
-      @endphp
-      <div class="col-3 mr-3 d-inline-block">
-        <a href="{{ route('team_lead.project.plan', ['id' => $d->id]) }}">
-          <div class="card" style="width: 18rem;">
-            <img class="card-img-top" src="{{asset('tlb1.png')}}" alt="Card image cap">
+
+<div class="container-fluid px-4 mt-4">
+  {{-- Scrollable Cards Section --}}
+  <div class="row">
+    <div class="d-flex flex-nowrap overflow-auto gap-4">
+      @foreach ($datain->take(8) as $d)
+        @php
+          $ids = App\Models\ProjectPlanM::where('project_id', $d->id)->value('id');
+        @endphp
+        <div class="card card-utama" style="width: 18rem; min-width: 18rem;">
+          <a href="{{ route('team_lead.project.plan', ['id' => $d->id]) }}" class="text-decoration-none text-dark">
+            <img class="card-img-top" src="{{ asset('tlb1.png') }}" alt="Project Image">
             <div class="card-body">
-              <h5 class="card-title">{{$d->judul}}</h5>
+              <h5 class="card-title text-truncate">{{ $d->judul }}</h5>
               @php
                 $plantarget = App\Models\ProjectPlanM::find($ids);
                 $pmname = App\Models\User::where('id', $plantarget->update_by)->value('name');
               @endphp
-              <p class="card-text">Last Time updated {{$d->updated_at->format('H:i:s')}} <br> {{$d->updated_at->format('d-m-Y')}}  By {{$pmname}}</p>
+              <p class="card-text small mb-0">Last updated: {{ $d->updated_at->format('H:i:s') }}</p>
+              <p class="card-text small">On {{ $d->updated_at->format('d-m-Y') }} by {{ $pmname }}</p>
             </div>
-          </div>
-        </a>
-      </div>
+          </a>
+        </div>
       @endforeach
     </div>
   </div>
-</div>
-<div class="card mt-4 mb-4">
-  <div class="card-header pb-0 p-3">
-      <div class="d-flex justify-content-between">
-          <h6 class="mb-2">Project Summary</h6>
-      </div>
-  </div>
-  <div class="table-responsive">
-      <table class="table align-items-center">
-  <thead>
-      <tr>
-          <th>No</th>
-          <th>Judul</th>
-          <th>Customer</th>
-          <th>progres</th>
-          <th>Deadline</th>
-      </tr>
-  </thead>
-  <tbody>
-    @foreach ($datain as $d)
-    <tr>
-        <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$loop->iteration}}</td>
-        <td> &nbsp;&nbsp;&nbsp;&nbsp;{{$d->judul}}</td>
-        <td> &nbsp;&nbsp;&nbsp;&nbsp;
-            {{-- Cari nama customer berdasarkan ID --}}
-            {{ $customer->where('id', $d->customer_id)->pluck('name')->first() ?? 'N/A' }}
-        </td>
-        <td>
-          @php
-            $progresin = App\Models\ProjectM::where('id', $d->id)->value('progres');
-          @endphp 
-           <div class="progress" style="height: 20px; width: 300px;">
-            <div class="progress-bar" role="progressbar" 
-              style="width: {{ $progresin }}%; background-color: #0a3d5f;" 
-              aria-valuenow="{{ $progresin }}" 
-              aria-valuemin="0" 
-              aria-valuemax="100">
-            </div>
-          </div>
-          <span class="ml-2">{{ $progresin }}%</span>
-        
-        </td>
-        <td> &nbsp;&nbsp;&nbsp;&nbsp;{{\Carbon\Carbon::parse($d->end)->format('d-m-Y')}}</td>
-    </tr>
-      @endforeach
-  </tbody>
-</table>
 
+  {{-- Project Summary Table --}}
+  <div class="card mt-5 mb-4">
+    <div class="card-header pb-0 p-3">
+      <h6 class="mb-0">Project Summary</h6>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-striped align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>No</th>
+            <th>Judul</th>
+            <th>Customer</th>
+            <th>Progres</th>
+            <th>Deadline</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach ($datain as $d)
+            @php
+              $progress = App\Models\ProjectM::where('id', $d->id)->value('progres');
+              $customerName = $customer->where('id', $d->customer_id)->pluck('name')->first() ?? 'N/A';
+            @endphp
+            <tr>
+              <td>{{ $loop->iteration }}</td>
+              <td class="text-truncate" style="max-width: 200px;">{{ $d->judul }}</td>
+              <td>{{ $customerName }}</td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <div class="progress flex-grow-1" style="height: 20px;">
+                    <div class="progress-bar" role="progressbar"
+                      style="width: {{ $progress }}%; background-color: #0a3d5f;"
+                      aria-valuenow="{{ $progress }}" aria-valuemin="0" aria-valuemax="100">
+                    </div>
+                  </div>
+                  <small>{{ $progress }}%</small>
+                </div>
+              </td>
+              <td>{{ \Carbon\Carbon::parse($d->end)->format('d-m-Y') }}</td>
+            </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
   </div>
+</div>
+
 @endsection

@@ -26,7 +26,7 @@
 
         @if ($role == 3)
             @php
-                $notif = \App\Models\NotifM::where('user_id', Auth::id())
+                $notif = \App\Models\NotifM::where('hapus', 0)->where('user_id', Auth::id())
                             ->orderBy('created_at','desc')
                             ->where('invoice_id',null)
                             ->get();
@@ -34,56 +34,222 @@
             @endphp
         @elseif ($role == 2)
             @php
-                $notif = \App\Models\NotifM::whereNotNull('invoice_id')
+                $notif = \App\Models\NotifM::where('hapus_finance',0)->whereNotNull('invoice_id')
                             ->orderBy('created_at','desc')
                             ->get();
-                $baru = $notif->where('status', 0)->count();
+                $baru = $notif->where('status_finance', 0)->count();
+            @endphp
+        @elseif ($role == 0)
+            @php
+              $notif = \App\Models\NotifKlienM::where('hapus',0)->orderBy('created_at','desc')->get();
+              $baru = $notif->where('status',0)->count();
+            @endphp
+        @elseif ($role == 1)
+            @php
+
+              $allNotif = \App\Models\NotifKlienM::where('hapus_tl',0)->orderBy('created_at', 'desc')->get();
+
+              $notif = $allNotif->filter(function ($n) {
+                  $user = \App\Models\User::find($n->user_id);
+                  return $user && $user->role != 1;
+              });
+              $baru = $notif->where('status_tl',0)->count();
             @endphp
         @endif
 
         @if ($role == 3 || $role == 2)
-            <li class="nav-item dropdown" style="margin-right: 1em">
-                <a class="nav-link dropdown-toggle position-relative text-white" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-bell"></i>
-                    @if ($baru > 0)
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            {{ $baru }}
-                            <span class="visually-hidden">unread messages</span>
-                        </span>
-                    @endif
-                </a>
+          <li class="nav-item dropdown" style="margin-right: 1em">
+              <a class="nav-link dropdown-toggle position-relative text-white" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="fas fa-bell"></i>
+                  @if ($baru > 0)
+                      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                          {{ $baru }}
+                          <span class="visually-hidden">unread messages</span>
+                      </span>
+                  @endif
+              </a>
 
-                <ul class="dropdown-menu dropdown-menu-end p-2" style="width: 320px;" aria-labelledby="notifDropdown">
-                    <form action="{{ route('klien.notif.readselected') }}" method="POST">
-                        @csrf
-                        <li>
-                            <button type="submit" class="btn btn-sm btn-primary w-100 mb-2">Tandai Telah Dibaca</button>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
+              <ul class="dropdown-menu dropdown-menu-end p-2" style="width: 320px;" aria-labelledby="notifDropdown">
+                  <form action="{{ $role == 3 ? route('klien.notif.readselected') : route('finance.notif.readselected') }}" method="POST" id="notifForm">
+                      @csrf
+                      <li class="d-flex gap-2">
+                          <button type="submit" class="btn btn-sm btn-primary w-100 mb-2" id="btn-read" disabled>Tandai Telah Dibaca</button>
+                          <button formaction="{{ $role == 3 ? route('klien.notif.deleteselected') : route('finance.notif.deleteselected') }}" type="submit" class="btn btn-sm btn-danger w-100 mb-2" id="btn-delete" disabled>Hapus</button>
+                      </li>
+                      <li><hr class="dropdown-divider"></li>
 
-                        @forelse ($notif as $n)
-                            @php
-                                $readClass = $n->status == 1 ? 'text-muted opacity-75' : 'fw-bold';
-                                $link = $role == 3
-                                    ? route('klien.project', $n->project_id)
-                                    : route('finance.invoice', ['id' => $n->invoice_id]);
+                      @forelse ($notif as $n)
+                          @php
+                              $readClass = $role == 3 
+                                ? ($n->status == 1 ? 'text-muted opacity-75' : 'fw-bold') 
+                                : ($n->status_finance == 1 ? 'text-muted opacity-75' : 'fw-bold');
+                              $link = $role == 3
+                                  ? route('klien.project', $n->project_id)
+                                  : route('finance.invoice', ['id' => $n->invoice_id]);
+                          @endphp
+                          <li class="form-check mb-2">
+                              <input class="form-check-input notif-checkbox-main" type="checkbox" name="notif_ids[]" value="{{ $n->id }}" id="notif{{ $n->id }}">
+                              <label class="form-check-label w-100" for="notif{{ $n->id }}">
+                                  <a href="{{ $link }}" class="text-decoration-none d-block {{ $readClass }}">
+                                      <div>{{ $n->title }}</div>
+                                      <small>{{ $n->value }}</small>
+                                  </a>
+                              </label>
+                          </li>
+                      @empty
+                          <li class="dropdown-item text-muted">Tidak ada notifikasi</li>
+                      @endforelse
+                  </form>
+              </ul>
+          </li>
+            <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const checkboxes = document.querySelectorAll('.notif-checkbox-main');
+                const btnRead = document.getElementById('btn-read');
+                const btnDelete = document.getElementById('btn-delete');
 
-                            @endphp
-                            <li class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" name="notif_ids[]" value="{{ $n->id }}" id="notif{{ $n->id }}">
-                                <label class="form-check-label w-100" for="notif{{ $n->id }}">
-                                    <a href="{{ $link }}" class="text-decoration-none d-block {{ $readClass }}">
-                                        <div>{{ $n->title }}</div>
-                                        <small>{{ $n->value }}</small>
-                                    </a>
-                                </label>
-                            </li>
-                        @empty
-                            <li class="dropdown-item text-muted">Tidak ada notifikasi</li>
-                        @endforelse
-                    </form>
-                </ul>
-            </li>
+                function toggleButtons() {
+                    const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+                    btnRead.disabled = !anyChecked;
+                    btnDelete.disabled = !anyChecked;
+                }
+
+                checkboxes.forEach(cb => cb.addEventListener('change', toggleButtons));
+                toggleButtons();
+            });
+            </script>
+
+        @elseif($role == 0)
+           <li class="nav-item dropdown" style="margin-right: 1em">
+              <a class="nav-link dropdown-toggle position-relative text-white" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="fas fa-bell"></i>
+                  @if ($baru > 0)
+                      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                          {{ $baru }}
+                          <span class="visually-hidden">unread messages</span>
+                      </span>
+                  @endif
+              </a>
+
+              <ul class="dropdown-menu dropdown-menu-end p-2" style="width: 320px;" aria-labelledby="notifDropdown">
+                  <form method="POST" id="notifForm">
+                      @csrf
+                      <li class="d-flex justify-content-between mb-2">
+                          <button type="submit" id="markReadBtn-pm" formaction="{{ route('pm.notif.readselected') }}" class="btn btn-sm btn-primary w-50 me-1" disabled>
+                              Tandai Dibaca
+                          </button>
+                          <button type="submit" id="deleteBtn-pm" formaction="{{ route('pm.notif.deleteselected') }}" class="btn btn-sm btn-danger w-50 ms-1" disabled
+                                  onclick="return confirm('Yakin ingin menghapus notifikasi terpilih?')">
+                              Hapus
+                          </button>
+                      </li>
+                      <li><hr class="dropdown-divider"></li>
+
+                      @forelse ($notif as $n)
+                          @php
+                              $readClass = $n->status_tl == 1 ? 'text-muted opacity-75' : 'fw-bold';
+                              $link = $role == 3
+                                  ? route('klien.project', $n->project_id)
+                                  : route('finance.invoice', ['id' => $n->invoice_id]);
+                          @endphp
+                          <li class="form-check mb-2">
+                              <input class="form-check-input notif-checkbox-pm" type="checkbox" name="notif_ids[]" value="{{ $n->id }}" id="notif{{ $n->id }}">
+                              <label class="form-check-label w-100" for="notif{{ $n->id }}">
+                                  <a href="{{ route('pm.k-project.communication', $n->project_id) }}" class="text-decoration-none d-block {{ $readClass }}">
+                                      <div>{{ $n->title }}</div>
+                                      <small>{{ $n->value }}</small>
+                                  </a>
+                              </label>
+                          </li>
+                      @empty
+                          <li class="dropdown-item text-muted">Tidak ada notifikasi</li>
+                      @endforelse
+                  </form>
+              </ul>
+          </li>
+
+          <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const checkboxes = document.querySelectorAll('.notif-checkbox-pm');
+                const markReadBtn = document.getElementById('markReadBtn-pm');
+                const deleteBtn = document.getElementById('deleteBtn-pm');
+
+                function toggleButtons() {
+                    const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+                    markReadBtn.disabled = !anyChecked;
+                    deleteBtn.disabled = !anyChecked;
+                }
+
+                checkboxes.forEach(cb => cb.addEventListener('change', toggleButtons));
+                toggleButtons();
+            });
+            </script>
+        @elseif($role == 1)
+           <li class="nav-item dropdown" style="margin-right: 1em">
+              <a class="nav-link dropdown-toggle position-relative text-white" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="fas fa-bell"></i>
+                  @if ($baru > 0)
+                      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                          {{ $baru }}
+                          <span class="visually-hidden">unread messages</span>
+                      </span>
+                  @endif
+              </a>
+
+              <ul class="dropdown-menu dropdown-menu-end p-2" style="width: 320px;" aria-labelledby="notifDropdown">
+                  <form method="POST" id="notifForm">
+                      @csrf
+                      <li class="d-flex justify-content-between mb-2">
+                          <button type="submit" id="markReadBtn-tl" formaction="{{ route('team_lead.notif.readselected') }}" class="btn btn-sm btn-primary w-50 me-1" disabled>
+                              Tandai Dibaca
+                          </button>
+                          <button type="submit" id="deleteBtn-tl" formaction="{{ route('team_lead.notif.deleteselected') }}" class="btn btn-sm btn-danger w-50 ms-1" disabled
+                                  onclick="return confirm('Yakin ingin menghapus notifikasi terpilih?')">
+                              Hapus
+                          </button>
+                      </li>
+                      <li><hr class="dropdown-divider"></li>
+
+                      @forelse ($notif as $n)
+                          @php
+                              $readClass = $n->status == 1 ? 'text-muted opacity-75' : 'fw-bold';
+                              $link = $role == 3
+                                  ? route('klien.project', $n->project_id)
+                                  : route('finance.invoice', ['id' => $n->invoice_id]);
+                          @endphp
+                          <li class="form-check mb-2">
+                              <input class="form-check-input notif-checkbox-tl" type="checkbox" name="notif_ids[]" value="{{ $n->id }}" id="notif{{ $n->id }}">
+                              <label class="form-check-label w-100" for="notif{{ $n->id }}">
+                                  <a href="{{ route('team_lead.project.plan', $n->project_id) }}" class="text-decoration-none d-block {{ $readClass }}">
+                                      <div>{{ $n->title }}</div>
+                                      <small>{{ $n->value }}</small>
+                                  </a>
+                              </label>
+                          </li>
+                      @empty
+                          <li class="dropdown-item text-muted">Tidak ada notifikasi</li>
+                      @endforelse
+                  </form>
+              </ul>
+          </li>
+
+          <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const checkboxes = document.querySelectorAll('.notif-checkbox-tl');
+                const markReadBtn = document.getElementById('markReadBtn-tl');
+                const deleteBtn = document.getElementById('deleteBtn-tl');
+
+                function toggleButtons() {
+                    const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+                    markReadBtn.disabled = !anyChecked;
+                    deleteBtn.disabled = !anyChecked;
+                }
+
+                checkboxes.forEach(cb => cb.addEventListener('change', toggleButtons));
+                toggleButtons();
+            });
+            </script>
+
         @endif
 
 

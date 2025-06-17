@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\NotifKlienM;
 use App\Models\NotifM;
 use App\Models\ProjectM;
 use App\Models\User;
@@ -18,12 +19,115 @@ class DashboardController
         'notif_ids.*' => 'integer|exists:notification,id',
     ]);
 
-    // Update the status to 1 (read)
-    NotifM::whereIn('id', $request->notif_ids)
-        ->where('user_id', Auth::user()->id) // Ensure users can only update their own notifs
-        ->update(['status' => 1]);
+    if(Auth::user()->role == 3){
+        foreach($request->notif_ids as $n){
+            $notif = NotifM::find($n);
+            $notif->status = 1;
+            $notif->save();
+        }
+    }else{
+        
+        foreach($request->notif_ids as $n){
+            $notif = NotifM::find($n);
+            $notif->status_finance = 1;
+            $notif->save();
+        }
+    }
+    
 
     return back()->with('success', 'Notifikasi berhasil ditandai sebagai telah dibaca.');
+}
+    public function deletenotif(Request $request)
+{
+    // dd(Auth::user()->role);
+    // Validate that 'notif_ids' is an array
+    $request->validate([
+        'notif_ids' => 'required|array',
+        'notif_ids.*' => 'integer|exists:notification,id',
+    ]);
+    if(Auth::user()->role == 3){
+
+        foreach($request->notif_ids as $n){
+            $notif = NotifM::find($n);
+            $notif->hapus = 1;
+            $notif->save();
+        }
+    }else{
+
+        foreach($request->notif_ids as $n){
+            $notif = NotifM::find($n);
+            $notif->hapus_finance = 1;
+            $notif->save();
+        }
+    }
+    
+
+    return back()->with('success', 'Notifikasi berhasil dihapus.');
+}
+    public function readnotifpm(Request $request)
+{
+    // dd($request->all());
+    // Validate that 'notif_ids' is an array
+    $request->validate([
+    'notif_ids' => 'required|array',
+    'notif_ids.*' => 'integer|exists:notification,id',
+]);
+
+// Update the status to 1 (read)
+if(Auth::user()->role == 1){
+
+    foreach ($request->notif_ids as $n) {
+        $notif = NotifKlienM::find($n);
+        if ($notif) {
+            $notif->status_tl = 1;
+            $notif->save();
+        }
+    }
+}else{
+    foreach ($request->notif_ids as $n) {
+        $notif = NotifKlienM::find($n);
+        if ($notif) {
+            $notif->status = 1;
+            $notif->save();
+        }
+    }
+
+}
+
+
+    return back()->with('success', 'Notifikasi berhasil ditandai sebagai telah dibaca.');
+}
+    public function deletenotifpm(Request $request)
+{
+    // dd($request->all());
+    // Validate that 'notif_ids' is an array
+    $request->validate([
+    'notif_ids' => 'required|array',
+    'notif_ids.*' => 'integer|exists:notification,id',
+]);
+if(Auth::user()->role == 1){
+
+    foreach ($request->notif_ids as $n) {
+        $notif = NotifKlienM::find($n);
+        if ($notif) {
+            $notif->hapus_tl = 1;
+            $notif->save();
+        }
+    }
+}else{
+
+    foreach ($request->notif_ids as $n) {
+        $notif = NotifKlienM::find($n);
+        if ($notif) {
+            $notif->hapus = 1;
+            $notif->save();
+        }
+    }
+}
+// Update the status to 1 (read)
+
+
+    return back()->with('success', 'Notifikasi berhasil dihapus');
 }
     public function projectManager ()
     {
