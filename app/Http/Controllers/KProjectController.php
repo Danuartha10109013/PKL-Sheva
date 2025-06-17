@@ -7,6 +7,7 @@ use App\Mail\LaunchMail;
 use App\Models\ChatM;
 use App\Models\forumM;
 use App\Models\invoiceM;
+use App\Models\NotifKlienM;
 use App\Models\NotifM;
 use App\Models\PostM;
 use App\Models\ProjectM;
@@ -396,6 +397,14 @@ class KProjectController
                 $notif->project_id = $data->id;
                 // $notif->invoice_id = $invoice;
                 $notif->save();
+                $notifs = new NotifKlienM();
+                $notifs->user_id = $data->customer_id;
+                $notifs->status = 2;
+                $notifs->title = 'Project '. $data->judul . ' Has Been Launched';
+                $notifs->value = 'Silahkan periksa detail project plan dan lakukan komentar serta persetujuan project plan';
+                $notifs->project_id = $data->id;
+                // $notifs->invoice_id = $invoice;
+                $notifs->save();
 
                 return redirect()->back()->with('success', 'Your project has been launched.');
             } else {

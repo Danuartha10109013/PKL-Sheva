@@ -41,7 +41,7 @@
             @endphp
         @elseif ($role == 0)
             @php
-              $notif = \App\Models\NotifKlienM::where('hapus',0)->orderBy('created_at','desc')->get();
+              $notif = \App\Models\NotifKlienM::where('hapus',0)->where('status','!=',2)->orderBy('created_at','desc')->get();
               $baru = $notif->where('status',0)->count();
             @endphp
         @elseif ($role == 1)
@@ -147,7 +147,7 @@
 
                       @forelse ($notif as $n)
                           @php
-                              $readClass = $n->status_tl == 1 ? 'text-muted opacity-75' : 'fw-bold';
+                              $readClass = $n->status == 1 ? 'text-muted opacity-75' : 'fw-bold';
                               $link = $role == 3
                                   ? route('klien.project', $n->project_id)
                                   : route('finance.invoice', ['id' => $n->invoice_id]);
@@ -212,7 +212,7 @@
 
                       @forelse ($notif as $n)
                           @php
-                              $readClass = $n->status == 1 ? 'text-muted opacity-75' : 'fw-bold';
+                              $readClass = $n->status_tl == 1 ? 'text-muted opacity-75' : 'fw-bold';
                               $link = $role == 3
                                   ? route('klien.project', $n->project_id)
                                   : route('finance.invoice', ['id' => $n->invoice_id]);
