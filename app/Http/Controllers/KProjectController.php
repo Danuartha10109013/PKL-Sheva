@@ -264,6 +264,7 @@ class KProjectController
     }
     public function update_plan_revision(Request $request,$id){
         // Validate incoming request data
+        // dd($request->all());
         $request->validate([
             'pengantar' => 'string|nullable',
             'ringkasan' => 'string|nullable',
@@ -315,7 +316,7 @@ class KProjectController
             'start' => $request->start[$index] ?? null,
             'end' => $request->end[$index] ?? null,
             'description' => $request->fase_1[$index] ?? null,
-            'status' =>  $fase[$index]->status,
+            'status' =>  $fase[$index]->status ?? null,
             'note' =>  $fase[$index]->note ?? null,
             'notes' =>  $fase[$index]->notes ?? null,
             ];
