@@ -256,6 +256,7 @@ class KProjectController
             'notes' =>  null,
             ];
         }
+        
         $projectPlan->fase = json_encode($faseData); // Simpan dalam kolom JSON
         $projectPlan->save();
 
