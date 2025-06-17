@@ -29,7 +29,7 @@
             </tr>
             <tr>
                 <td><strong>Team Leader:</strong></td>
-                <td>{{ $tl->name ' Team Leader'}}</td>
+                <td>{{ $tl->name ?? ' Team Leader'}}</td>
             </tr>
             <tr>
                 <td><strong>Tanggal Mulai:</strong></td>
