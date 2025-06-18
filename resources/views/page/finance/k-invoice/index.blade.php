@@ -238,7 +238,7 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="alamat" class="form-label">Alamat</label>
-                                                                <textarea class="form-control" id="alamat" name="alamat" placeholder="Masukan Alamat" required>{{ $invoice->alamat }}</textarea>
+                                                                <textarea class="form-control" id="alamat" name="alamat" placeholder="Masukan Alamat Klien" required>{{ $invoice->alamat }}</textarea>
                                                             </div>
                                                             
                                                             <div class="mb-3">

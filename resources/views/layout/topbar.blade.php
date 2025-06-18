@@ -155,7 +155,7 @@
                           <li class="form-check mb-2">
                               <input class="form-check-input notif-checkbox-pm" type="checkbox" name="notif_ids[]" value="{{ $n->id }}" id="notif{{ $n->id }}">
                               <label class="form-check-label w-100" for="notif{{ $n->id }}">
-                                  <a href="{{ route('pm.k-project.communication', $n->project_id) }}" class="text-decoration-none d-block {{ $readClass }}">
+                                  <a href="{{ route('pm.k-project.plan', $n->project_id) }}" class="text-decoration-none d-block {{ $readClass }}">
                                       <div>{{ $n->title }}</div>
                                       <small>{{ $n->value }}</small>
                                   </a>

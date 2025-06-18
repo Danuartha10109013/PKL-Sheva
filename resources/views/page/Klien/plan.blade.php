@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <p class="font-weight-bold">Catatan</p>
+                        <p class="font-weight-bold">Komentar</p>
                         @if ($data->status == 1)
                         <textarea name="{{ $section['name'] }}" class="form-control" rows="4" readonly>{{ old($section['name'], $section['note']) }}</textarea>
                         @else
@@ -48,7 +48,7 @@
                     </div>
                       
                     <div class="col-md-3">
-                        <p class="font-weight-bold">Catatan Klien</p>
+                        <p class="font-weight-bold">Komentar Klien</p>
 
                       <div class="border p-3 bg-light">
                         {{ $section['note_klien'] ?? '-' }}
@@ -62,7 +62,7 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <p class="font-weight-bold">Catatan</p>
+                        <p class="font-weight-bold">Komentar</p>
                         @if ($data->status == 1)
                         <textarea name="{{ $section['name'] }}" class="form-control" rows="4" readonly>{{ old($section['name'], $section['note']) }}</textarea>
                         @else
@@ -75,7 +75,7 @@
             <div class="text-end">
               @if ($data->status == 1)
               @else
-              <button type="submit" class="btn btn-success">Save Changes</button>
+              <button type="submit" class="btn btn-success">Kirim Komentar</button>
               @endif
             </div>
           </div>
@@ -83,11 +83,11 @@
             @if (Auth::user()->role == 3)
               @if ($data->status == 1)
               @else
-                <a href="#" data-id="{{ $data->id }}" class="btn btn-primary" id="approveBtn"><i class="fa fa-check"></i> Approve Project Plan</a>
+                <a href="#" data-id="{{ $data->id }}" class="btn btn-primary" id="approveBtn"><i class="fa fa-check"></i> Setujui Project Plan</a>
               @endif
             @endif
         @else
-        <p class="text-center text-warning">The Document is in Progres</p>
+        <p class="text-center text-warning">Dokumen Sedang Disiapkan</p>
         @endif
             
 
@@ -101,15 +101,15 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="confirmationModalLabel">Confirm Approval</h5>
+          <h5 class="modal-title" id="confirmationModalLabel">Konfirmasi Persetujuan</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          Are you sure you want to approve the project plan?
+          Apakah anda yakin ingin menyetujui project plan ini?
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <a id="confirmBtn" href="#" class="btn btn-primary">Approve</a>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+          <a id="confirmBtn" href="#" class="btn btn-primary">Setujui</a>
         </div>
       </div>
     </div>

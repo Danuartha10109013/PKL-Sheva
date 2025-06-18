@@ -9,7 +9,7 @@ Detail Project Plan
 <div class="card">
     <div class="card-header pb-0">
         <div class="d-flex justify-content-between">
-            <h6 class="">Detail Of Project Plan No Dokumen : {{$data->no_projec_plan}}</h6>
+            <h6 class="">Isi Konten Project Plan No Dokumen : {{$data->no_projec_plan}}</h6>
             @if (Auth::user()->role == 1)
             <a href="{{route('team_lead.project.print',$project->id)}}" class="btn btn-primary"><i class="fa fa-download"></i> Download</a>
             @elseif (Auth::user()->role == 0)

@@ -141,13 +141,20 @@ class ClientController
 
         // Redirect back to the project details page with a success message
         return redirect()->back()
-                         ->with('success', 'Project Plan updated successfully!');
+                         ->with('success', 'Komentar berhasil Ditambahkan!');
     }
 
     public function setuju ($id){
         $data = ProjectPlanM::find($id);
         // dd($data);
         $data->status = 1 ;
+        $project = ProjectM::find($data->project_id);
+        $notif = new NotifKlienM();
+        $notif->user_id = Auth::user()->id;
+        $notif->title = "Project ".$project->judul." Telah Disetujui Oleh Klien";
+        $notif->value = "Silahkan Lakukan Perkembangan terkait projectnya";
+        $notif->project_id = $data->project_id;
+        $notif->save();
         $data->save();
         return redirect()->back()->with('success','Project Plan has Approved');
     }

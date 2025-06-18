@@ -61,7 +61,7 @@ Dashboard
         <div class="row">
           <div class="col-8">
             <div class="numbers">
-              <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Clients</p>
+              <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Klien</p>
               <h5 class="font-weight-bolder">
                 {{-- {{$client}} --}}
                 @php
@@ -152,8 +152,8 @@ Dashboard
             <div class="card-body">
               <h5 class="card-title text-truncate">{{ $d->judul }}</h5>
               <p class="card-text text-truncate">
-                Last updated {{ $d->updated_at->format('H:i:s') }}<br>
-                {{ $d->updated_at->format('d-m-Y') }} by {{ $pmname }}
+                Terakhir Diubah {{ $d->updated_at->format('H:i:s') }}<br>
+                {{ $d->updated_at->format('d-m-Y') }} oleh {{ $pmname }}
               </p>
             </div>
           </a>
@@ -167,7 +167,7 @@ Dashboard
   <div class="card">
     <div class="card-header pb-0 p-3">
       <div class="d-flex justify-content-between">
-        <h6 class="mb-2">Project Summary</h6>
+        <h6 class="mb-2">Ringkasan Proyek</h6>
       </div>
     </div>
 
@@ -177,9 +177,9 @@ Dashboard
           <tr>
             <th scope="col">No</th>
             <th scope="col">Judul</th>
-            <th scope="col">Customer</th>
-            <th scope="col">Progress</th>
-            <th scope="col">Deadline</th>
+            <th scope="col">Klien</th>
+            <th scope="col">Progres</th>
+            <th scope="col">Batas Waktu</th>
           </tr>
         </thead>
         <tbody>

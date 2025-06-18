@@ -73,10 +73,11 @@ class KProgresController
     $completion_percentage = $total_tasks > 0 ? ($completed_phase_1 / $total_tasks) * 100 : 0; // Persentase penyelesaian
     // dd($completion_percentage);
     $pjct= ProjectM::find($id);
+    $kliens = User::find($pjct->customer_id);
     $pjct->progres = $completion_percentage;
     $inn = invoiceM::where('project_id',$plan->project_id)->first();
     if($plan->status == 0 || $plan->status == 2){
-        return redirect()->back()->with('error','Project Plan Belum Disetujui');
+        return redirect()->back()->with('error','Project Plan Belum Disetujui Oleh Klien : '.$kliens->name);
     }
    
     if($completion_percentage >= 60 && $completion_percentage < 90){

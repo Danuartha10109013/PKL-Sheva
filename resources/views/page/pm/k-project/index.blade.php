@@ -84,9 +84,9 @@ Kelola Poject Plan
                   </a>
 
               @else
-                  <a href="{{ route('pm.k-project.communication', $d->id) }}" class="btn btn-light" data-bs-toggle="tooltip" title="Comment Project">
+                  {{-- <a href="{{ route('pm.k-project.communication', $d->id) }}" class="btn btn-light" data-bs-toggle="tooltip" title="Comment Project">
                       <i class="fa-solid fa-people-arrows"></i> 
-                  </a>
+                  </a> --}}
                   {{-- @php
                       $planss = \App\Models\ProjectPlanM::where('project_id', $d->id)->value('status');
                   @endphp
