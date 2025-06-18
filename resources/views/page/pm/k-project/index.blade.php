@@ -263,11 +263,11 @@ Kelola Poject Plan
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="judul" class="form-label">Project Title</label>
+                        <label for="judul" class="form-label">Project Title<small class="text-danger">*</small></label>
                         <input type="text" class="form-control" id="judul" name="judul" required>
                     </div>
                     <div class="mb-3">
-                        <label for="customer" class="form-label">Customer</label>
+                        <label for="customer" class="form-label">Customer<small class="text-danger">*</small></label>
                         <select type="text" class="form-control" id="customer" name="customer" required>
                             <option value="" selected disabled>--Pilih Customer Or Add New</option>
                             @foreach ($customer as $c)
@@ -276,7 +276,7 @@ Kelola Poject Plan
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="customer" class="form-label">Team Lead</label>
+                        <label for="customer" class="form-label">Team Lead<small class="text-danger">*</small></label>
                         <select type="text" class="form-control" id="customer" name="team_leader" required>
                             <option value="" selected disabled>--Pilih Team Lead Or Add New</option>
                             @foreach ($team_leader as $tl)
@@ -285,15 +285,15 @@ Kelola Poject Plan
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="start" class="form-label">Start Date</label>
+                        <label for="start" class="form-label">Start Date<small class="text-danger">*</small></label>
                         <input type="date" class="form-control" id="start" name="start" >
                     </div>
                     <div class="mb-3">
-                        <label for="end" class="form-label">End Date</label>
+                        <label for="end" class="form-label">End Date<small class="text-danger">*</small></label>
                         <input type="date" class="form-control" id="end" name="end" >
                     </div>
                     <div class="mb-3">
-                      <label for="biaya" class="form-label">Total Cost</label>
+                      <label for="biaya" class="form-label">Total Cost<small class="text-danger">*</small></label>
                       <input type="text" class="form-control" id="biaya" name="biaya_display">
                       <input type="hidden" id="biaya_hidden" name="biaya">
                   </div>
