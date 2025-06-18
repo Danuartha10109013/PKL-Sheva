@@ -124,6 +124,6 @@ class TeamLeadController
 
         // Redirect back to the project details page with a success message
         return redirect()->back()
-                         ->with('success', 'Komentar telah berhasil ditambahkan!');
+                         ->with('success', 'Komentar telah berhasil dikirimkan!');
     }
 }

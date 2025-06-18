@@ -141,7 +141,7 @@ class ClientController
 
         // Redirect back to the project details page with a success message
         return redirect()->back()
-                         ->with('success', 'Komentar berhasil Ditambahkan!');
+                         ->with('success', 'Komentar berhasil Dikirimkan!');
     }
 
     public function setuju ($id){

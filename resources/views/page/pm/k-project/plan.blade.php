@@ -53,7 +53,13 @@ Detail Project Plan
                     </button>
                     <small class="text-danger ms-1">* Simpan Dokumen Terlebih Dahulu Sebelum Menghasilkan Tautan Gambar</small>
                 </div>
+                @php
+                    $shows = \App\Models\ProjectM::find($data->project_id);
+                @endphp
+                @if ($shows->launch == 1)
+                    
                 <a href="javascript:void(0);" class="btn btn-info" onclick="toggleComments()">Perlihatkan Komentar</a>
+                @endif
             </div>
 
 
