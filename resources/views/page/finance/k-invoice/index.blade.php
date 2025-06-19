@@ -376,12 +376,17 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                             $inv = \App\Models\InvoiceM::where('project_id',$d->id)->value('id');
                                             $invoice = \App\Models\InvoiceM::find($inv);
                                             // dd($d->progres);
+
                                         @endphp
                                         @if (!empty($invoice->{'30'}))
                                             &nbsp;&nbsp;&nbsp;&nbsp;{{ $invoice->{'30'} }}
+                                            @if ($invoice->bukti_pembayaran_30)
+                                            <br> &nbsp;&nbsp;&nbsp;&nbsp;
+                                                <img src="{{asset('storage/'.$invoice->bukti_pembayaran_30)}}" width="90%" alt="Bukti">
+                                            @endif
                                         @else
                                             &nbsp;&nbsp;&nbsp;&nbsp;{!! $d->progres < 30 ? 'Progres 30% belum tercapai,<br>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;Tagihan Belum Dikirim' : 'Tagihan Belum Dibayar' !!}
+                                            &nbsp;&nbsp;&nbsp;&nbsp;Tagihan Belum Dikirim' : ($invoice->bukti_pembayaran_30 ? 'Bukti telah dikirim' :'Tagihan Belum Dibayar')  !!}
 
                                             <br>
                                             &nbsp;&nbsp;&nbsp;
@@ -393,6 +398,10 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                                 {{ $d->progres < 30 ? 'onclick=return false;' : '' }}>
                                                 Konfirmasi
                                             </a>
+                                            @if ($invoice->bukti_pembayaran_30)
+                                            <br> &nbsp;&nbsp;&nbsp;&nbsp;
+                                                <img src="{{asset('storage/'.$invoice->bukti_pembayaran_30)}}" width="90%" alt="Bukti">
+                                            @endif
                                         <style>
                                             .disabled-link {
                                             pointer-events: none;
@@ -434,9 +443,13 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                     <td>
                                         @if (!empty($invoice->{'60'}))
                                             &nbsp;&nbsp;&nbsp;&nbsp;{{ $invoice->{'60'} }}
+                                            @if ($invoice->bukti_pembayaran_60)
+                                            <br> &nbsp;&nbsp;&nbsp;&nbsp;
+                                                <img src="{{asset('storage/'.$invoice->bukti_pembayaran_60)}}" width="90%" alt="Bukti">
+                                            @endif
                                         @else
                                             &nbsp;&nbsp;&nbsp;&nbsp;{!! $d->progres < 60 ? 'Progres 60% belum tercapai,<br>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;Tagihan Belum Dikirim' : 'Tagihan Belum Dibayar' !!}
+                                            &nbsp;&nbsp;&nbsp;&nbsp;Tagihan Belum Dikirim' : ($invoice->bukti_pembayaran_60 ? 'Bukti telah dikirim' :'Tagihan Belum Dibayar') !!}
                                             <br>
                                             &nbsp;&nbsp;&nbsp;
                                             {{-- <a href="#" class="text text-danger" data-bs-toggle="modal" data-bs-target="#confirmModal60{{ $invoice->id }}">
@@ -450,6 +463,10 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                                 {{ $d->progres < 60 ? 'onclick=return false;' : '' }}>
                                                 Konfirmasi
                                             </a>
+                                            @if ($invoice->bukti_pembayaran_60)
+                                            <br> &nbsp;&nbsp;&nbsp;&nbsp;
+                                                <img src="{{asset('storage/'.$invoice->bukti_pembayaran_60)}}" width="90%" alt="Bukti">
+                                            @endif
                                         @endif
                                         <div class="modal fade" id="confirmModal60{{$invoice->id}}" tabindex="-1" aria-labelledby="confirmModal60Label{{$invoice->id}}" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered">
@@ -481,9 +498,13 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                     <td>
                                         @if (!empty($invoice->{'90'}))
                                             &nbsp;&nbsp;&nbsp;&nbsp;{{ $invoice->{'90'} }}
+                                            @if ($invoice->bukti_pembayaran_90)
+                                            <br> &nbsp;&nbsp;&nbsp;&nbsp;
+                                                <img src="{{asset('storage/'.$invoice->bukti_pembayaran_90)}}" width="90%" alt="Bukti">
+                                            @endif
                                         @else
                                             &nbsp;&nbsp;&nbsp;&nbsp;{!! $d->progres < 90 ? 'Progres 90% belum tercapai,<br>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;Tagihan Belum Dikirim' : 'Tagihan Belum Dibayar' !!}
+                                            &nbsp;&nbsp;&nbsp;&nbsp;Tagihan Belum Dikirim' : ($invoice->bukti_pembayaran_90 ? 'Bukti telah dikirim' :'Tagihan Belum Dibayar') !!}
                                             <br>
                                             &nbsp;&nbsp;&nbsp;
                                             {{-- <a href="#" class="text text-danger" data-bs-toggle="modal" data-bs-target="#confirmModal90{{ $invoice->id }}">
@@ -497,6 +518,10 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                                 {{ $d->progres < 90 ? 'onclick=return false;' : '' }}>
                                                 Konfirmasi
                                             </a>
+                                            @if ($invoice->bukti_pembayaran_90)
+                                            <br> &nbsp;&nbsp;&nbsp;&nbsp;
+                                                <img src="{{asset('storage/'.$invoice->bukti_pembayaran_90)}}" width="90%" alt="Bukti">
+                                            @endif
                                         @endif
                                         <div class="modal fade" id="confirmModal90{{$d->id}}" tabindex="-1" aria-labelledby="confirmModal90Label{{$d->id}}" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered">
@@ -528,9 +553,13 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                     <td>
                                         @if (!empty($invoice->{'100'}))
                                             &nbsp;&nbsp;&nbsp;&nbsp;{{ $invoice->{'100'} }}
+                                            @if ($invoice->bukti_pembayaran_100)
+                                            <br> &nbsp;&nbsp;&nbsp;&nbsp;
+                                                <img src="{{asset('storage/'.$invoice->bukti_pembayaran_100)}}" width="90%" alt="Bukti">
+                                            @endif
                                         @else
                                             &nbsp;&nbsp;&nbsp;&nbsp;{!! $d->progres < 100 ? 'Progres 100% belum tercapai,<br>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;Tagihan Belum Dikirim' : 'Tagihan Belum Dibayar' !!}
+                                            &nbsp;&nbsp;&nbsp;&nbsp;Tagihan Belum Dikirim' : ($invoice->bukti_pembayaran_100 ? 'Bukti telah dikirim' :'Tagihan Belum Dibayar') !!}
                                             <br>
                                             &nbsp;&nbsp;&nbsp;
                                             {{-- <a href="#" class="text text-danger" data-bs-toggle="modal" data-bs-target="#confirmModal100{{ $invoice->id }}">
@@ -544,6 +573,10 @@ $labels = ['<30%', '30%', '60%', '90%', '100%'];
                                                 {{ $d->progres < 100 ? 'onclick=return false;' : '' }}>
                                                 Konfirmasi
                                             </a>
+                                            @if ($invoice->bukti_pembayaran_100)
+                                            <br> &nbsp;&nbsp;&nbsp;&nbsp;
+                                                <img src="{{asset('storage/'.$invoice->bukti_pembayaran_100)}}" width="90%" alt="Bukti">
+                                            @endif
                                         @endif
                                         <div class="modal fade" id="confirmModal100{{$d->id}}" tabindex="-1" aria-labelledby="confirmModal100Label{{$d->id}}" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered">

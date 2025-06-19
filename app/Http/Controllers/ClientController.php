@@ -10,6 +10,7 @@ use App\Models\ProjectM;
 use App\Models\ProjectPlanM;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ClientController
 {
@@ -287,5 +288,94 @@ class ClientController
     $total = $subTotal + $ppn;
 
     return view('page.finance.k-invoice.print', compact('data','history','project', 'invoiceDetails', 'subTotal', 'ppn', 'total'));
+}
+
+public function store30(Request $request, $id)
+{
+    $request->validate([
+        'bukti30' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+    ]);
+
+    $invoice = invoiceM::findOrFail($id);
+
+    // Hapus bukti lama jika ada
+    if ($invoice->bukti && Storage::exists($invoice->bukti)) {
+        Storage::delete($invoice->bukti);
+    }
+
+    // Simpan bukti baru
+    $path = $request->file('bukti30')->store('bukti_pembayaran30', 'public');
+
+    // Update kolom bukti pada invoice
+    $invoice->bukti_pembayaran_30 = $path;
+    $invoice->save();
+
+    return redirect()->back()->with('success', 'Bukti pembayaran berhasil diupload.');
+}
+public function store60(Request $request, $id)
+{
+    $request->validate([
+        'bukti60' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+    ]);
+
+    $invoice = invoiceM::findOrFail($id);
+
+    // Hapus bukti lama jika ada
+    if ($invoice->bukti && Storage::exists($invoice->bukti)) {
+        Storage::delete($invoice->bukti);
+    }
+
+    // Simpan bukti baru
+    $path = $request->file('bukti60')->store('bukti_pembayaran60', 'public');
+
+    // Update kolom bukti pada invoice
+    $invoice->bukti_pembayaran_60 = $path;
+    $invoice->save();
+
+    return redirect()->back()->with('success', 'Bukti pembayaran berhasil diupload.');
+}
+public function store90(Request $request, $id)
+{
+    $request->validate([
+        'bukti90' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+    ]);
+
+    $invoice = invoiceM::findOrFail($id);
+
+    // Hapus bukti lama jika ada
+    if ($invoice->bukti && Storage::exists($invoice->bukti)) {
+        Storage::delete($invoice->bukti);
+    }
+
+    // Simpan bukti baru
+    $path = $request->file('bukti90')->store('bukti_pembayaran90', 'public');
+
+    // Update kolom bukti pada invoice
+    $invoice->bukti_pembayaran_90 = $path;
+    $invoice->save();
+
+    return redirect()->back()->with('success', 'Bukti pembayaran berhasil diupload.');
+}
+public function store100(Request $request, $id)
+{
+    $request->validate([
+        'bukti100' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+    ]);
+
+    $invoice = invoiceM::findOrFail($id);
+
+    // Hapus bukti lama jika ada
+    if ($invoice->bukti && Storage::exists($invoice->bukti)) {
+        Storage::delete($invoice->bukti);
+    }
+
+    // Simpan bukti baru
+    $path = $request->file('bukti100')->store('bukti_pembayaran100', 'public');
+
+    // Update kolom bukti pada invoice
+    $invoice->bukti_pembayaran_100 = $path;
+    $invoice->save();
+
+    return redirect()->back()->with('success', 'Bukti pembayaran berhasil diupload.');
 }
 }

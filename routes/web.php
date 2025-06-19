@@ -146,6 +146,10 @@ Route::middleware([AutoLogout::class])->group(function () {
             Route::get('list/{id}', [ClientController::class, 'bef_invoice'])->name('invoice.before');
             Route::get('/{id}', [ClientController::class, 'p_invoice'])->name('invoice');
             Route::get('/print/{id}', [ClientController::class, 'p_invoice'])->name('p.invoice');
+            Route::post('/store/bukti30/{id}', [ClientController::class, 'store30'])->name('p.invoice.bukti30');
+            Route::post('/store/bukti60/{id}', [ClientController::class, 'store60'])->name('p.invoice.bukti60');
+            Route::post('/store/bukti90/{id}', [ClientController::class, 'store90'])->name('p.invoice.bukti90');
+            Route::post('/store/bukti100/{id}', [ClientController::class, 'store100'])->name('p.invoice.bukti100');
 
         });
 
