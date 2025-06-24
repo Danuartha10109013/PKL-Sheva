@@ -29,6 +29,7 @@
                     <th>End Date</th>
                     <th>Action</th>
                     <th>Total Biaya</th>
+                    <th>Status</th>
                     <th>30%</th>
                     <th>60%</th>
                     <th>90%</th>
@@ -41,6 +42,7 @@
                 <tr>
                     <td>&nbsp;&nbsp;&nbsp;&nbsp;{{$loop->iteration}}</td>
                     <td>&nbsp;&nbsp;&nbsp;&nbsp;{{$p->judul}}</td>
+                     
                     <td>&nbsp;&nbsp;&nbsp;&nbsp;
                         @php
                             $team_lead = \App\Models\User::find($p->team_leader_id);
@@ -50,6 +52,59 @@
                         <td>&nbsp;&nbsp;&nbsp;&nbsp;{{$p->end}}</td>
                         <td>&nbsp;&nbsp;&nbsp;&nbsp; <a href="{{route('klien.invoice',$p->id)}}" title="Go to Current Invoice" class="btn btn-primary"><i class="fa fa-file-invoice"></i></a></td>
                         <td>&nbsp;&nbsp;&nbsp;&nbsp;Rp. {{ number_format($p->biaya, 2, ',', '.') }}</td>
+                        @php
+                      $progres = $p->progres;
+                      $pesan = '';
+                      $invoice = \App\Models\InvoiceM::where('project_id',$p->id)->first();
+                      // dd($invoice->{'30'});
+                      if ($progres >= 100) {
+                          $pesan = 'Invoice telah dikirim untuk termin 4';
+                          if($invoice->{'100'} == 'payed'){
+                            $sts = 'Tagihan Telah Dibayar';
+                            $color = 'success';
+                          }else {
+                            $sts = 'Tagihan Belum DIbayar';
+                            $color = 'danger';
+                          }
+                      } elseif ($progres >= 90) {
+                          $pesan = 'Invoice telah dikirim untuk termin 3';
+                          if($invoice->{'90'} == 'payed'){
+                             $sts = 'Tagihan Telah Dibayar';
+                            $color = 'success';
+                          }else {
+                            $sts = 'Tagihan Belum DIbayar';
+                            $color = 'danger';
+                          }
+                      } elseif ($progres >= 60) {
+                          $pesan = 'Invoice telah dikirim untuk termin 2';
+                          if($invoice->{'60'} == 'payed'){
+                            $sts = 'Tagihan Telah Dibayar';
+                            $color = 'success';
+                          }else {
+                            $sts = 'Tagihan Belum DIbayar';
+                            $color = 'danger';
+                          }
+                      } elseif ($progres >= 30) {
+                          $pesan = 'Invoice telah dikirim untuk termin 1';
+                          if($invoice->{'30'} == 'payed'){
+                             $sts = 'Tagihan Telah Dibayar';
+                            $color = 'success';
+                          }else {
+                            $sts = 'Tagihan Belum DIbayar';
+                            $color = 'danger';
+                          }
+                      }
+                  @endphp
+                  <td >&nbsp;&nbsp;&nbsp;&nbsp;
+                      {{-- {{ number_format($progres, 2) }}% --}}
+                      @if ($pesan && $sts && $color)
+                          <small class="text-muted">{{ $pesan }}</small>
+                          <br>
+                          &nbsp;&nbsp;&nbsp;&nbsp;<small class="text text-{{$color}}">{{ $sts }}</small>
+                      @else
+                      <small>Progres belum dimulai</small>
+                      @endif
+                  </td>
                         @php
                             $invoice = \App\Models\InvoiceM::where('project_id', $p->id)->first();
                         @endphp
