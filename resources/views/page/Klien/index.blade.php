@@ -7,16 +7,39 @@ Dashboard
 @endsection
 @section('content')
 <div class="row">
-  <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-    <div class="card">
+  <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4" >
+    <div class="card" style="height: 8rem">
       <div class="card-body p-3">
         <div class="row">
           <div class="col-8">
             <div class="numbers">
               <p class="text-sm mb-0 text-uppercase font-weight-bold">Project Name</p>
-              <h5 class="font-weight-bolder">
-                {{$project}}
-              </h5>
+                @php
+                  $latestProjectId = \App\Models\ProjectM::where('customer_id', Auth::user()->id)->latest()->value('id');
+                @endphp
+                <!-- Pastikan Bootstrap Icons sudah terload -->
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+                <form action="{{ route('klien.klien') }}" method="GET">
+                  <div class="form-group position-relative">
+                    <label for="projectSelect" class="font-weight-bold">
+                      <i class="bi bi-funnel-fill text-primary me-1"></i> Filter Project
+                    </label>
+
+                    <select name="project" id="projectSelect" class="form-control pe-5" onchange="this.form.submit()">
+                      <option value="">-- Pilih Project --</option>
+                      @foreach($projects as $p)
+                        <option value="{{ $p->id }}"
+                          {{ $cc !== null ? ($cc == $p->id ? 'selected' : '') : ($p->id == $latestProjectId ? 'selected' : '') }}>
+                          {{ $p->judul }}
+                        </option>
+                      @endforeach
+                    </select>
+
+                    <!-- Icon v -->
+                    <i class="bi bi-chevron-down position-absolute" style="right: 15px; top: 75%; transform: translateY(-50%); pointer-events: none;"></i>
+                  </div>
+                </form>
             </div>
           </div>
           <div class="col-4 text-end">
@@ -29,7 +52,7 @@ Dashboard
     </div>
   </div>
   <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-    <div class="card">
+    <div class="card" style="height: 8rem">
       <div class="card-body p-3">
         <div class="row">
           <div class="col-8">
@@ -138,7 +161,7 @@ Dashboard
     </div>
 
   <div class="col-xl-3 col-sm-6 mb-xl-0">
-    <div class="card">
+    <div class="card" style="height: 8rem">
       <div class="card-body p-3">
         <div class="row">
           <div class="col-8">
@@ -168,7 +191,7 @@ Dashboard
     </div>
   </div>
   <div class="col-xl-3 col-sm-6">
-    <div class="card">
+    <div class="card" style="height: 8rem">
       <div class="card-body p-3">
         <div class="row">
           <div class="col-8">

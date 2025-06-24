@@ -160,15 +160,29 @@ if(Auth::user()->role == 1){
         $team_leader = User::all();
         return view('page.finance.index',compact('client','data','customer','team_leader'));
     }
-    public function klien ()
+    public function klien (Request $request)
     {
-        $project = ProjectM::where('customer_id', Auth::user()->id)
-                   ->latest()
-                   ->value('judul');
-        $ids = ProjectM::where('customer_id', Auth::user()->id)
-                    ->latest()
-                    ->value('id');
-        $data= ProjectM::find($ids);
-        return view('page.Klien.index',compact('project','data'));
+        $cc = $request->project;
+        // dd($request->project);
+        if($request->project){
+
+            $projects = ProjectM::where('customer_id', Auth::user()->id)
+                       ->get();
+                       
+            $ids = ProjectM::where('customer_id', Auth::user()->id)
+                        ->latest()
+                        ->value('id');
+            $data= ProjectM::find($request->project);
+        }else{
+
+            $projects = ProjectM::where('customer_id', Auth::user()->id)
+                       ->get();
+                       
+            $ids = ProjectM::where('customer_id', Auth::user()->id)
+                        ->latest()
+                        ->value('id');
+            $data= ProjectM::find($ids);
+        }
+        return view('page.Klien.index',compact('projects','data','cc'));
     }
 }
