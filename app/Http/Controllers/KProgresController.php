@@ -80,7 +80,7 @@ class KProgresController
         return redirect()->back()->with('error','Project Plan Belum Disetujui Oleh Klien : '.$kliens->name);
     }
 
-    if($total_tasks > 3){
+    if($total_tasks > 4){
         if($completion_percentage >= 60 && $completion_percentage < 90){
             if($inn->{'30'} == null){
                 return redirect()->back()->with('error','Progres 30% belum terkonfirmasi membayar');
