@@ -115,6 +115,7 @@
                 margin-bottom: 50px
                 /* margin: 5mm; Apply margin to all subsequent pages */
             }
+        }
     </style>
 </head>
 <body>
@@ -179,7 +180,10 @@
         <p>{!! $data->catatan !!}</p>
     </div>
 
-    <!-- Print button -->
-    <button class="btn-print" onclick="window.print()">Print</button>
+    <script>
+        window.onload = function () {
+            window.print();
+        };
+    </script>
 </body>
 </html>

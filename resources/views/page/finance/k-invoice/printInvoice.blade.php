@@ -188,5 +188,10 @@
             <p><strong>{{$data->pembuat}}</strong></p>
         </footer>
     </div>
+    <script>
+        window.onload = function () {
+            window.print();
+        };
+    </script>
 </body>
 </html>

@@ -111,6 +111,11 @@
     </style>    
 </head>
 <body>
+    <script>
+        window.onload = function () {
+            window.print();
+        };
+    </script>
     <div class="invoice">
         <header>
             <div class="header-left">
