@@ -114,7 +114,7 @@ class KProjectController
 
         $bill->no_invoice = $invoiceNumber;
         $bill->save();
-        $finance = User::find(3);
+        // $finance = User::find(3);
         $notif = new NotifM();
                 $notif->user_id = $project->customer_id;
                 $notif->status = 0;
