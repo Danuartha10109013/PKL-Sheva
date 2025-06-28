@@ -187,7 +187,7 @@ public function printInvoice($id){
             // dd($invoice);
 
         // Redirect atau kembali dengan pesan sukses
-        return redirect()->back()->with('success', 'Invoice berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Invoice updated successfully.');
     }
 
     public function project(){
@@ -413,32 +413,32 @@ public function printInvoice($id){
             Mail::to($user->email)->send(new InvoiceMail($emailData));
             HistoryM::create($history);
         }
-        return redirect()->back()->with('success', 'Email telah berhasil dikirim');
+        return redirect()->back()->with('success', 'Email has been sent successfully');
     }
 
     public function tiga($id) {
         $inv = invoiceM::find($id);
         $inv['30'] = 'payed'; // Use array syntax for numeric or unusual column names
         $inv->save();
-        return redirect()->back()->with('success', 'Pembayaran telah dikonfirmasi');
+        return redirect()->back()->with('success', 'Payment has been confirmed for 30');
     }
     public function enam($id) {
         $inv = invoiceM::find($id);
         $inv['60'] = 'payed'; // Use array syntax for numeric or unusual column names
         $inv->save();
-        return redirect()->back()->with('success', 'Pembayaran telah dikonfirmasi');
+        return redirect()->back()->with('success', 'Payment has been confirmed for 40%');
     }
     public function sembilan($id) {
         $inv = invoiceM::find($id);
         $inv['90'] = 'payed'; // Use array syntax for numeric or unusual column names
         $inv->save();
-        return redirect()->back()->with('success', 'Pembayaran telah dikonfirmasi');
+        return redirect()->back()->with('success', 'Payment has been confirmed for 90%');
     }
     public function sepuluh($id) {
         $inv = invoiceM::find($id);
         $inv['100'] = 'payed'; // Use array syntax for numeric or unusual column names
         $inv->save();
-        return redirect()->back()->with('success', 'Pembayaran telah dikonfirmasi');
+        return redirect()->back()->with('success', 'Payment has been confirmed for 100%');
     }
     
 }

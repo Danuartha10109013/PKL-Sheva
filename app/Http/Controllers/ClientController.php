@@ -142,7 +142,7 @@ class ClientController
 
         // Redirect back to the project details page with a success message
         return redirect()->back()
-                         ->with('success', 'Komentar berhasil Dikirimkan!');
+                         ->with('success', 'Comment successfully submitted');
     }
 
     public function setuju ($id){
@@ -152,7 +152,7 @@ class ClientController
         $project = ProjectM::find($data->project_id);
         $notif = new NotifKlienM();
         $notif->user_id = Auth::user()->id;
-        $notif->title = "Project ".$project->judul." Telah Disetujui Oleh Klien";
+        $notif->title = "Project ".$project->judul." Approved By Client";
         $notif->value = "Silahkan Lakukan Perkembangan terkait projectnya";
         $notif->project_id = $data->project_id;
         $notif->save();
@@ -310,7 +310,7 @@ public function store30(Request $request, $id)
     $invoice->bukti_pembayaran_30 = $path;
     $invoice->save();
 
-    return redirect()->back()->with('success', 'Bukti pembayaran berhasil diupload.');
+    return redirect()->back()->with('success', 'Proof of payment successfully uploaded.');
 }
 public function store60(Request $request, $id)
 {
@@ -332,7 +332,7 @@ public function store60(Request $request, $id)
     $invoice->bukti_pembayaran_60 = $path;
     $invoice->save();
 
-    return redirect()->back()->with('success', 'Bukti pembayaran berhasil diupload.');
+    return redirect()->back()->with('success', 'Proof of payment successfully uploaded.');
 }
 public function store90(Request $request, $id)
 {
@@ -354,7 +354,7 @@ public function store90(Request $request, $id)
     $invoice->bukti_pembayaran_90 = $path;
     $invoice->save();
 
-    return redirect()->back()->with('success', 'Bukti pembayaran berhasil diupload.');
+    return redirect()->back()->with('success', 'Proof of payment successfully uploaded.');
 }
 public function store100(Request $request, $id)
 {
@@ -376,6 +376,6 @@ public function store100(Request $request, $id)
     $invoice->bukti_pembayaran_100 = $path;
     $invoice->save();
 
-    return redirect()->back()->with('success', 'Bukti pembayaran berhasil diupload.');
+    return redirect()->back()->with('success', 'Proof of payment successfully uploaded.');
 }
 }

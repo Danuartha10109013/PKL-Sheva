@@ -118,12 +118,12 @@ class TeamLeadController
         $notif->user_id = Auth::user()->id;
         $notif->project_id = $projectPlan->project_id;
         $project = ProjectM::find($projectPlan->project_id);
-        $notif->title = 'Team Lead telah memberikan komentar pada '. $project->judul;
+        $notif->title = 'Team Lead has comments on '. $project->judul;
         $notif->value = 'Silahkan segera periksa komentar dan lakukan tanggapan terhadap komentar';
         $notif->save();
 
         // Redirect back to the project details page with a success message
         return redirect()->back()
-                         ->with('success', 'Komentar telah berhasil dikirimkan!');
+                         ->with('success', 'Comment has been successfully submitted');
     }
 }

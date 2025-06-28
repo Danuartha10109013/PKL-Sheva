@@ -82,15 +82,15 @@ class KProgresController
    
     if($completion_percentage >= 60 && $completion_percentage < 90){
         if($inn->{'30'} == null){
-            return redirect()->back()->with('error','Progres 30% belom terkonfirmasi membayar');
+            return redirect()->back()->with('error','Progres 30% belum terkonfirmasi membayar');
         }
     }elseif($completion_percentage >= 90 && $completion_percentage < 100){
         if($inn->{'60'} == null){
-            return redirect()->back()->with('error','Progres 60% belom terkonfirmasi membayar');
+            return redirect()->back()->with('error','Progres 60% belum terkonfirmasi membayar');
         }
     }elseif($completion_percentage >= 100 ){
         if($inn->{'90'} == null){
-            return redirect()->back()->with('error','Progres 90% belom terkonfirmasi membayar');
+            return redirect()->back()->with('error','Progres 90% belum terkonfirmasi membayar');
         }
     }
     $plan->save();
@@ -311,7 +311,7 @@ class KProgresController
     
 
 
-    return redirect()->route('pm.k-progres')->with('success', 'Data telah diperbarui');
+    return redirect()->route('pm.k-progres')->with('success', 'Progress data has been updated');
 }
 
 }
