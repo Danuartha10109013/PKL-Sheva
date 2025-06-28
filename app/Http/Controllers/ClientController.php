@@ -36,7 +36,7 @@ class ClientController
             $notif->save();
         }
 
-        
+
         $fase = json_decode(ProjectPlanM::where('project_id', $id)->value('fase'));
         $sections = [
             ['title' => 'Pengantar', 'content' => $data->pengantar, 'note' => $data->pengantar_catatan, 'name' => 'pengantar_catatan'],
@@ -108,7 +108,7 @@ class ClientController
                 'description' => $f->description,
                 'status' =>  $f->status,
                 'notes' =>  $f->notes ?? null,
-                'note' =>  $request->scrum_name[$index] ?? null, 
+                'note' =>  $request->scrum_name[$index] ?? null,
                 ];
             }
             // dd($faseData);
@@ -181,6 +181,7 @@ class ClientController
     }
 
     public function p_invoice($id){
+        // dd($id);
         $ids = InvoiceM::where('project_id', $id)->value('id');
     $data = InvoiceM::find($ids);
 
@@ -195,12 +196,12 @@ class ClientController
         $invoice = InvoiceM::where('project_id', $project->id)->first();
         if ($invoice) {
             if (
-                empty($invoice->no_invoice) || 
-                empty($invoice->kepada) || 
-                empty($invoice->npwp) || 
-                empty($invoice->alamat) || 
-                empty($invoice->pembuat) || 
-                empty($invoice->ppn) 
+                empty($invoice->no_invoice) ||
+                empty($invoice->kepada) ||
+                empty($invoice->npwp) ||
+                empty($invoice->alamat) ||
+                empty($invoice->pembuat) ||
+                empty($invoice->ppn)
             ) {
                 return redirect()->back()->with('error', 'Lengkapi data invoice terlebih dahulu untuk project: ' . $project->judul);
             }
@@ -215,7 +216,7 @@ class ClientController
         $ppn = $subTotal * $data->ppn;
         $total = $subTotal + $ppn;
         $terbilang = ucfirst(terbilang($total)) . ' Rupiah';
-        dd($terbilang);
+        // dd($terbilang);
         $invoiceDetails[] = [
             'no' => 1,
             'deskripsi' => "Termin 0 0%, {$project->judul}",
