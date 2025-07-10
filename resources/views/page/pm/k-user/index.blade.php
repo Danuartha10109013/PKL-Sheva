@@ -190,6 +190,60 @@ Kelola User
                     <div class="mb-3">
                         <label for="password" class="form-label">Password <small class="text-danger">*</small></label>
                         <input type="password" class="form-control" name="password" id="password">
+                        <small>
+                            
+                            <ul class="form-text list-unstyled" id="password-hint">
+                                <li id="hint-length" class="text-muted">• At least 8 characters</li>
+                                <li id="hint-uppercase" class="text-muted">• At least 1 uppercase letter</li>
+                                <li id="hint-lowercase" class="text-muted">• At least 1 lowercase letter</li>
+                                <li id="hint-number" class="text-muted">• At least 1 number</li>
+                                <li id="hint-symbol" class="text-muted">• At least 1 special character</li>
+                            </ul>
+
+
+                            <script>
+                                const passwordInput = document.getElementById('password');
+
+                                const hintLength = document.getElementById('hint-length');
+                                const hintUpper = document.getElementById('hint-uppercase');
+                                const hintLower = document.getElementById('hint-lowercase');
+                                const hintNumber = document.getElementById('hint-number');
+                                const hintSymbol = document.getElementById('hint-symbol');
+
+                                passwordInput.addEventListener('input', function () {
+                                    const value = passwordInput.value;
+
+                                    // Cek setiap kriteria
+                                    const isLongEnough = value.length >= 8;
+                                    const hasUpper = /[A-Z]/.test(value);
+                                    const hasLower = /[a-z]/.test(value);
+                                    const hasNumber = /[0-9]/.test(value);
+                                    const hasSymbol = /[^A-Za-z0-9]/.test(value);
+
+                                    // Update masing-masing item
+                                    updateHint(hintLength, isLongEnough);
+                                    updateHint(hintUpper, hasUpper);
+                                    updateHint(hintLower, hasLower);
+                                    updateHint(hintNumber, hasNumber);
+                                    updateHint(hintSymbol, hasSymbol);
+                                });
+
+                                function updateHint(element, condition) {
+                                    if (condition) {
+                                        element.classList.remove('text-muted');
+                                        element.classList.add('text-success');
+                                        element.innerHTML = element.innerHTML.replace('•', '✅');
+                                    } else {
+                                        element.classList.remove('text-success');
+                                        element.classList.add('text-muted');
+                                        element.innerHTML = element.innerHTML.replace('✅', '•');
+                                    }
+                                }
+                            </script>
+
+
+
+                        </small>
                         <span class="text-danger error-password"></span>
                     </div>
                     <div class="mb-3">
@@ -365,10 +419,60 @@ document.addEventListener('DOMContentLoaded', function () {
                         <input type="file" class="form-control" name="profile" id="profile">
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label">New Password (optional)</label>
-                        <input type="password" class="form-control" name="password" id="password" minlength="8">
-                        <small class="form-text text-muted">Minimum 8 characters</small>
+                        <label for="password-edit" class="form-label">New Password (optional) <small class="text-danger">*</small></label>
+                        <input type="password" class="form-control password-input" name="password" id="password-edit">
+
+                        <ul class="form-text list-unstyled password-hint">
+                            <li class="hint-length text-muted">• At least 8 characters</li>
+                            <li class="hint-uppercase text-muted">• At least 1 uppercase letter</li>
+                            <li class="hint-lowercase text-muted">• At least 1 lowercase letter</li>
+                            <li class="hint-number text-muted">• At least 1 number</li>
+                            <li class="hint-symbol text-muted">• At least 1 special character</li>
+                        </ul>
+
+                        <span class="text-danger error-password"></span>
+                        <script>
+                            document.querySelectorAll('.password-input').forEach(function (input) {
+                                input.addEventListener('input', function () {
+                                    const container = input.closest('.mb-3');
+                                    const value = input.value;
+
+                                    const hintLength = container.querySelector('.hint-length');
+                                    const hintUpper = container.querySelector('.hint-uppercase');
+                                    const hintLower = container.querySelector('.hint-lowercase');
+                                    const hintNumber = container.querySelector('.hint-number');
+                                    const hintSymbol = container.querySelector('.hint-symbol');
+
+                                    const isLongEnough = value.length >= 8;
+                                    const hasUpper = /[A-Z]/.test(value);
+                                    const hasLower = /[a-z]/.test(value);
+                                    const hasNumber = /[0-9]/.test(value);
+                                    const hasSymbol = /[^A-Za-z0-9]/.test(value);
+
+                                    updateHint(hintLength, isLongEnough, '• At least 8 characters', '✅ At least 8 characters');
+                                    updateHint(hintUpper, hasUpper, '• At least 1 uppercase letter', '✅ At least 1 uppercase letter');
+                                    updateHint(hintLower, hasLower, '• At least 1 lowercase letter', '✅ At least 1 lowercase letter');
+                                    updateHint(hintNumber, hasNumber, '• At least 1 number', '✅ At least 1 number');
+                                    updateHint(hintSymbol, hasSymbol, '• At least 1 special character', '✅ At least 1 special character');
+                                });
+                            });
+
+                            function updateHint(element, condition, originalText, successText) {
+                                if (!element) return;
+                                if (condition) {
+                                    element.classList.remove('text-muted');
+                                    element.classList.add('text-success');
+                                    element.textContent = successText;
+                                } else {
+                                    element.classList.remove('text-success');
+                                    element.classList.add('text-muted');
+                                    element.textContent = originalText;
+                                }
+                            }
+                        </script>
+
                     </div>
+
                     <div class="mb-3">
                         <label for="password_confirmation" class="form-label">Password Confirmation</label>
                         <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" minlength="8">

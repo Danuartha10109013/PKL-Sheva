@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
+use Illuminate\Validation\Rules\Password;
+
+
+
 class KelolaUser
 {
     public function index(){
@@ -28,6 +32,15 @@ class KelolaUser
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|min:8|confirmed',
             'profile' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'password' => [
+                'nullable',
+                'confirmed',
+                Password::min(8)
+                    ->mixedCase()    // mengharuskan huruf besar & kecil
+                    ->letters()      // mengharuskan huruf (sudah termasuk huruf besar/kecil)
+                    ->numbers()      // mengharuskan angka
+                    ->symbols(),     // mengharuskan simbol (karakter spesial)
+            ],
         ]);
 
         // Check if validation fails
@@ -84,7 +97,15 @@ public function store(Request $request)
         'birthday' => 'nullable|date',
         'email' => 'required|string|email|max:255|unique:users',
         'profile' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        'password' => [
+            'required',
+            'confirmed',
+            Password::min(8)
+                ->mixedCase()    // mengharuskan huruf besar & kecil
+                ->letters()      // mengharuskan huruf (sudah termasuk huruf besar/kecil)
+                ->numbers()      // mengharuskan angka
+                ->symbols(),     // mengharuskan simbol (karakter spesial)
+        ],
     ]);
 
     // Conditional validation for npwp only for Client (role 3)

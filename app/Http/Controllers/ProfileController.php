@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
+
 
 class ProfileController
 {
@@ -31,7 +33,15 @@ class ProfileController
             'jabatan' => 'nullable|string|max:100',
             'npwp' => 'nullable',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|min:8|confirmed',
+            'password' => [
+            'nullable',
+            'confirmed',
+                Password::min(8)
+                    ->mixedCase()    // mengharuskan huruf besar & kecil
+                    ->letters()      // mengharuskan huruf (sudah termasuk huruf besar/kecil)
+                    ->numbers()      // mengharuskan angka
+                    ->symbols(),     // mengharuskan simbol (karakter spesial)
+            ],
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
     

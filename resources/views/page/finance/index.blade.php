@@ -122,6 +122,7 @@ Dashboard
           <th>Judul</th>
           <th>Customer</th>
           <th>progres</th>
+          <th>Payment Status</th>
           <th>Deadline</th>
       </tr>
   </thead>
@@ -134,7 +135,7 @@ Dashboard
             {{-- Cari nama customer berdasarkan ID --}}
             {{ $customer->where('id', $d->customer_id)->pluck('name')->first() ?? 'N/A' }}
         </td>
-        <td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;
           @php
             $progresin = App\Models\ProjectM::where('id', $d->id)->value('progres');
           @endphp 
@@ -149,6 +150,39 @@ Dashboard
           <span class="ml-2">{{ $progresin }}%</span>
         
         </td>
+       <td>
+          @php
+              $invoice = \App\Models\InvoiceM::where('project_id', $d->id)->first();
+              $stages = [30, 60, 90, 100];
+          @endphp
+
+          <div class="progress-container" style="display: flex; width: 100%; height: 20px; background-color: #e9ecef; border-radius: 10px; overflow: hidden;">
+              @foreach($stages as $index => $stage)
+                  @php
+                      $status = $invoice && $invoice[$stage] === 'payed' ? 'payed' : 'not_payed';
+                      $color = $status === 'payed' ? '#1c2c54' : '#734543'; // primary or danger
+                      $tooltip = $status === 'payed' ? 'Payed' : 'Not Payed';
+                  @endphp
+
+                  <div 
+                      style="
+                          width: 25%; 
+                          background-color: {{ $color }}; 
+                          display: flex; 
+                          align-items: center; 
+                          justify-content: center; 
+                          color: white; 
+                          font-size: 0.8rem;
+                          cursor: pointer;"
+                      title="{{ $stage }}% - {{ $tooltip }}"
+                  >
+                      {{ $stage }}%
+                  </div>
+              @endforeach
+          </div>
+      </td>
+
+
         <td> &nbsp;&nbsp;&nbsp;&nbsp;{{\Carbon\Carbon::parse($d->end)->format('d-m-Y')}}</td>
     </tr>
       @endforeach
