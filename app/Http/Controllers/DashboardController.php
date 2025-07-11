@@ -14,10 +14,10 @@ class DashboardController
     public function readnotif(Request $request)
 {
     // Validate that 'notif_ids' is an array
-    $request->validate([
-        'notif_ids' => 'required|array',
-        'notif_ids.*' => 'integer|exists:notification,id',
-    ]);
+    // $request->validate([
+    //     'notif_ids' => 'required|array',
+    //     'notif_ids.*' => 'integer|exists:notification,id',
+    // ]);
 
     if(Auth::user()->role == 3){
         foreach($request->notif_ids as $n){
@@ -26,14 +26,14 @@ class DashboardController
             $notif->save();
         }
     }else{
-        
+
         foreach($request->notif_ids as $n){
             $notif = NotifM::find($n);
             $notif->status_finance = 1;
             $notif->save();
         }
     }
-    
+
 
     return back()->with('success', 'Notifikasi berhasil ditandai sebagai telah dibaca.');
 }
@@ -41,10 +41,10 @@ class DashboardController
 {
     // dd(Auth::user()->role);
     // Validate that 'notif_ids' is an array
-    $request->validate([
-        'notif_ids' => 'required|array',
-        'notif_ids.*' => 'integer|exists:notification,id',
-    ]);
+    // $request->validate([
+    //     'notif_ids' => 'required|array',
+    //     'notif_ids.*' => 'integer|exists:notification,id',
+    // ]);
     if(Auth::user()->role == 3){
 
         foreach($request->notif_ids as $n){
@@ -60,24 +60,25 @@ class DashboardController
             $notif->save();
         }
     }
-    
+
 
     return back()->with('success', 'Notifikasi berhasil dihapus.');
 }
     public function readnotifpm(Request $request)
 {
-    // dd($request->all());
+    // dd($request->notif_ids);
     // Validate that 'notif_ids' is an array
-    $request->validate([
-    'notif_ids' => 'required|array',
-    'notif_ids.*' => 'integer|exists:notification,id',
-]);
+//     $request->validate([
+//     'notif_ids' => 'required|array',
+//     'notif_ids.*' => 'string|exists:notification,id',
+// ]);
 
 // Update the status to 1 (read)
 if(Auth::user()->role == 1){
 
     foreach ($request->notif_ids as $n) {
         $notif = NotifKlienM::find($n);
+        dd($notif);
         if ($notif) {
             $notif->status_tl = 1;
             $notif->save();
@@ -101,10 +102,10 @@ if(Auth::user()->role == 1){
 {
     // dd($request->all());
     // Validate that 'notif_ids' is an array
-    $request->validate([
-    'notif_ids' => 'required|array',
-    'notif_ids.*' => 'integer|exists:notification,id',
-]);
+//     $request->validate([
+//     'notif_ids' => 'required|array',
+//     'notif_ids.*' => 'integer|exists:notification,id',
+// ]);
 if(Auth::user()->role == 1){
 
     foreach ($request->notif_ids as $n) {
@@ -131,7 +132,7 @@ if(Auth::user()->role == 1){
 }
     public function projectManager ()
     {
-        $client = User::where('role', 3)->count(); 
+        $client = User::where('role', 3)->count();
         // $data = ProjectM::all()->sort('updated_at','desc');
         $data = ProjectM::orderBy('updated_at', 'desc')->get();
 
@@ -152,7 +153,7 @@ if(Auth::user()->role == 1){
     }
     public function finance ()
     {
-        $client = User::where('role', 3)->count(); 
+        $client = User::where('role', 3)->count();
         // $data = ProjectM::all()->sort('updated_at','desc');
         $data = ProjectM::orderBy('updated_at', 'desc')->get();
 
@@ -168,7 +169,7 @@ if(Auth::user()->role == 1){
 
             $projects = ProjectM::where('customer_id', Auth::user()->id)
                        ->get();
-                       
+
             $ids = ProjectM::where('customer_id', Auth::user()->id)
                         ->latest()
                         ->value('id');
@@ -177,7 +178,7 @@ if(Auth::user()->role == 1){
 
             $projects = ProjectM::where('customer_id', Auth::user()->id)
                        ->get();
-                       
+
             $ids = ProjectM::where('customer_id', Auth::user()->id)
                         ->latest()
                         ->value('id');

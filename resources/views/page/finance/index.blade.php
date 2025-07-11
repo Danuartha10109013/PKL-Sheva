@@ -69,7 +69,7 @@ Dashboard
                 @endphp
                 {{$client}}
               </h5>
-              
+
             </div>
           </div>
           <div class="col-4 text-end">
@@ -138,17 +138,17 @@ Dashboard
         <td>&nbsp;&nbsp;&nbsp;&nbsp;
           @php
             $progresin = App\Models\ProjectM::where('id', $d->id)->value('progres');
-          @endphp 
+          @endphp
            <div class="progress" style="height: 20px; width: 300px;">
-            <div class="progress-bar" role="progressbar" 
-              style="width: {{ $progresin }}%; background-color: #0a3d5f;" 
-              aria-valuenow="{{ $progresin }}" 
-              aria-valuemin="0" 
+            <div class="progress-bar" role="progressbar"
+              style="width: {{ $progresin }}%; background-color: #0a3d5f;"
+              aria-valuenow="{{ $progresin }}"
+              aria-valuemin="0"
               aria-valuemax="100">
             </div>
           </div>
           <span class="ml-2">{{ $progresin }}%</span>
-        
+
         </td>
        <td>
           @php
@@ -160,18 +160,18 @@ Dashboard
               @foreach($stages as $index => $stage)
                   @php
                       $status = $invoice && $invoice[$stage] === 'payed' ? 'payed' : 'not_payed';
-                      $color = $status === 'payed' ? '#1c2c54' : '#734543'; // primary or danger
+                      $color = $status === 'payed' ? '#34eb4c' : '#f23518'; // primary or danger
                       $tooltip = $status === 'payed' ? 'Payed' : 'Not Payed';
                   @endphp
 
-                  <div 
+                  <div
                       style="
-                          width: 25%; 
-                          background-color: {{ $color }}; 
-                          display: flex; 
-                          align-items: center; 
-                          justify-content: center; 
-                          color: white; 
+                          width: 25%;
+                          background-color: {{ $color }};
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          color: white;
                           font-size: 0.8rem;
                           cursor: pointer;"
                       title="{{ $stage }}% - {{ $tooltip }}"
